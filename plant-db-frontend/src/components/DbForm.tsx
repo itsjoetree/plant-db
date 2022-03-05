@@ -30,12 +30,12 @@ function DbForm() {
     const [isSubmitting, setIsSubmitting] = React.useState<boolean>()
     
     React.useEffect(() => {
-        axios.get<ModelInfo>('')
+        axios.get<ModelInfo>(`/api/${controller}/${id ? id : 'schema'}`)
             .then(response => setFormInfo(response.data))
             .catch(err => {
                 if (err.response) setServerError(err.response.data)
             })
-    }, [])
+    }, [controller, id])
 
     React.useEffect(() => {
         if (formInfo) {

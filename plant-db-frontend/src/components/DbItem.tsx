@@ -21,7 +21,7 @@ function DbItem() {
     const [error, setError] = React.useState<string>()
 
     React.useEffect(() => {
-        axios.get<ModelInfo>(`${controller}/${id}`)
+        axios.get<ModelInfo>(`/api/${controller}/${id}`)
             .then(response => { 
                 setItemInfo(response.data)
                 setLoading(false)
