@@ -11,3 +11,36 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.bg-midnightblue {
+  background-color: midnightblue;
+}
+
+.color-midnightblue {
+  color: midnightblue;
+}
+
+.btn-responsive {
+  width: 100%;
+}
+
+.h-10 {
+  height: 10em;
+}
+
+@media (min-width: 600px) {
+  .btn-responsive {
+    width: 50%
+  }
+}
+@media (min-width: 900px) {
+  .btn-responsive {
+    width: 45%
+  }
+}
+
+@media (min-width: 1200px) {
+  .btn-responsive {
+    width: 40%
+  }
+}
