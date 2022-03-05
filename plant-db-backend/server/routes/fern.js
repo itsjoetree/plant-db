@@ -1,11 +1,17 @@
 const express = require('express')
+const mongoose = require('mongoose')
+const fernSchema = require('../schemas/fern')
 const router = express.Router()
 
-router.get('/', (req, res) => {
+const Fern = mongoose.model('Fern', fernSchema)
+
+router.get('/', async (req, res) => {
   const top = req.query.top
   const skip = req.query.skip
 
-  res.send('testing /')
+  const ferns = await Fern.find()
+
+  res.send(ferns)
 })
 
 router.get('/schema', (req, res) => {
