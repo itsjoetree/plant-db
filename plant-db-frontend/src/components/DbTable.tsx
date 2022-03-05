@@ -45,18 +45,16 @@ function DbTable() {
                     </tr>
                 </thead>
 
-                <tbody>
-                    <th>
-                        {
-                            tableInfo?.rows.map((row, index) => <tr key={index}>
-                                {
-                                    row.map(record => <td key={record.propertyName}>
-                                        {record.value}
-                                        </td>)
-                                }
-                            </tr>)
-                        }
-                    </th>
+                <tbody> 
+                    {
+                        tableInfo?.rows.map((row, index) => <tr key={index}>
+                            {
+                                row.map(record => <td key={record.propertyName}>
+                                    {record.value}
+                                    </td>)
+                            }
+                        </tr>)
+                    }
                 </tbody>
             </Table>
 
