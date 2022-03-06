@@ -11,6 +11,7 @@ type ModelInfo = {
 type TableInfo = {
     schema: Property[],
     rows: ModelRecord[][],
+    totalCount: number,
 }
 
 type ModelRecord = {
@@ -18,11 +19,20 @@ type ModelRecord = {
     value: any,
 }
 
+type DropdownOption = {
+    name: string,
+    value: string,
+}
+
 type Property = {
     propertyName: string,
     displayName: string,
     type: any,
+    dropdown?: DropdownOption[],
     isRequired: boolean,
+    isKey: boolean,
+    isIdentifier: boolean,
+    isHidden: boolean,
 }
 
 export {

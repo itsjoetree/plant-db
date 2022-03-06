@@ -6,7 +6,7 @@ type ErrorProps = {
 
 function Error({ text }: ErrorProps) {
     return (
-        <div className="text-danger"> &bull; {text}</div>
+        <div className="text-danger ms-2"> &bull; {text}</div>
     )
 }
 

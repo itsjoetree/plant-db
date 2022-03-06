@@ -3,7 +3,7 @@ import { Alert } from "react-bootstrap"
 import { Link } from "react-router-dom"
 
 type InitialLoadProps = {
-    text: string
+    text?: string
 }
 
 function InitialLoadError({ text } : InitialLoadProps) {

@@ -1,8 +1,11 @@
 import axios from "axios"
 import React from "react"
+import { PlusCircleFill } from "react-bootstrap-icons"
 import { FormSelect, Table } from "react-bootstrap"
 import { useParams } from "react-router"
+import { Link } from "react-router-dom"
 import { TableInfo } from "../types"
+import Heading from "./Heading"
 import InitialLoadError from "./IntialLoadError"
 import Loading from "./Loading"
 
@@ -36,33 +39,48 @@ function DbTable() {
 
     return ((loading && !error) ? <Loading /> : (error && loading) ? <InitialLoadError text={error} /> :
         <>
-            <Table>
+            <Heading heading={controller ?? ''} />
+
+            <div className="text-start ms-2 mt-4 mb-4">
+                <Link to={`/${controller}/new`}><PlusCircleFill color="black" size={25} /></Link>
+            </div>
+
+            <Table hover responsive>
                 <thead>
                     <tr>
                         {
-                           tableInfo?.schema.map(p => <th key={p.propertyName}>{p.displayName}</th>) 
+                           tableInfo?.schema.filter(s => !s.isHidden).map(p => <th key={p.propertyName}>{p.displayName}</th>) 
                         }
                     </tr>
                 </thead>
 
                 <tbody> 
                     {
-                        tableInfo?.rows.map((row, index) => <tr key={index}>
-                            {
-                                row.map(record => <td key={record.propertyName}>
-                                    {record.value}
+                        tableInfo?.rows.map((row, index) => {
+                            const keyRecord = row.find(r => r.propertyName === tableInfo.schema.find(s => s.isKey)?.propertyName)
+                            
+                            return (<Link 
+                            key={index}
+                            className="table-row" 
+                            to={`/${controller}/${keyRecord?.value}`}>
+                                {
+                                    row.filter(r => r.propertyName !== keyRecord?.propertyName).map(record => <td key={record.propertyName}>
+                                        {record.value}
                                     </td>)
-                            }
-                        </tr>)
+                                }
+                            </Link>)
+                        })
                     }
                 </tbody>
             </Table>
 
-            <FormSelect onChange={pgSizeChange} value={pgSize}>
-                {
-                    pageSizes.map(ps => <option key={ps} value={ps}>{ps}</option>)
-                }
-            </FormSelect>
+            <div className="m-2">
+                <FormSelect className="mx-auto" onChange={pgSizeChange} value={pgSize}>
+                    {
+                        pageSizes.map(ps => <option key={ps} value={ps}>{ps}</option>)
+                    }
+                </FormSelect>
+            </div>
         </>
     )
 }

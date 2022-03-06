@@ -1,11 +1,11 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import { DbInfo } from "../types"
+import Heading from "./Heading"
 
 function Home() {
     const databases: DbInfo[] = [
         {name: 'ferns', displayName: 'Ferns'},
-        {name: 'ivys', displayName: 'Ivys'},
     ]
 
     React.useEffect(() => {
@@ -14,14 +14,11 @@ function Home() {
 
     return (
         <>
-            <div className="text-center text-white p-3 bg-midnightblue">
-                <h2>Plant DB</h2>
-
-                <p>
-                    An online database where nature enthusaists can share their findings 
-                    on different forms of plant life.
-                </p>
-            </div>
+            <Heading 
+                heading="Plant DB"
+                text="An online database where nature enthusaists can share their findings 
+                on different forms of plant life."
+              />
 
             {
                 databases.map(db => <div key={db.name} className="d-grid gap-2 m-2">

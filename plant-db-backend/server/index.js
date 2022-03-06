@@ -1,12 +1,10 @@
 const express = require("express");
-const path = require("path")
+const mongoose = require('mongoose')
+const fernRouter = require("./routes/fern")
 
 const PORT = process.env.PORT || 3001;
 
-const fernRouter = require("./routes/fern")
 const app = express()
-
-const mongoose = require('mongoose')
 
 const url = `mongodb+srv://plant:lofiplant@cluster0.d21af.mongodb.net/plantDb?retryWrites=true&w=majority`;
 

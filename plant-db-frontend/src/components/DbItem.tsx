@@ -1,7 +1,7 @@
 import axios from "axios"
 import React, { Fragment } from "react"
 import { useParams } from "react-router"
-import { ModelInfo } from "../types"
+import { ModelInfo, Property } from "../types"
 import { ArrowLeftCircleFill, PenFill, TrashFill } from "react-bootstrap-icons"
 import DbDelete from "./DbDelete"
 import InitialLoadError from "./IntialLoadError"
@@ -31,35 +31,51 @@ function DbItem() {
             })
     }, [controller, id])
 
-    return ((loading && !error) ? <Loading /> : 
-        (loading && error) ? <InitialLoadError text={error} /> :
-        <>
-            <h2>{controller} {id}</h2>
+    function getDisplayValue(p: Property) {
+        switch (p.type) {
+            case 'Dropdown':  
+                return p.dropdown?.find(d => d.value === itemInfo?.records.find(r => r.propertyName === p.propertyName)?.value)?.name
+            default:
+                return itemInfo?.records.find(r => r.propertyName === p.propertyName)?.value
+        }
+    }
 
-            <dl>
-                {
-                    itemInfo?.schema.map(p => <Fragment key={p.propertyName}>
-                        <dd>{p.propertyName}</dd>
-                        <dt>{itemInfo.records.find(r => r.propertyName === p.propertyName)?.value}</dt>
-                    </Fragment>)
-                }
-            </dl>
-            
+    return ((loading && !error) ? <Loading /> : 
+        (loading && error) ? <InitialLoadError /> :
+        <>
+            <div className="ms-3 mt-1">
+                <h1>{controller}</h1>
+                <h3 className="ms-1">
+                    {itemInfo?.records.find(r => r.propertyName === itemInfo?.schema.find(p => p.isIdentifier)?.propertyName)?.value}
+                </h3>
+            </div>
+
+            <div className="m-4">
+                <dl className="border rounded p-2 mx-auto">
+                    {
+                        itemInfo?.schema.filter(f => !f.isHidden).map(p => <Fragment key={p.propertyName}>
+                            <dt>{p.displayName}</dt>
+                            <dd>{getDisplayValue(p)}</dd>
+                        </Fragment>)
+                    }
+                </dl>
+            </div>
+
             {
                 action === 'delete' && <DbDelete />
             }
 
-            <div className="bg-light p-3">
+            <div className="p-4 text-center">
                 <Link className="me-2" to={`/${controller}`}>
-                    <ArrowLeftCircleFill color="black" size={20} />
+                    <ArrowLeftCircleFill color="black" size={30} />
                 </Link>
 
                 <Link className="me-2" to={`/${controller}/${id}/edit`}>
-                    <PenFill color="black" size={20} />
+                    <PenFill color="black" size={30} />
                 </Link>
 
-                <Link className="me-2" to={`/${controller}/${id}/delete`}>
-                    <TrashFill color="black" size={20} />
+                <Link to={`/${controller}/${id}/delete`}>
+                    <TrashFill color="black" size={30} />
                 </Link>
             </div>
         </>

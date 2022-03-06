@@ -25,12 +25,14 @@ function DbDelete() {
     }
 
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form className="text-center" onSubmit={handleSubmit}>
             {error && <Error text={error} />}
             <Alert variant="light">
                 Are you sure you wish to delete this record?
 
-                <Button type="submit">Delete</Button>
+                <div className="d-grid gap-2 btn-responsive mx-auto">
+                    <Button variant="dark" type="submit">Delete</Button>
+                </div>
             </Alert>
         </Form>
     )
