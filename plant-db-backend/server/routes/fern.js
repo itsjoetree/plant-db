@@ -1,9 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
-const fernSchema = require('../schemas/fern')
+const Fern = require('../schemas/fern')
 const router = express.Router()
-
-const Fern = mongoose.model('Fern', fernSchema)
 
 const lightingConditionDropdown = [
   {name: 'Bright', value: 'Bright'},
@@ -46,7 +44,7 @@ function generateRecords(fern) {
 }
 
 // Checks if dropdown values are valid, if there is an error: return true
-function checkDropdowns(fern) {
+function checkDropdownsHasError(fern) {
   if (wateringIntervalDropdown.findIndex(d => d.value === fern.wateringInterval) === -1) {
     res.status(409).send('Invalid Watering Interval.')
     return true;
@@ -66,7 +64,8 @@ router.get('/', async (req, res) => {
 
   const tableInfo = {
     schema: generateSchema(),
-    rows: ferns.map(fern => generateRecords(fern))
+    rows: ferns.map(fern => generateRecords(fern)),
+    totalCount: await Fern.count()
   }
 
   res.send(tableInfo)
@@ -100,7 +99,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {  
   const newFern = req.body
 
-  if (checkDropdowns(newFern)) return
+  if (checkDropdownsHasError(newFern)) return
 
   Fern.create(newFern)
     .then(r => res.status(200).send(r._id))
@@ -113,7 +112,7 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   let updatedFern = JSON.parse(JSON.stringify(req.body))
 
-  if (checkDropdowns(updatedFern)) return
+  if (checkDropdownsHasError(updatedFern)) return
   const existingRecord = await Fern.findOne({ name: updatedFern.name })
   
   // If name exists, and existingRecord is the current: ignore name, otherwise return error.

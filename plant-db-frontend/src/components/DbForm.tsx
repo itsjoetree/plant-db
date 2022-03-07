@@ -1,15 +1,15 @@
-import React from "react"
-import { ModelInfo, Property } from "../types"
 import * as Yup from "yup"
-import { ErrorMessage, Field, Form, Formik } from "formik"
-import { Button, Col, Row } from "react-bootstrap"
-import { useNavigate, useParams } from "react-router"
+import React from "react"
 import axios from "axios"
 import Error from "./Error"
 import Loading from "./Loading"
+import SomethingWentWrong from "./SomethingWentWrong"
 import { Link } from "react-router-dom"
 import { ArrowLeftCircleFill } from "react-bootstrap-icons"
-import SomethingWentWrong from "./SomethingWentWrong"
+import { ErrorMessage, Field, Form, Formik } from "formik"
+import { Button, Col, Row } from "react-bootstrap"
+import { useNavigate, useParams } from "react-router"
+import { ModelInfo, Property } from "../types"
 
 type DbFormParams = {
     id: string,

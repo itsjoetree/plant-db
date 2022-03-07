@@ -1,12 +1,12 @@
 import axios from "axios"
 import React, { Fragment } from "react"
+import DbDelete from "./DbDelete"
+import Loading from "./Loading"
+import SomethingWentWrong from "./SomethingWentWrong"
+import { Link } from "react-router-dom"
 import { useParams } from "react-router"
 import { ModelInfo, Property } from "../types"
 import { ArrowLeftCircleFill, PenFill, TrashFill } from "react-bootstrap-icons"
-import DbDelete from "./DbDelete"
-import Loading from "./Loading"
-import { Link } from "react-router-dom"
-import SomethingWentWrong from "./SomethingWentWrong"
 
 type DbItemParams = {
     controller: string,

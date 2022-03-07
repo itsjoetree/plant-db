@@ -36,4 +36,4 @@ const fernSchema = new mongoose.Schema({
 
 fernSchema.plugin(uniqueValidator)
 
-module.exports = fernSchema
+module.exports = mongoose.model('Fern', fernSchema)

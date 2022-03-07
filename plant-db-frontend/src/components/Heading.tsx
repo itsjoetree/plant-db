@@ -1,4 +1,3 @@
-
 type HeadingProps = {
     heading: string,
     text?: string,

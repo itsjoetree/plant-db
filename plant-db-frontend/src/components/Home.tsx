@@ -1,7 +1,7 @@
 import React from "react"
+import Heading from "./Heading"
 import { Link } from "react-router-dom"
 import { DbInfo } from "../types"
-import Heading from "./Heading"
 
 function Home() {
     const databases: DbInfo[] = [
