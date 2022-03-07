@@ -110,19 +110,36 @@ router.post('/', async (req, res) => {
 })
 
 router.put('/:id', async (req, res) => {
-  let updatedFern = JSON.parse(JSON.stringify(req.body))
-
-  if (checkDropdownsHasError(updatedFern)) return
-  const existingRecord = await Fern.findOne({ name: updatedFern.name })
-  
-  // If name exists, and existingRecord is the current: ignore name, otherwise return error.
-  if (existingRecord) {
-    if (existingRecord.id !== req.params.id) { res.status(500).send('Name already exists.'); return }
-    else if (existingRecord.name === updatedFern.name) delete updatedFern.name
-  }
+  let objectId;
 
   try {
-    await Fern.findOneAndUpdate({ id: req.params.id }, updatedFern, { runValidators: true, context: 'query' })
+    objectId = mongoose.Types.ObjectId(req.params.id)  
+  } catch {
+    res.status(500).send('Invalid Id.')
+  }
+
+  const fern = await Fern.findById(objectId)
+  if (!fern) { res.status(404).send('Unable to update non-exsistant record.'); return; }
+
+  const fernObj = {}
+
+  fernObj.lightingCondition = req.body.lightingCondition
+  fernObj.wateringInterval = req.body.wateringInterval
+
+  if (checkDropdownsHasError(fern)) return
+
+  const existingRecord = await Fern.findOne({ name: req.body.name })
+  if (existingRecord && existingRecord.id !== req.params.id) { res.status(500).send('Name already exists.'); return }
+  
+  if (fern.name !== req.body.name) fernObj.name = req.body.name
+  fernObj.id = req.params.id
+  fernObj.nickname = req.body.nickname
+  fernObj.description = req.body.description
+  fernObj.avgHeightInches = req.body.avgHeightInches
+  fernObj.origin = req.body.origin
+
+  try {
+    await Fern.findOneAndUpdate({ _id: req.params.id }, fernObj, { runValidators: true, context: 'query' })
     res.status(200).send('Record updated.')
   } catch {
     res.status(500).send('Unable to update record.')
