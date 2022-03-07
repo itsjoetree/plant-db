@@ -57,10 +57,20 @@ function checkDropdownsHasError(fern) {
 }
 
 router.get('/', async (req, res) => {
-  if (req.query.top && isNaN(req.query.top)) res.status(500).send('top parameter must be numeric.')
-  if (req.query.skip && isNaN(req.query.skip)) res.status(500).send('skip parameter must be numeric.')
+  if (req.query.top && isNaN(req.query.top)) { res.status(500).send('top parameter must be numeric.'); return; }
+  if (req.query.skip && isNaN(req.query.skip)) { res.status(500).send('skip parameter must be numeric.'); return; }
 
-  const ferns = await Fern.find().skip(req.query.skip).limit(req.query.top)
+  let ferns = Fern.find()
+  const skip = parseInt(req.query.skip)
+  const top = parseInt(req.query.top)
+  
+  if (skip >= 0)
+    ferns = ferns.skip(skip)
+
+  if (top >= 0)
+    ferns = ferns.limit(top)
+
+  ferns = await ferns
 
   const tableInfo = {
     schema: generateSchema(),
