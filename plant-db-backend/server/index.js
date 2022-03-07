@@ -10,7 +10,7 @@ const app = express()
 
 const url = process.env.DB_STRING;
 
-const connectionParams={
+const connectionParams= {
     useNewUrlParser: true,
     useUnifiedTopology: true 
 }
@@ -24,7 +24,7 @@ mongoose.connect(url, connectionParams)
   })
 
 app.use(express.json())
-app.use(express.urlencoded())
+app.use(express.urlencoded({ extended: false }))
 app.use("/api/ferns", fernRouter)
 
 app.get("/api", (req, res) => {
