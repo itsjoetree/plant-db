@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import DbTable from './components/DbTable';
 import DbForm from './components/DbForm';
 import DbItem from './components/DbItem';
-import NotFound from './components/NotFound';
+import SomethingWentWrong from './components/SomethingWentWrong';
 import Layout from './components/Layout';
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
         <Route path="/:controller/:id" element={<DbItem />} />
         <Route path="/:controller/:id/edit" element={<DbForm />} />
         <Route path="/:controller/:id/:action" element={<DbItem />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="*" element={<SomethingWentWrong />} />
       </Routes>
     </Layout>
   );

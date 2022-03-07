@@ -5,11 +5,11 @@ import { ErrorMessage, Field, Form, Formik } from "formik"
 import { Button, Col, Row } from "react-bootstrap"
 import { useNavigate, useParams } from "react-router"
 import axios from "axios"
-import InitialLoadError from "./IntialLoadError"
 import Error from "./Error"
 import Loading from "./Loading"
 import { Link } from "react-router-dom"
 import { ArrowLeftCircleFill } from "react-bootstrap-icons"
+import SomethingWentWrong from "./SomethingWentWrong"
 
 type DbFormParams = {
     id: string,
@@ -25,14 +25,16 @@ function DbForm() {
     const [serverError, setServerError] = React.useState<string>()
     const [loading, setLoading] = React.useState<boolean>(true)
     const [isSubmitting, setIsSubmitting] = React.useState<boolean>()
+    const identifier = id && formInfo?.records.find(r => r.propertyName === formInfo?.schema.find(p => p.isIdentifier)?.propertyName)?.value
     
     React.useEffect(() => {
+        document.title = `${controller} (${id ? `${identifier} Edit` : 'Create'}) - Plant DB`
         axios.get(`/api/${controller}/${id ? id : 'schema'}`)
             .then(response => id ? setFormInfo(response.data) : setFormInfo({schema: response.data} as ModelInfo))
             .catch(err => {
                 if (err.response) setServerError(err.response.data)
             })
-    }, [controller, id])
+    }, [controller, id, identifier])
 
     React.useEffect(() => {
         if (formInfo) {
@@ -99,10 +101,10 @@ function DbForm() {
 
     return (<>
         {(loading && !serverError) ? <Loading /> :
-            (loading && serverError) ? <InitialLoadError /> : <>
+            (loading && serverError) ? <SomethingWentWrong /> : <>
                 <div className="ms-3 mt-1">
                     <h1>{controller}</h1>
-                    <h3 className="ms-1">{id ? "Edit" : "Create"}</h3>
+                    <h3 className="ms-1">{id ? `Edit ${identifier}` : "Create"}</h3>
                 </div>
 
                 {serverError && <Error text={serverError} />}

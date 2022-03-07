@@ -1,14 +1,15 @@
+import React from "react"
 import { Link } from "react-router-dom"
 
-function NotFound() {
+function SomethingWentWrong() {
     return (
         <div className="text-center">
-            <h2>Not Found</h2>
+            <h2>Something went wrong!</h2>
 
             <p>
-                The resoure you are trying to load was not found.
+                It appears that there was an issue processing your request.
             </p>
-        
+
             <div className="m-2">
                 <Link to="/" role="button" className="btn btn-dark btn-responsive mx-auto">Go Home</Link>
             </div>
@@ -16,4 +17,4 @@ function NotFound() {
     )
 }
 
-export default NotFound
+export default SomethingWentWrong

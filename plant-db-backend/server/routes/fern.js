@@ -17,6 +17,7 @@ const wateringIntervalDropdown = [
   {name: 'Seldom', value: 'Seldom'}
 ]
 
+// Generates a schema for presenting data on the frontend
 function generateSchema() {
     return [
       { propertyName: 'id', type: 'Number', isKey: true, isHidden: true },
@@ -30,6 +31,7 @@ function generateSchema() {
     ]
 }
 
+// Generates records for presenting data on the frontend
 function generateRecords(fern) {
   return [
     { propertyName: 'id', value: fern.id },
@@ -43,12 +45,17 @@ function generateRecords(fern) {
   ]
 }
 
+// Checks if dropdown values are valid, if there is an error: return true
 function checkDropdowns(fern) {
-  if (wateringIntervalDropdown.findIndex(d => d.value === fern.wateringInterval) === -1)
+  if (wateringIntervalDropdown.findIndex(d => d.value === fern.wateringInterval) === -1) {
     res.status(409).send('Invalid Watering Interval.')
+    return true;
+  }
 
-  if (lightingConditionDropdown.findIndex(d => d.value === fern.lightingCondition) === -1)
+  if (lightingConditionDropdown.findIndex(d => d.value === fern.lightingCondition) === -1) {
     res.status(409).send('Invalid Lighting Condition.')
+    return true;
+  }
 }
 
 router.get('/', async (req, res) => {
@@ -71,14 +78,17 @@ router.get('/schema', (req, res) => {
 
 router.get('/:id', async (req, res) => {
   let fern;
+  let objectId;
 
   try {
-    const objectId = mongoose.Types.ObjectId(req.params.id)
-    fern = await Fern.findById(objectId)    
+    objectId = mongoose.Types.ObjectId(req.params.id)
   } catch {
     res.status(500).send('Invalid Id.')
   }
-  
+
+  fern = await Fern.findById(objectId)
+  if (!fern) { res.status(404).send('Record not found.'); return; }
+
   const modelInfo = {
     schema: generateSchema(),
     records: generateRecords(fern)
@@ -90,7 +100,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {  
   const newFern = req.body
 
-  checkDropdowns(newFern)
+  if (checkDropdowns(newFern)) return
 
   Fern.create(newFern)
     .then(r => res.status(200).send(r._id))
@@ -103,34 +113,35 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   let updatedFern = JSON.parse(JSON.stringify(req.body))
 
+  if (checkDropdowns(updatedFern)) return
+  const existingRecord = await Fern.findOne({ name: updatedFern.name })
+  
+  // If name exists, and existingRecord is the current: ignore name, otherwise return error.
+  if (existingRecord) {
+    if (existingRecord.id !== req.params.id) { res.status(500).send('Name already exists.'); return }
+    else if (existingRecord.name === updatedFern.name) delete updatedFern.name
+  }
+
   try {
-    checkDropdowns(updatedFern)
-
-    // Check if name currently exists
-    const existingRecord = await Fern.findOne({ name: updatedFern.name })
-
-    if (existingRecord) {
-      if (existingRecord.id !== req.params.id) { res.status(500).send('Name already exists.'); return }
-      else if (existingRecord.name === updatedFern.name) delete updatedFern.name
-    }
-
     await Fern.findOneAndUpdate({ id: req.params.id }, updatedFern, { runValidators: true, context: 'query' })
     res.status(200).send('Record updated.')
-  } catch (e) {
-    console.log(e)
+  } catch {
     res.status(500).send('Unable to update record.')
   }
 })
 
 router.delete('/:id', async (req, res) => {
   let fern;
+  let objectId;
 
   try {
-    const objectId = mongoose.Types.ObjectId(req.params.id)
-    fern = await Fern.findById(objectId)    
+    objectId = mongoose.Types.ObjectId(req.params.id)  
   } catch {
     res.status(500).send('Invalid Id.')
   }
+
+  fern = await Fern.findById(objectId)
+  if (!fern) { res.status(404).send('Record not found.'); return; }
 
   try {
     await fern.remove()

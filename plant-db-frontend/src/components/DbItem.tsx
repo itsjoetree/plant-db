@@ -4,9 +4,9 @@ import { useParams } from "react-router"
 import { ModelInfo, Property } from "../types"
 import { ArrowLeftCircleFill, PenFill, TrashFill } from "react-bootstrap-icons"
 import DbDelete from "./DbDelete"
-import InitialLoadError from "./IntialLoadError"
 import Loading from "./Loading"
 import { Link } from "react-router-dom"
+import SomethingWentWrong from "./SomethingWentWrong"
 
 type DbItemParams = {
     controller: string,
@@ -19,8 +19,10 @@ function DbItem() {
     const [itemInfo, setItemInfo] = React.useState<ModelInfo>()
     const [loading, setLoading] = React.useState<boolean>(true)
     const [error, setError] = React.useState<string>()
+    const identifier = itemInfo?.records.find(r => r.propertyName === itemInfo?.schema.find(p => p.isIdentifier)?.propertyName)?.value
 
     React.useEffect(() => {
+        document.title = `${controller} (${identifier}) - Plant DB`
         axios.get<ModelInfo>(`/api/${controller}/${id}`)
             .then(response => { 
                 setItemInfo(response.data)
@@ -29,7 +31,7 @@ function DbItem() {
             .catch(err => {
                 if (err.response) setError(err.response.data)
             })
-    }, [controller, id])
+    }, [controller, id, identifier])
 
     function getDisplayValue(p: Property) {
         switch (p.type) {
@@ -41,12 +43,12 @@ function DbItem() {
     }
 
     return ((loading && !error) ? <Loading /> : 
-        (loading && error) ? <InitialLoadError /> :
+        (loading && error) ? <SomethingWentWrong /> :
         <>
             <div className="ms-3 mt-1">
                 <h1>{controller}</h1>
                 <h3 className="ms-1">
-                    {itemInfo?.records.find(r => r.propertyName === itemInfo?.schema.find(p => p.isIdentifier)?.propertyName)?.value}
+                    {identifier}
                 </h3>
             </div>
 

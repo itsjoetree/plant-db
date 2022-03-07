@@ -4,10 +4,10 @@ import { PlusCircleFill } from "react-bootstrap-icons"
 import { FormSelect, Table } from "react-bootstrap"
 import { useParams } from "react-router"
 import { Link } from "react-router-dom"
-import { TableInfo } from "../types"
+import { ModelRecord, TableInfo } from "../types"
 import Heading from "./Heading"
-import InitialLoadError from "./IntialLoadError"
 import Loading from "./Loading"
+import SomethingWentWrong from "./SomethingWentWrong"
 
 type DbTableParams = {
     controller: string,
@@ -23,6 +23,7 @@ function DbTable() {
     const [loading, setLoading] = React.useState<boolean>(true)
 
     React.useEffect(() => {
+        document.title = `${controller} - Plant DB`
         const path = `/api/${controller}?skip=${(pgIndex - 1) * pgSize}&top=${pgSize}`
 
         axios.get<TableInfo>(path)
@@ -37,7 +38,18 @@ function DbTable() {
 
     const pgSizeChange = (e: React.ChangeEvent<HTMLSelectElement>) => setPgSize(parseInt(e.currentTarget.value))
 
-    return ((loading && !error) ? <Loading /> : (error && loading) ? <InitialLoadError text={error} /> :
+    function getDisplayValue(record: ModelRecord) {
+        const property = tableInfo?.schema.find(p => p.propertyName === record.propertyName)
+
+        switch (property?.type) {
+            case 'Dropdown':
+                return property.dropdown?.find(d => d.value === record.value)?.name
+            default:
+                return record.value
+        }
+    }
+
+    return ((loading && !error) ? <Loading /> : (error && loading) ? <SomethingWentWrong /> :
         <>
             <Heading heading={controller ?? ''} />
 
@@ -65,7 +77,7 @@ function DbTable() {
                             to={`/${controller}/${keyRecord?.value}`}>
                                 {
                                     row.filter(r => r.propertyName !== keyRecord?.propertyName).map(record => <td key={record.propertyName}>
-                                        {record.value}
+                                        {getDisplayValue(record)}
                                     </td>)
                                 }
                             </Link>)
