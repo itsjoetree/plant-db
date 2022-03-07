@@ -36,10 +36,10 @@ type Property = {
 }
 
 export {
-    DataType,
     DbInfo,
     ModelInfo,
     TableInfo,
     ModelRecord,
-    Property
+    DropdownOption,
+    Property,
 }
