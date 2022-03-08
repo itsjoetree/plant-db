@@ -20,9 +20,9 @@ function DbItem() {
     const [loading, setLoading] = React.useState<boolean>(true)
     const [error, setError] = React.useState<string>()
     const identifier = itemInfo?.records.find(r => r.propertyName === itemInfo?.schema.find(p => p.isIdentifier)?.propertyName)?.value
+    document.title = `${controller} (${identifier}) - Plant DB`
 
     React.useEffect(() => {
-        document.title = `${controller} (${identifier}) - Plant DB`
         axios.get<ModelInfo>(`/api/${controller}/${id}`)
             .then(response => { 
                 setItemInfo(response.data)
@@ -31,7 +31,7 @@ function DbItem() {
             .catch(err => {
                 if (err.response) setError(err.response.data)
             })
-    }, [controller, id, identifier])
+    }, [controller, id])
 
     function getDisplayValue(p: Property) {
         switch (p.type) {

@@ -26,15 +26,15 @@ function DbForm() {
     const [loading, setLoading] = React.useState<boolean>(true)
     const [isSubmitting, setIsSubmitting] = React.useState<boolean>()
     const identifier = id && formInfo?.records.find(r => r.propertyName === formInfo?.schema.find(p => p.isIdentifier)?.propertyName)?.value
-    
+    document.title = `${controller} (${id ? `${identifier} Edit` : 'Create'}) - Plant DB`
+
     React.useEffect(() => {
-        document.title = `${controller} (${id ? `${identifier} Edit` : 'Create'}) - Plant DB`
         axios.get(`/api/${controller}/${id ? id : 'schema'}`)
             .then(response => id ? setFormInfo(response.data) : setFormInfo({schema: response.data} as ModelInfo))
             .catch(err => {
                 if (err.response) setServerError(err.response.data)
             })
-    }, [controller, id, identifier])
+    }, [controller, id])
 
     React.useEffect(() => {
         if (formInfo) {

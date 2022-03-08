@@ -57,8 +57,8 @@ function checkDropdownsHasError(fern) {
 }
 
 router.get('/', async (req, res) => {
-  if (req.query.top && isNaN(req.query.top)) { res.status(500).send('top parameter must be numeric.'); return; }
-  if (req.query.skip && isNaN(req.query.skip)) { res.status(500).send('skip parameter must be numeric.'); return; }
+  if (req.query.top && isNaN(req.query.top)) return res.status(500).send('top parameter must be numeric.')
+  if (req.query.skip && isNaN(req.query.skip)) return res.status(500).send('skip parameter must be numeric.')
 
   let ferns = Fern.find()
   const skip = parseInt(req.query.skip)
@@ -92,11 +92,11 @@ router.get('/:id', async (req, res) => {
   try {
     objectId = mongoose.Types.ObjectId(req.params.id)
   } catch {
-    res.status(500).send('Invalid Id.')
+    return res.status(500).send('Invalid Id.')
   }
 
   fern = await Fern.findById(objectId)
-  if (!fern) { res.status(404).send('Record not found.'); return; }
+  if (!fern) return res.status(404).send('Record not found.')
 
   const modelInfo = {
     schema: generateSchema(),
@@ -125,12 +125,11 @@ router.put('/:id', async (req, res) => {
   try {
     objectId = mongoose.Types.ObjectId(req.params.id)  
   } catch {
-    res.status(500).send('Invalid Id.')
+    return res.status(500).send('Invalid Id.')
   }
 
   const fern = await Fern.findById(objectId)
-  if (!fern) { res.status(404).send('Unable to update non-exsistant record.'); return; }
-
+  if (!fern) return res.status(404).send('Unable to update non-exsistant record.')
   const fernObj = {}
 
   fernObj.lightingCondition = req.body.lightingCondition
@@ -163,11 +162,11 @@ router.delete('/:id', async (req, res) => {
   try {
     objectId = mongoose.Types.ObjectId(req.params.id)  
   } catch {
-    res.status(500).send('Invalid Id.')
+    return es.status(500).send('Invalid Id.')
   }
 
   fern = await Fern.findById(objectId)
-  if (!fern) { res.status(404).send('Record not found.'); return; }
+  if (!fern) return res.status(404).send('Record not found.')
 
   try {
     await fern.remove()
