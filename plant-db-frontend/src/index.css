@@ -7,8 +7,14 @@ th {
   white-space: nowrap;
 }
 
-td a {
+td {
+  overflow: hidden;
+}
+
+td > a {
   display: block;
+  margin: -10em;
+  padding: 10em;
 }
 
 td a:hover {

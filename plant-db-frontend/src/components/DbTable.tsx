@@ -22,9 +22,9 @@ function DbTable() {
     const [pgSize, setPgSize] = React.useState<number>(20)
     const [error, setError] = React.useState<string>()
     const [loading, setLoading] = React.useState<boolean>(true)
+    document.title = `${controller} - Plant DB`
 
     React.useEffect(() => {
-        document.title = `${controller} - Plant DB`
         const path = `/api/${controller}?skip=${(pgIndex - 1) * pgSize}&top=${pgSize}`
 
         axios.get<TableInfo>(path)
@@ -49,7 +49,7 @@ function DbTable() {
             case 'Dropdown':
                 return property.dropdown?.find(d => d.value === record.value)?.name
             default:
-                return record.value === '' || !record.value ? <>&nbsp;</> : record.value
+                return record.value
         }
     }
 
@@ -104,6 +104,5 @@ function DbTable() {
         </>
     )
 }
-
 
 export default DbTable

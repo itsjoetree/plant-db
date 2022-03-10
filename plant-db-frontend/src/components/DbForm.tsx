@@ -22,18 +22,17 @@ function DbForm() {
     const [formInfo, setFormInfo] = React.useState<ModelInfo>()
     const [initialValues, setInitialValues] = React.useState<any>()
     const [validationSchema, setValidationSchema] = React.useState<any>()
-    const [serverError, setServerError] = React.useState<string>()
+    const [error, setError] = React.useState<string>()
     const [loading, setLoading] = React.useState<boolean>(true)
+    const [hasInitialError, setHasInitialError] = React.useState<boolean>(false)
     const [isSubmitting, setIsSubmitting] = React.useState<boolean>()
     const identifier = id && formInfo?.records.find(r => r.propertyName === formInfo?.schema.find(p => p.isIdentifier)?.propertyName)?.value
-    document.title = `${controller} (${id ? `${identifier} Edit` : 'Create'}) - Plant DB`
+    document.title = `${controller} (${id ? `Edit ${identifier ?? ''}` : 'Create'}) - Plant DB`
 
     React.useEffect(() => {
         axios.get(`/api/${controller}/${id ? id : 'schema'}`)
             .then(response => id ? setFormInfo(response.data) : setFormInfo({schema: response.data} as ModelInfo))
-            .catch(err => {
-                if (err.response) setServerError(err.response.data)
-            })
+            .catch(_err => setHasInitialError(true))
     }, [controller, id])
 
     React.useEffect(() => {
@@ -100,21 +99,20 @@ function DbForm() {
     }
 
     return (<>
-        {(loading && !serverError) ? <Loading /> :
-            (loading && serverError) ? <SomethingWentWrong /> : <>
+        {hasInitialError ? <SomethingWentWrong /> : loading ? <Loading /> : <>
                 <div className="ms-3 mt-1">
                     <h1>{controller}</h1>
                     <h3 className="ms-1">{id ? `Edit ${identifier}` : "Create"}</h3>
                 </div>
 
-                {serverError && <Error text={serverError} />}
+                {error && <Error text={error} />}
 
                 <Formik
                     initialValues={initialValues}
                     validationSchema={validationSchema}
                     onSubmit={values => {
                         setIsSubmitting(true)
-                        setServerError('')
+                        setError('')
 
                         // Let's determine if this will be an edit or create
                         // action through the useParams id.
@@ -123,7 +121,7 @@ function DbForm() {
                             .then(_response => navigate(`/${controller}/${id}`))
                             .catch(err => {
                                 if (err.response) {
-                                    setServerError(err.response.data)
+                                    setError(err.response.data)
                                     setIsSubmitting(false)
                                 }
                             })
@@ -131,13 +129,13 @@ function DbForm() {
                             .then(response => navigate(`/${controller}/${response.data}`))
                             .catch(err => {
                                 if (err.response) {
-                                    setServerError(err.response.data)
+                                    setError(err.response.data)
                                     setIsSubmitting(false)
                                 }
                             })
                     }}
                     >
-                    {({ errors }) => (
+                    {() => (
                         <Form>
                             <Row className="m-3">
                                 {

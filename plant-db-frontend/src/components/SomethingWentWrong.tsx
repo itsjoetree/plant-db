@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom"
 
 function SomethingWentWrong() {
+    document.title = 'Not Found - Plant DB'
+
     return (
         <div className="text-center">
             <h2>Something went wrong!</h2>

@@ -4,14 +4,12 @@ import { Link } from "react-router-dom"
 import { DbInfo } from "../types"
 
 function Home() {
+    document.title = 'Home - Plant DB'
+
     const databases: DbInfo[] = [
         {name: 'ferns', displayName: 'Ferns'},
     ]
-
-    React.useEffect(() => {
-        document.title = 'Home - Plant DB'
-    }, [])
-
+    
     return (
         <>
             <Heading 
