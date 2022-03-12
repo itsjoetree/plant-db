@@ -9,6 +9,7 @@ import { useParams } from "react-router"
 import { Link } from "react-router-dom"
 import { ModelRecord, TableInfo } from "../types"
 import { Pagination } from '@mui/material';
+import { Helmet } from "react-helmet"
 
 type DbTableParams = {
     controller: string,
@@ -22,7 +23,6 @@ function DbTable() {
     const [pgSize, setPgSize] = React.useState<number>(20)
     const [error, setError] = React.useState<string>()
     const [loading, setLoading] = React.useState<boolean>(true)
-    document.title = `${controller} - Plant DB`
 
     React.useEffect(() => {
         const path = `/api/${controller}?skip=${(pgIndex - 1) * pgSize}&top=${pgSize}`
@@ -55,6 +55,9 @@ function DbTable() {
 
     return ((loading && !error) ? <Loading /> : (error && loading) ? <SomethingWentWrong /> :
         <>
+            <Helmet>
+                <title>{`${controller} - Plant DB`}</title>
+            </Helmet>
             <Heading heading={controller ?? ''} />
 
             <div className="text-start ms-2 mt-4 mb-4">

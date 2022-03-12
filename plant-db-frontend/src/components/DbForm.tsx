@@ -10,6 +10,7 @@ import { ErrorMessage, Field, Form, Formik } from "formik"
 import { Button, Col, Row } from "react-bootstrap"
 import { useNavigate, useParams } from "react-router"
 import { ModelInfo, Property } from "../types"
+import { Helmet } from "react-helmet"
 
 type DbFormParams = {
     id: string,
@@ -27,7 +28,6 @@ function DbForm() {
     const [hasInitialError, setHasInitialError] = React.useState<boolean>(false)
     const [isSubmitting, setIsSubmitting] = React.useState<boolean>()
     const identifier = id && formInfo?.records.find(r => r.propertyName === formInfo?.schema.find(p => p.isIdentifier)?.propertyName)?.value
-    document.title = `${controller} (${id ? `Edit ${identifier ?? ''}` : 'Create'}) - Plant DB`
 
     React.useEffect(() => {
         axios.get(`/api/${controller}/${id ? id : 'schema'}`)
@@ -100,6 +100,9 @@ function DbForm() {
 
     return (<>
         {hasInitialError ? <SomethingWentWrong /> : loading ? <Loading /> : <>
+                <Helmet>
+                    <title>{`${controller} (${id ? `Edit ${identifier ?? ''}` : 'Create'}) - Plant DB`}</title>
+                </Helmet>
                 <div className="ms-3 mt-1">
                     <h1>{controller}</h1>
                     <h3 className="ms-1">{id ? `Edit ${identifier}` : "Create"}</h3>

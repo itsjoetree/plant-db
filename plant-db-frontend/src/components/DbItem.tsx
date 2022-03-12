@@ -8,6 +8,7 @@ import { useParams } from "react-router"
 import { ModelInfo, Property } from "../types"
 import { ArrowLeftCircleFill, PenFill, TrashFill } from "react-bootstrap-icons"
 import { upperCase } from "../helpers"
+import { Helmet } from "react-helmet"
 
 type DbItemParams = {
     controller: string,
@@ -22,7 +23,6 @@ function DbItem() {
     const [loading, setLoading] = React.useState<boolean>(true)
     const [hasInitialError, setHasInitialError] = React.useState<boolean>(action !== undefined && acceptableActions.indexOf(action ?? '') === -1)
     const identifier = itemInfo?.records.find(r => r.propertyName === itemInfo?.schema.find(p => p.isIdentifier)?.propertyName)?.value
-    document.title = `${controller} ${identifier ? `(${action ? `${upperCase(action)} ` : ''}${identifier})` : ''} - Plant DB`
 
     React.useEffect(() => {
         axios.get<ModelInfo>(`/api/${controller}/${id}`)
@@ -44,6 +44,9 @@ function DbItem() {
     
     return (hasInitialError ? <SomethingWentWrong /> : loading ? <Loading /> : 
         <>
+            <Helmet>
+                <title>{ `${controller} ${identifier ? `(${action ? `${upperCase(action)} ` : ''}${identifier})` : ''} - Plant DB`}</title>
+            </Helmet>
             <div className="ms-3 mt-1">
                 <h1>{controller}</h1>
                 <h3 className="ms-1">

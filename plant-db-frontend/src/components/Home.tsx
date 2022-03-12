@@ -2,16 +2,18 @@ import React from "react"
 import Heading from "./Heading"
 import { Link } from "react-router-dom"
 import { DbInfo } from "../types"
+import { Helmet } from "react-helmet"
 
 function Home() {
-    document.title = 'Home - Plant DB'
-
     const databases: DbInfo[] = [
         {name: 'ferns', displayName: 'Ferns'},
     ]
     
     return (
         <>
+            <Helmet>
+                <title>{document.title = 'Home - Plant DB'}</title>
+            </Helmet>
             <Heading 
                 heading="Plant DB"
                 text="An online database where nature enthusaists can share their findings 
