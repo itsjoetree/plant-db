@@ -1,3 +1,4 @@
+import mongoose from "mongoose"
 import connectDB from "../../../middleware/mongodb"
 import Fern from "../../../models/fern"
 import { checkDropdownsHasError, generateRecords, generateSchema } from "../../../helpers/fern"
@@ -6,15 +7,18 @@ const handler = async (req, res) => {
     let fern
     let objectId
 
+    const { id } = req.query
+    console.log(id)
+
     switch (req.method) {
         case 'PUT':
             try {
-                objectId = mongoose.Types.ObjectId(req.params.id)  
+                objectId = mongoose.Types.ObjectId(id)  
             } catch {
                 return res.status(500).send('Invalid Id.')
             }
             
-            const fern = await Fern.findById(objectId)
+            fern = await Fern.findById(objectId)
             if (!fern) return res.status(404).send('Unable to update non-exsistant record.')
             const fernObj = {}
             
@@ -24,17 +28,17 @@ const handler = async (req, res) => {
             if (checkDropdownsHasError(fern)) return
             
             const existingRecord = await Fern.findOne({ name: req.body.name })
-            if (existingRecord && existingRecord.id !== req.params.id) { res.status(500).send('Name already exists.'); return }
+            if (existingRecord && existingRecord.id !== id) { res.status(500).send('Name already exists.'); return }
             
             if (fern.name !== req.body.name) fernObj.name = req.body.name
-            fernObj.id = req.params.id
+            fernObj.id = id
             fernObj.nickname = req.body.nickname
             fernObj.description = req.body.description
             fernObj.avgHeightInches = req.body.avgHeightInches
             fernObj.origin = req.body.origin
             
             try {
-                await Fern.findOneAndUpdate({ _id: req.params.id }, fernObj, { runValidators: true, context: 'query' })
+                await Fern.findOneAndUpdate({ _id: id }, fernObj, { runValidators: true, context: 'query' })
                 res.status(200).send('Record updated.')
             } catch {
                 res.status(500).send('Unable to update record.')
@@ -43,7 +47,7 @@ const handler = async (req, res) => {
             return
         case 'DELETE':
             try {
-                objectId = mongoose.Types.ObjectId(req.params.id)  
+                objectId = mongoose.Types.ObjectId(id)  
             } catch {
                 return es.status(500).send('Invalid Id.')
             }
@@ -60,7 +64,7 @@ const handler = async (req, res) => {
             return
         case 'GET':
             try {
-                objectId = mongoose.Types.ObjectId(req.params.id)
+                objectId = mongoose.Types.ObjectId(id)
             } catch {
                 return res.status(500).send('Invalid Id.')
             }

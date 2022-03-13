@@ -20,18 +20,20 @@ function DbTable() {
     const [loading, setLoading] = React.useState<boolean>(true)
 
     React.useEffect(() => {
-        const path = `/api/${controller}?skip=${(pgIndex - 1) * pgSize}&top=${pgSize}`
+        if (controller) {
+            const path = `/api/${controller}?skip=${(pgIndex - 1) * pgSize}&top=${pgSize}`
 
-        axios.get<TableInfo>(path)
-            .then(response => {
-                const totalPages = Math.ceil(response.data.totalCount / pgSize)
-                if (pgIndex > totalPages) setPgIndex(totalPages)
-                setTableInfo(response.data)
-                setLoading(false)
-            })
-            .catch(err => {
-                if (err.response) setError(err.response.data)
-            })
+            axios.get<TableInfo>(path)
+                .then(response => {
+                    const totalPages = Math.ceil(response.data.totalCount / pgSize)
+                    if (pgIndex > totalPages) setPgIndex(totalPages)
+                    setTableInfo(response.data)
+                    setLoading(false)
+                })
+                .catch(err => {
+                    if (err.response) setError(err.response.data)
+                })
+        }
     }, [controller, pgIndex, pgSize])
 
     const changePgSize = (e: React.ChangeEvent<HTMLSelectElement>) => setPgSize(parseInt(e.currentTarget.value))
@@ -51,7 +53,7 @@ function DbTable() {
     return ((loading && !error) ? <Loading /> : (error && loading) ? <SomethingWentWrong /> :
         <>
             <div className="text-start ms-2 mt-4 mb-4">
-                <Link href={`/${controller}/new`}><PlusCircleFill color="black" size={25} /></Link>
+                <Link href={`/${controller}/new`}><PlusCircleFill className="cursor-pointer" color="black" size={25} /></Link>
             </div>
 
             <Table hover responsive>
