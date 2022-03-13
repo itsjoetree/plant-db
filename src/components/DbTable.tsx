@@ -1,23 +1,18 @@
 import axios from "axios"
 import React from "react"
-import Heading from "./Heading"
 import Loading from "./Loading"
 import SomethingWentWrong from "./SomethingWentWrong"
+import Link from "next/link"
+import { useRouter } from "next/router"
 import { PlusCircleFill } from "react-bootstrap-icons"
 import { FormSelect, Table } from "react-bootstrap"
-import { useParams } from "react-router"
-import { Link } from "react-router-dom"
 import { ModelRecord, TableInfo } from "../types"
-import { Pagination } from '@mui/material';
-import { Helmet } from "react-helmet"
-
-type DbTableParams = {
-    controller: string,
-}
+import { Pagination } from '@mui/material'
 
 function DbTable() {
     const pageSizes = [5, 10, 15, 20]
-    const { controller } = useParams<DbTableParams>()
+    const router = useRouter()
+    const { controller } = router.query
     const [tableInfo, setTableInfo] = React.useState<TableInfo>()
     const [pgIndex, setPgIndex] = React.useState<number>(1)
     const [pgSize, setPgSize] = React.useState<number>(20)
@@ -43,7 +38,7 @@ function DbTable() {
     const changePgIndex =  (e: React.ChangeEvent<unknown>, page: number) => setPgIndex(page)
 
     function getDisplayValue(record: ModelRecord) {
-        const property = tableInfo?.schema.find(p => p.propertyName === record.propertyName)
+        const property = tableInfo?.schema?.find(p => p.propertyName === record.propertyName)
 
         switch (property?.type) {
             case 'Dropdown':
@@ -55,20 +50,15 @@ function DbTable() {
 
     return ((loading && !error) ? <Loading /> : (error && loading) ? <SomethingWentWrong /> :
         <>
-            <Helmet>
-                <title>{`${controller} - Plant DB`}</title>
-            </Helmet>
-            <Heading heading={controller ?? ''} />
-
             <div className="text-start ms-2 mt-4 mb-4">
-                <Link to={`/${controller}/new`}><PlusCircleFill color="black" size={25} /></Link>
+                <Link href={`/${controller}/new`}><PlusCircleFill color="black" size={25} /></Link>
             </div>
 
             <Table hover responsive>
                 <thead>
                     <tr>
                         {
-                           tableInfo?.schema.filter(s => !s.isHidden).map(p => <th key={p.propertyName}>{p.displayName}</th>) 
+                           tableInfo?.schema?.filter(s => !s.isHidden).map(p => <th key={p.propertyName}>{p.displayName}</th>) 
                         }
                     </tr>
                 </thead>
@@ -83,8 +73,10 @@ function DbTable() {
                             className="table-row cursor-pointer">
                                 {
                                     row.filter(r => r.propertyName !== keyRecord?.propertyName).map(record => <td key={record.propertyName}>
-                                        <Link className="table-link" to={`/${controller}/${keyRecord?.value}`}>
-                                            {getDisplayValue(record)}
+                                        <Link href={`/${controller}/${keyRecord?.value}`}>
+                                            <a className="table-link">
+                                                {getDisplayValue(record)}
+                                            </a>
                                         </Link>
                                     </td>)
                                 }

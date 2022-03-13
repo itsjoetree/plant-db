@@ -1,12 +1,13 @@
-import { Helmet } from "react-helmet"
-import { Link } from "react-router-dom"
+import Head from "next/head"
+import Link from "next/link"
 
 function SomethingWentWrong() {
     return (
         <>
-            <Helmet>
+            <Head>
                 <title>Not Found - Plant DB</title>
-            </Helmet>
+            </Head>
+
             <div className="text-center">
                 <h2>Something went wrong!</h2>
 
@@ -15,7 +16,9 @@ function SomethingWentWrong() {
                 </p>
 
                 <div className="m-2">
-                    <Link to="/" role="button" className="btn btn-dark btn-responsive mx-auto">Go Home</Link>
+                    <Link href="/">
+                        <a className="btn btn-dark btn-responsive mx-auto">Go Home</a>
+                    </Link>
                 </div>
             </div>
         </>

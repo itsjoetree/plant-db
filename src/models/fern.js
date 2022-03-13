@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+import mongoose from "mongoose"
 const uniqueValidator = require('mongoose-unique-validator');
 
 const fernSchema = new mongoose.Schema({ 
@@ -36,4 +36,5 @@ const fernSchema = new mongoose.Schema({
 
 fernSchema.plugin(uniqueValidator)
 
-module.exports = mongoose.model('Fern', fernSchema)
+global.Fern = global.Fern || mongoose.model('Fern', fernSchema)
+export default global.Fern

@@ -1,27 +1,25 @@
 import axios from "axios"
 import React, { Fragment } from "react"
-import DbDelete from "./DbDelete"
-import Loading from "./Loading"
-import SomethingWentWrong from "./SomethingWentWrong"
-import { Link } from "react-router-dom"
-import { useParams } from "react-router"
-import { ModelInfo, Property } from "../types"
+import Loading from "../../components/Loading"
+import SomethingWentWrong from "../../components/SomethingWentWrong"
+import Link from "next/link"
+import Head from "next/head"
+import { useRouter } from "next/router"
+import { ModelInfo, Property } from "../../types"
 import { ArrowLeftCircleFill, PenFill, TrashFill } from "react-bootstrap-icons"
-import { upperCase } from "../helpers"
-import { Helmet } from "react-helmet"
+import { upperCase } from "../../helpers"
 
-type DbItemParams = {
-    controller: string,
-    id: string,
-    action: string,
+type DbItemProps = {
+    children: any
 }
 
-function DbItem() {
+function DbItem({ children } : DbItemProps) {
+    const router = useRouter()
     const acceptableActions = ['delete']
-    const { controller, id, action } = useParams<DbItemParams>()
+    const { controller, id, action } = router.query
     const [itemInfo, setItemInfo] = React.useState<ModelInfo>()
     const [loading, setLoading] = React.useState<boolean>(true)
-    const [hasInitialError, setHasInitialError] = React.useState<boolean>(action !== undefined && acceptableActions.indexOf(action ?? '') === -1)
+    const [hasInitialError, setHasInitialError] = React.useState<boolean>(action !== undefined && acceptableActions.indexOf(action as string ?? '') === -1)
     const identifier = itemInfo?.records.find(r => r.propertyName === itemInfo?.schema.find(p => p.isIdentifier)?.propertyName)?.value
 
     React.useEffect(() => {
@@ -44,9 +42,10 @@ function DbItem() {
     
     return (hasInitialError ? <SomethingWentWrong /> : loading ? <Loading /> : 
         <>
-            <Helmet>
-                <title>{ `${controller} ${identifier ? `(${action ? `${upperCase(action)} ` : ''}${identifier})` : ''} - Plant DB`}</title>
-            </Helmet>
+            <Head>
+                <title>{ `${controller} ${identifier ? `(${action ? `${upperCase(action as string)} ` : ''}${identifier})` : ''} - Plant DB`}</title>
+            </Head>
+            
             <div className="ms-3 mt-1">
                 <h1>{controller}</h1>
                 <h3 className="ms-1">
@@ -65,20 +64,22 @@ function DbItem() {
                 </dl>
             </div>
 
-            {
-                action === 'delete' && <DbDelete />
-            }
+            {children && children}
 
             <div className="p-4 text-center">
-                <Link className="me-2" to={`/${controller}`}>
-                    <ArrowLeftCircleFill color="black" size={30} />
-                </Link>
+                <span className="me-2">
+                    <Link href={`/${controller}`}>
+                        <ArrowLeftCircleFill color="black" size={30} />
+                    </Link>
+                </span>
 
-                <Link className="me-2" to={`/${controller}/${id}/edit`}>
-                    <PenFill color="black" size={30} />
-                </Link>
+                <span className="me-2">
+                    <Link href={`/${controller}/${id}/edit`}>
+                        <PenFill color="black" size={30} />
+                    </Link>
+                </span>
 
-                <Link to={`/${controller}/${id}/delete`}>
+                <Link href={`/${controller}/${id}/delete`}>
                     <TrashFill color="black" size={30} />
                 </Link>
             </div>

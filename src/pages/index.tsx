@@ -1,8 +1,8 @@
 import React from "react"
-import Heading from "./Heading"
-import { Link } from "react-router-dom"
+import Heading from "../components/Heading"
+import Head from "next/head"
 import { DbInfo } from "../types"
-import { Helmet } from "react-helmet"
+import Link from "next/link"
 
 function Home() {
     const databases: DbInfo[] = [
@@ -11,9 +11,10 @@ function Home() {
     
     return (
         <>
-            <Helmet>
-                <title>{document.title = 'Home - Plant DB'}</title>
-            </Helmet>
+            <Head>
+                <title>Home - Plant DB</title>
+            </Head>
+
             <Heading 
                 heading="Plant DB"
                 text="An online database where nature enthusaists can share their findings 
@@ -22,8 +23,10 @@ function Home() {
 
             {
                 databases.map(db => <div key={db.name} className="d-grid gap-2 m-2">
-                        <Link to={'/' + db.name} key={db.name} role="button" className="btn btn-dark btn-responsive mx-auto">
-                            {db.displayName}
+                        <Link href={'/' + db.name} key={db.name}>
+                            <a role="button" className="btn btn-dark btn-responsive mx-auto">
+                                {db.displayName}
+                            </a>
                         </Link>
                     </div>)
             }
