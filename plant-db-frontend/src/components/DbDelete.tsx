@@ -1,19 +1,24 @@
 import axios from "axios"
 import React from "react"
 import Error from "./Error"
-import { useRouter } from "next/router"
 import { Form, Alert, Button } from "react-bootstrap"
+import { useNavigate, useParams } from "react-router"
+
+type DbDeleteParams = {
+    id: string,
+    controller: string,
+}
 
 function DbDelete() {
-    const router = useRouter()
-    const { id, controller } = router.query
+    const { id, controller } = useParams<DbDeleteParams>()
+    const navigate = useNavigate()
     const [error, setError] = React.useState<string>()
 
     function handleSubmit (e: React.FormEvent) {
         e.preventDefault()
 
         axios.delete(`/api/${controller}/${id}`)
-            .then(_response => router.push(`/${controller}`))
+            .then(_response => navigate(`/${controller}`))
             .catch(err => {
                 if (err.response) setError(err.response.data)
             })

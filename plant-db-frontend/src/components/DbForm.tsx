@@ -4,28 +4,36 @@ import axios from "axios"
 import Error from "./Error"
 import Loading from "./Loading"
 import SomethingWentWrong from "./SomethingWentWrong"
-import Link from "next/link"
-import Head from "next/head"
-import { useRouter } from "next/router"
+import { Link } from "react-router-dom"
 import { ArrowLeftCircleFill } from "react-bootstrap-icons"
 import { ErrorMessage, Field, Form, Formik } from "formik"
 import { Button, Col, Row } from "react-bootstrap"
+import { useNavigate, useParams } from "react-router"
 import { ModelInfo, Property } from "../types"
+import { Helmet } from "react-helmet"
 
-type DbFormProps = {
-    formInfo: ModelInfo,
-    heading: string
+type DbFormParams = {
+    id: string,
+    controller: string
 }
 
-function DbForm({ formInfo, heading } : DbFormProps) {
-    const router = useRouter()
-    const { id, controller } = router.query
+function DbForm() {
+    const navigate = useNavigate()
+    const { id, controller } = useParams<DbFormParams>()
+    const [formInfo, setFormInfo] = React.useState<ModelInfo>()
     const [initialValues, setInitialValues] = React.useState<any>()
     const [validationSchema, setValidationSchema] = React.useState<any>()
     const [error, setError] = React.useState<string>()
     const [loading, setLoading] = React.useState<boolean>(true)
     const [hasInitialError, setHasInitialError] = React.useState<boolean>(false)
     const [isSubmitting, setIsSubmitting] = React.useState<boolean>()
+    const identifier = id && formInfo?.records.find(r => r.propertyName === formInfo?.schema.find(p => p.isIdentifier)?.propertyName)?.value
+
+    React.useEffect(() => {
+        axios.get(`/api/${controller}/${id ? id : 'schema'}`)
+            .then(response => id ? setFormInfo(response.data) : setFormInfo({schema: response.data} as ModelInfo))
+            .catch(_err => setHasInitialError(true))
+    }, [controller, id])
 
     React.useEffect(() => {
         if (formInfo) {
@@ -92,9 +100,12 @@ function DbForm({ formInfo, heading } : DbFormProps) {
 
     return (<>
         {hasInitialError ? <SomethingWentWrong /> : loading ? <Loading /> : <>
+                <Helmet>
+                    <title>{`${controller} (${id ? `Edit ${identifier ?? ''}` : 'Create'}) - Plant DB`}</title>
+                </Helmet>
                 <div className="ms-3 mt-1">
                     <h1>{controller}</h1>
-                    <h3 className="ms-1">{heading}</h3>
+                    <h3 className="ms-1">{id ? `Edit ${identifier}` : "Create"}</h3>
                 </div>
 
                 {error && <Error text={error} />}
@@ -110,7 +121,7 @@ function DbForm({ formInfo, heading } : DbFormProps) {
                         // action through the useParams id.
 
                         if (id) axios.put(`/api/${controller}/${id}`, values)
-                            .then(_response => router.push(`/${controller}/${id}`))
+                            .then(_response => navigate(`/${controller}/${id}`))
                             .catch(err => {
                                 if (err.response) {
                                     setError(err.response.data)
@@ -118,7 +129,7 @@ function DbForm({ formInfo, heading } : DbFormProps) {
                                 }
                             })
                         else axios.post<string>(`/api/${controller}`, values)
-                            .then(response => router.push(`/${controller}/${response.data}`))
+                            .then(response => navigate(`/${controller}/${response.data}`))
                             .catch(err => {
                                 if (err.response) {
                                     setError(err.response.data)
@@ -149,8 +160,8 @@ function DbForm({ formInfo, heading } : DbFormProps) {
                     )}
                 </Formik>
                 
-                <div className="mt-4 ms-2">
-                    <Link href={`/${controller}${id ? `/${id}` : ''}`}>
+                <div className="mt-4">
+                    <Link className="ms-2" to={`/${controller}${id ? `/${id}` : ''}`}>
                         <ArrowLeftCircleFill color="black" size={30} />
                     </Link>
                 </div>
