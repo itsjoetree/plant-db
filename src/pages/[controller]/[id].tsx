@@ -23,13 +23,12 @@ function DbItem({ children } : DbItemProps) {
     const identifier = itemInfo?.records.find(r => r.propertyName === itemInfo?.schema.find(p => p.isIdentifier)?.propertyName)?.value
 
     React.useEffect(() => {
-        if (controller && id)
-            axios.get<ModelInfo>(`/api/${controller}/${id}`)
-                .then(response => { 
-                    setItemInfo(response.data)
-                    setLoading(false)
-                })
-                .catch(_err => setHasInitialError(true))
+        axios.get<ModelInfo>(`/api/${controller}/${id}`)
+            .then(response => { 
+                setItemInfo(response.data)
+                setLoading(false)
+            })
+            .catch(_err => setHasInitialError(true))
     }, [controller, id])
 
     function getDisplayValue(p: Property) {
@@ -70,18 +69,18 @@ function DbItem({ children } : DbItemProps) {
             <div className="p-4 text-center">
                 <span className="me-2">
                     <Link href={`/${controller}`}>
-                        <ArrowLeftCircleFill className="cursor-pointer" color="black" size={30} />
+                        <ArrowLeftCircleFill color="black" size={30} />
                     </Link>
                 </span>
 
                 <span className="me-2">
                     <Link href={`/${controller}/${id}/edit`}>
-                        <PenFill className="cursor-pointer" color="black" size={30} />
+                        <PenFill color="black" size={30} />
                     </Link>
                 </span>
 
                 <Link href={`/${controller}/${id}/delete`}>
-                    <TrashFill className="cursor-pointer" color="black" size={30} />
+                    <TrashFill color="black" size={30} />
                 </Link>
             </div>
         </>

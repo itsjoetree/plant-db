@@ -4,7 +4,7 @@ import axios from "axios"
 import SomethingWentWrong from "../../components/SomethingWentWrong"
 import Loading from "../../components/Loading"
 import { useRouter } from "next/router"
-import { ModelInfo, Property } from "../../types"
+import { ModelInfo } from "../../types"
 import DbForm from "../../components/DbForm"
 
 function CreateForm() {
@@ -14,10 +14,9 @@ function CreateForm() {
     const { controller } = router.query
 
     React.useEffect(() => {
-        if (controller)
-            axios.get<Property[]>(`/api/${controller}/schema`)
-                .then(response => setFormInfo({ schema: response.data } as ModelInfo))
-                .catch(_err => setHasInitialError(true))
+        axios.get(`/api/${controller}/schema`)
+            .then(response => setFormInfo(response.data))
+            .catch(_err => setHasInitialError(true))
     }, [controller])
 
     return (hasInitialError ? <SomethingWentWrong /> : !formInfo ? <Loading /> : <>

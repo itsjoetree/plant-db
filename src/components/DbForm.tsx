@@ -5,6 +5,7 @@ import Error from "./Error"
 import Loading from "./Loading"
 import SomethingWentWrong from "./SomethingWentWrong"
 import Link from "next/link"
+import Head from "next/head"
 import { useRouter } from "next/router"
 import { ArrowLeftCircleFill } from "react-bootstrap-icons"
 import { ErrorMessage, Field, Form, Formik } from "formik"
@@ -150,7 +151,7 @@ function DbForm({ formInfo, heading } : DbFormProps) {
                 
                 <div className="mt-4 ms-2">
                     <Link href={`/${controller}${id ? `/${id}` : ''}`}>
-                        <ArrowLeftCircleFill className="cursor-pointer" color="black" size={30} />
+                        <ArrowLeftCircleFill color="black" size={30} />
                     </Link>
                 </div>
             </>

@@ -4,7 +4,7 @@ import Link from "next/link"
 function SiteNavBar() {
     return <div className="text-center bg-midnightblue p-2">
         <Link href="/">
-            <HouseFill className="cursor-pointer" size={25} color="white" />
+            <HouseFill size={25} color="white" />
         </Link>
     </div>
 }

@@ -15,10 +15,9 @@ function EditForm() {
     const identifier = formInfo?.records.find(r => r.propertyName === formInfo?.schema.find(p => p.isIdentifier)?.propertyName)?.value ?? ''
 
     React.useEffect(() => {
-        if (controller && id)
-            axios.get(`/api/${controller}/${id}`)
-                .then(response => setFormInfo(response.data))
-                .catch(_err => setHasInitialError(true))
+        axios.get(`/api/${controller}/${id}`)
+            .then(response => setFormInfo(response.data))
+            .catch(_err => setHasInitialError(true))
     }, [controller, id])
 
     return (hasInitialError ? <SomethingWentWrong /> : !formInfo ? <Loading /> : <>
