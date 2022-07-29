@@ -9,7 +9,7 @@ import { ArrowLeftCircleFill } from "react-bootstrap-icons"
 import { ErrorMessage, Field, Form, Formik } from "formik"
 import { Button, Col, Row } from "react-bootstrap"
 import { useNavigate, useParams } from "react-router"
-import { ModelInfo, Property } from "../types"
+import { PlantDataType, PlantInfo, PlantProperty } from "../types.d"
 import { Helmet } from "react-helmet"
 
 type DbFormParams = {
@@ -20,18 +20,19 @@ type DbFormParams = {
 function DbForm() {
     const navigate = useNavigate()
     const { id, controller } = useParams<DbFormParams>()
-    const [formInfo, setFormInfo] = React.useState<ModelInfo>()
+
+    const [formInfo, setFormInfo] = React.useState<PlantInfo>()
     const [initialValues, setInitialValues] = React.useState<any>()
     const [validationSchema, setValidationSchema] = React.useState<any>()
     const [error, setError] = React.useState<string>()
     const [loading, setLoading] = React.useState<boolean>(true)
     const [hasInitialError, setHasInitialError] = React.useState<boolean>(false)
     const [isSubmitting, setIsSubmitting] = React.useState<boolean>()
-    const identifier = id && formInfo?.records.find(r => r.propertyName === formInfo?.schema.find(p => p.isIdentifier)?.propertyName)?.value
+    const identifier = id && formInfo?.records[0].find(r => r.propertyName === formInfo?.schema.find(p => p.isIdentifier)?.propertyName)?.value
 
     React.useEffect(() => {
-        axios.get(`/api/${controller}/${id ? id : 'schema'}`)
-            .then(response => id ? setFormInfo(response.data) : setFormInfo({schema: response.data} as ModelInfo))
+        axios.get<PlantInfo>(`/api/${controller}/${id ? id : ''}`)
+            .then(response => setFormInfo(response.data))
             .catch(_err => setHasInitialError(true))
     }, [controller, id])
 
@@ -43,25 +44,25 @@ function DbForm() {
             formInfo.schema.filter(s => !s.isHidden).forEach(p => {
                 const options: string[] = []
 
-                p.dropdown?.forEach(d => {
-                    options.push(d.value)
+                p.options?.forEach(o => {
+                    options.push(o.value)
                 })
 
                 switch (p.type) {
-                    case 'Dropdown':
-                        initVals[p.propertyName] = formInfo.records?.find(r => r.propertyName === p.propertyName)?.value ?? options[0]
+                    case PlantDataType.Enum:
+                        initVals[p.propertyName] = formInfo.records[0]?.find(r => r.propertyName === p.propertyName)?.value ?? options[0]
                         break
                     default:
-                        initVals[p.propertyName] = formInfo.records?.find(r => r.propertyName === p.propertyName)?.value ?? ''
+                        initVals[p.propertyName] = formInfo.records[0]?.find(r => r.propertyName === p.propertyName)?.value ?? ''
                         break
                 }
 
                 // As the application supports more types they will be added here
                 switch (p.type) {
-                    case 'Dropdown':
+                    case PlantDataType.Enum:
                         valSchema[p.propertyName] =  Yup.string().oneOf(options)
                         break
-                    case 'Number':
+                    case PlantDataType.Decimal:
                         valSchema[p.propertyName] = Yup.number()
                         break
                     default: // Default case will be string
@@ -80,21 +81,16 @@ function DbForm() {
         }
     }, [formInfo])
 
-    const typeDict = new Map([
-        ['String', 'text'],
-        ['Number', 'number'],
-    ])
-
-    function getField(p: Property) {
+    function getField(p: PlantProperty) {
         switch (p.type) {
-            case 'Dropdown':
+            case PlantDataType.Enum:
                 return <Field name={p.propertyName} className="form-select" as="select">
                     {
-                        p.dropdown?.map(d => <option key={d.value} value={d.value}>{d.name}</option>)
+                        p.options?.map(d => <option key={d.value} value={d.value}>{d.name}</option>)
                     }
                 </Field>
              default:
-             return <Field className="form-control" type={typeDict.get(p.type)} name={p.propertyName} />
+             return <Field className="form-control" name={p.propertyName} />
         }
     }
 

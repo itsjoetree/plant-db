@@ -1,11 +1,10 @@
 import React from "react"
 import Heading from "./Heading"
 import { Link } from "react-router-dom"
-import { DbInfo } from "../types"
 import { Helmet } from "react-helmet"
 
 function Home() {
-    const databases: DbInfo[] = [
+    const databases = [
         {name: 'ferns', displayName: 'Ferns'},
     ]
     
@@ -29,7 +28,6 @@ function Home() {
             }
         </>
     )
-
 }
 
 export default Home

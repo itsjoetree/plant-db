@@ -1,45 +1,32 @@
-type DbInfo = {
-    name: string,
-    displayName: string,
+export const enum PlantDataType {
+    String,
+    Int,
+    Decimal,
+    Enum
 }
 
-type ModelInfo = {
-    schema: Property[],
-    records: ModelRecord[],
-}
-
-type TableInfo = {
-    schema: Property[],
-    rows: ModelRecord[][],
+export type PlantInfo = {
+    schema: PlantProperty[],
+    records: PlantRecord[][],
     totalCount: number,
 }
-
-type ModelRecord = {
+export type PlantRecord = {
     propertyName: string,
     value: any,
 }
 
-type DropdownOption = {
+export type DropdownOption = {
     name: string,
     value: string,
 }
 
-type Property = {
+export type PlantProperty = {
     propertyName: string,
     displayName: string,
-    type: any,
-    dropdown?: DropdownOption[],
+    type: PlantDataType,
+    options?: DropdownOption[],
     isRequired: boolean,
     isKey: boolean,
     isIdentifier: boolean,
     isHidden: boolean,
-}
-
-export {
-    DbInfo,
-    ModelInfo,
-    TableInfo,
-    ModelRecord,
-    DropdownOption,
-    Property,
 }

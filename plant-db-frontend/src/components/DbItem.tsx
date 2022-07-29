@@ -5,7 +5,7 @@ import Loading from "./Loading"
 import SomethingWentWrong from "./SomethingWentWrong"
 import { Link } from "react-router-dom"
 import { useParams } from "react-router"
-import { ModelInfo, Property } from "../types"
+import { PlantDataType, PlantInfo, PlantProperty } from "../types.d"
 import { ArrowLeftCircleFill, PenFill, TrashFill } from "react-bootstrap-icons"
 import { upperCase } from "../helpers"
 import { Helmet } from "react-helmet"
@@ -19,13 +19,13 @@ type DbItemParams = {
 function DbItem() {
     const acceptableActions = ['delete']
     const { controller, id, action } = useParams<DbItemParams>()
-    const [itemInfo, setItemInfo] = React.useState<ModelInfo>()
+    const [itemInfo, setItemInfo] = React.useState<PlantInfo>()
     const [loading, setLoading] = React.useState<boolean>(true)
     const [hasInitialError, setHasInitialError] = React.useState<boolean>(action !== undefined && acceptableActions.indexOf(action ?? '') === -1)
-    const identifier = itemInfo?.records.find(r => r.propertyName === itemInfo?.schema.find(p => p.isIdentifier)?.propertyName)?.value
+    const identifier = itemInfo?.records[0].find(r => r.propertyName === itemInfo?.schema.find(p => p.isIdentifier)?.propertyName)?.value
 
     React.useEffect(() => {
-        axios.get<ModelInfo>(`/api/${controller}/${id}`)
+        axios.get<PlantInfo>(`/api/${controller}/${id}`)
             .then(response => { 
                 setItemInfo(response.data)
                 setLoading(false)
@@ -33,12 +33,12 @@ function DbItem() {
             .catch(_err => setHasInitialError(true))
     }, [controller, id])
 
-    function getDisplayValue(p: Property) {
+    function getDisplayValue(p: PlantProperty) {
         switch (p.type) {
-            case 'Dropdown':  
-                return p.dropdown?.find(d => d.value === itemInfo?.records.find(r => r.propertyName === p.propertyName)?.value)?.name
+            case PlantDataType.Enum:  
+                return p.options?.find(d => d.value === itemInfo?.records[0].find(r => r.propertyName === p.propertyName)?.value)?.name
             default:
-                return itemInfo?.records.find(r => r.propertyName === p.propertyName)?.value
+                return itemInfo?.records[0].find(r => r.propertyName === p.propertyName)?.value
         }
     }
     
