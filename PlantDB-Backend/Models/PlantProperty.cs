@@ -18,6 +18,8 @@
 
         public bool IsKey { get; set; }
 
+        public bool IsHidden { get; set; }
+
         public bool IsRequired { get; set; }
 
         public int? MaxLength { get; set; }

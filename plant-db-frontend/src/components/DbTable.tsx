@@ -42,7 +42,9 @@ function DbTable() {
     const changePgSize = (e: React.ChangeEvent<HTMLSelectElement>) => setPgSize(parseInt(e.currentTarget.value))
     const changePgIndex =  (e: React.ChangeEvent<unknown>, page: number) => setPgIndex(page)
 
-    function getDisplayValue(record: PlantRecord) {
+    function getDisplayValue(record: PlantRecord | undefined) {
+        if (record === undefined) return
+
         const property = plantInfo?.schema.find(p => p.propertyName === record.propertyName)
 
         switch (property?.type) {
@@ -82,9 +84,9 @@ function DbTable() {
                             key={index}
                             className="table-row cursor-pointer">
                                 {
-                                    row.filter(r => r.propertyName !== keyRecord?.propertyName).map(record => <td key={record.propertyName}>
+                                    plantInfo?.schema.filter(s => !s.isHidden).map(s => <td key={s.propertyName}>
                                         <Link className="table-link" to={`/${controller}/${keyRecord?.value}`}>
-                                            {getDisplayValue(record)}
+                                            {getDisplayValue(row.find(r => r.propertyName === s.propertyName))}
                                         </Link>
                                     </td>)
                                 }

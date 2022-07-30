@@ -1,28 +1,41 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PlantDB_Backend.Models;
 using PlantDB_Backend.Helpers;
-using Microsoft.EntityFrameworkCore.Storage;
-using static PlantDB_Backend.Models.Extensions;
 using Microsoft.EntityFrameworkCore;
+using PlantDB_Backend.Services;
 
 namespace PlantDB_Backend.Controllers
 {
+    /// <summary>
+    /// API to interact with <see cref="Cactus"/> stored in the database.
+    /// </summary>
     [ApiController]
     [Route("/api/cacti")]
     public class CactusController : ControllerBase
     {
         private readonly PlantDBContext DbContext;
+        private readonly PlantService PlantService;
 
         public CactusController(PlantDBContext dbContext)
         {
             DbContext = dbContext;
+            PlantService = new(dbContext);
         }
 
+        /// <summary>
+        /// Returns a collection of <see cref="Cactus"/> in a <see cref="PlantInfo"/> object.
+        /// </summary>
+        /// <param name="skip">Number of records to skip when querying.</param>
+        /// <param name="top">Number of records to return when querying.</param>
+        /// <returns><see cref="PlantInfo"/></returns>
         [HttpGet]
-        public PlantInfo Get(int skip, int top)
+        public async Task<PlantInfo> GetPlantInfo(int skip, int top)
         {
-            int totalCount = DbContext.Cacti.Count();
-            IEnumerable <Cactus> cacti = DbContext.Cacti.Skip(skip).Take(top);
+            int totalCount = await DbContext.Cacti.CountAsync();
+            IEnumerable <Cactus> cacti = DbContext.Cacti
+                .Include(c => c.PlantBase)
+                .Skip(skip)
+                .Take(top);
 
             List<List<PlantRecord>> records = new List<List<PlantRecord>>();
             foreach (Cactus cactus in cacti)
@@ -38,143 +51,81 @@ namespace PlantDB_Backend.Controllers
             };
         }
 
+        /// <summary>
+        /// Returns information regarding a <see cref="Cactus"/> in a <see cref="PlantInfo"/> object.
+        /// </summary>
+        /// <param name="id">Id of <see cref="Cactus"/> to query.</param>
+        /// <returns><see cref="PlantInfo"/></returns>
+        [HttpGet("{id}")]
+        public async Task<PlantInfo> GetPlantInfo(int id)
+        {
+            List<List<PlantRecord>> records = new List<List<PlantRecord>>();
+            Cactus cactus = await DbContext.Cacti
+                .Include(f => f.PlantBase)
+                .SingleAsync(f => f.Id == id);
+
+            records.Add(RecordBuilder.GenerateRecords(cactus).ToList());
+
+            return new()
+            {
+                Schema = GenerateSchema(),
+                Records = records,
+                TotalCount = 1
+            };
+        }
+
+        /// <summary>
+        /// Creates a new <see cref="Cactus"/>.
+        /// </summary>
+        /// <param name="records">A collection of<see cref="PlantRecord"/> to build new <see cref="Cactus"/></param>
+        /// <returns>Id of new <see cref="Cactus"/></returns>
         [HttpPost]
+        [Consumes("application/json")]
         public async Task<int> CreateAsync(IEnumerable<PlantRecord> records)
         {
-            using IDbContextTransaction transaction = DbContext.Database.BeginTransaction();
-
-            string name;
-            string description;
-            string lightingCondition;
-            string wateringInterval;
-            string averageHeightInches;
-            string glochids;
-
-            try
-            {
-                name = records.Single(r => r.PropertyName == "name").Value ?? string.Empty;
-                description = records.Single(r => r.PropertyName == "description").Value ?? string.Empty;
-                lightingCondition = records.Single(r => r.PropertyName == "lightingCondition").Value ?? string.Empty;
-                wateringInterval = records.Single(r => r.PropertyName == "wateringInterval").Value ?? string.Empty;
-                averageHeightInches = records.Single(r => r.PropertyName == "averageHeightInches").Value ?? string.Empty;
-                glochids = records.Single(r => r.PropertyName == "glochids").Value ?? string.Empty;
-            }
-            catch
-            {
-                throw new Exception("Missing required fields.");
-            }
-
-            PlantBase plantBase = new()
-            {
-                Name = name,
-                Nickname = records.SingleOrDefault(r => r.PropertyName == "nickname")?.Value,
-                Description = description,
-                LightingCondition = (LightingCondition)int.Parse(lightingCondition),
-                WateringInterval = (WateringInterval)int.Parse(wateringInterval),
-                AverageHeightInches = decimal.Parse(averageHeightInches),
-                Origin = records.SingleOrDefault(r => r.PropertyName == "origin")?.Value
-            };
-
-            await DbContext.PlantBases.AddAsync(plantBase);
-            await DbContext.SaveChangesAsync();
-
-            Cactus cactus = new()
-            {
-                Glochids = int.Parse(glochids),
-                PlantBaseId = plantBase.Id,
-            };
-
-            await DbContext.Cacti.AddAsync(cactus);
-            await DbContext.SaveChangesAsync();
-            await transaction.CommitAsync();
-
-            return cactus.Id;
+            return await PlantService.CreateAsync<Cactus>(records);
         }
 
+        /// <summary>
+        /// Edits an existing <see cref="Cactus"/>
+        /// </summary>
+        /// <param name="id">Id of the <see cref="Cactus"/> to edit.</param>
+        /// <param name="records">A collection of <see cref="PlantRecord"/> to update the <see cref="Cactus"/> with.</param>
         [HttpPut("{id}")]
+        [Consumes("application/json")]
         public async Task EditAsync(int id, IEnumerable<PlantRecord> records)
         {
-            using IDbContextTransaction transaction = DbContext.Database.BeginTransaction();
-
             Cactus cactus = DbContext.Cacti
                 .Include(c => c.PlantBase)
+                .AsNoTracking()
                 .Single(c => c.Id == id);
 
-            string? nickname = records.SingleOrDefault(r => r.PropertyName == "nickname")?.Value;
-            string? name = records.SingleOrDefault(r => r.PropertyName == "name")?.Value;
-            string? description = records.SingleOrDefault(r => r.PropertyName == "description")?.Value;
-            string? lightingCondition = records.SingleOrDefault(r => r.PropertyName == "lightingCondition")?.Value;
-            string? wateringInterval = records.SingleOrDefault(r => r.PropertyName == "wateringInterval")?.Value;
-            string? averageHeightInches = records.SingleOrDefault(r => r.PropertyName == "averageHeightInches")?.Value;
-            string? glochids = records.SingleOrDefault(r => r.PropertyName == "glochids")?.Value;
-            string? origin = records.SingleOrDefault(r => r.PropertyName == "origin")?.Value;
-
-            if (!string.IsNullOrEmpty(nickname))
-            {
-                cactus.PlantBase.Nickname = nickname;
-            }
-
-            if (!string.IsNullOrEmpty(name))
-            {
-                cactus.PlantBase.Nickname = name;
-            }
-
-            if (!string.IsNullOrEmpty(description))
-            {
-                cactus.PlantBase.Description = description;
-            }
-
-            if (!string.IsNullOrEmpty(lightingCondition))
-            {
-                cactus.PlantBase.LightingCondition = (LightingCondition)int.Parse(lightingCondition);
-            }
-
-            if (!string.IsNullOrEmpty(wateringInterval))
-            {
-                cactus.PlantBase.WateringInterval = (WateringInterval)int.Parse(wateringInterval);
-            }
-
-            if (!string.IsNullOrEmpty(averageHeightInches))
-            {
-                cactus.PlantBase.AverageHeightInches = decimal.Parse(averageHeightInches);
-            }
-
-            if (!string.IsNullOrEmpty(glochids))
-            {
-                cactus.Glochids = int.Parse(glochids);
-            }
-
-            DbContext.PlantBases.Update(cactus.PlantBase);
-            DbContext.Cacti.Update(cactus);
-            await DbContext.SaveChangesAsync();
-
-            await transaction.CommitAsync();
+            await PlantService.EditAsync(cactus, records);
         }
 
+        /// <summary>
+        /// Deletes an existing <see cref="Cactus"/>
+        /// </summary>
+        /// <param name="id">Id of the <see cref="Cactus"/> to remove.</param>
         [HttpDelete("{id}")]
         public async Task DeleteAsync(int id)
         {
-            using IDbContextTransaction transaction = DbContext.Database.BeginTransaction();
-
             Cactus cactus = DbContext.Cacti.Single(c => c.Id == id);
-            PlantBase pb = DbContext.PlantBases.Single(pb => pb.Id == cactus.PlantBaseId);
-
-            DbContext.Cacti.Remove(cactus);
-            await DbContext.SaveChangesAsync();
-
-            DbContext.PlantBases.Remove(pb);
-            await DbContext.SaveChangesAsync();
-
-            await transaction.CommitAsync();
+            PlantBase plantBase = DbContext.PlantBases.Single(pb => pb.Id == cactus.PlantBaseId);
+            await PlantService.DeleteAsync(plantBase, cactus);
         }
 
+        /// <summary>
+        /// Generates a schema specific to <see cref="Cactus"/>.
+        /// </summary>
+        /// <returns>Collection of <see cref="PlantProperty"/></returns>
         private IEnumerable<PlantProperty> GenerateSchema()
         {
             return new List<PlantProperty>(SchemaBuilder.GenerateBaseSchema())
             {
                 new()
                 {
-                    PropertyName = "glochids",
+                    PropertyName = nameof(Cactus.Glochids),
                     DisplayName = "Glochids",
                     Type = PlantDataType.Int,
                 }

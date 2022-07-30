@@ -17,7 +17,7 @@ export type PlantRecord = {
 
 export type DropdownOption = {
     name: string,
-    value: string,
+    value: any,
 }
 
 export type PlantProperty = {

@@ -9,7 +9,7 @@ import { ArrowLeftCircleFill } from "react-bootstrap-icons"
 import { ErrorMessage, Field, Form, Formik } from "formik"
 import { Button, Col, Row } from "react-bootstrap"
 import { useNavigate, useParams } from "react-router"
-import { PlantDataType, PlantInfo, PlantProperty } from "../types.d"
+import { PlantDataType, PlantInfo, PlantProperty, PlantRecord } from "../types.d"
 import { Helmet } from "react-helmet"
 
 type DbFormParams = {
@@ -42,7 +42,7 @@ function DbForm() {
             const valSchema: {[key: string] : any} = {}
 
             formInfo.schema.filter(s => !s.isHidden).forEach(p => {
-                const options: string[] = []
+                const options: any[] = []
 
                 p.options?.forEach(o => {
                     options.push(o.value)
@@ -60,7 +60,7 @@ function DbForm() {
                 // As the application supports more types they will be added here
                 switch (p.type) {
                     case PlantDataType.Enum:
-                        valSchema[p.propertyName] =  Yup.string().oneOf(options)
+                        valSchema[p.propertyName] =  Yup.number().oneOf(options)
                         break
                     case PlantDataType.Decimal:
                         valSchema[p.propertyName] = Yup.number()
@@ -113,10 +113,21 @@ function DbForm() {
                         setIsSubmitting(true)
                         setError('')
 
+                        const records: PlantRecord[] = []
+
+                        Object.entries(values).forEach((entry : [string, any]) => {
+                            const record: PlantRecord = {
+                                propertyName: entry[0],
+                                value: entry[1]?.toString()
+                             }
+
+                            records.push(record)
+                        })
+
                         // Let's determine if this will be an edit or create
                         // action through the useParams id.
 
-                        if (id) axios.put(`/api/${controller}/${id}`, values)
+                        if (id) axios.put(`/api/${controller}/${id}`, records, { headers: { "Content-Type": "application/json" } })
                             .then(_response => navigate(`/${controller}/${id}`))
                             .catch(err => {
                                 if (err.response) {
@@ -124,7 +135,7 @@ function DbForm() {
                                     setIsSubmitting(false)
                                 }
                             })
-                        else axios.post<string>(`/api/${controller}`, values)
+                        else axios.post<string>(`/api/${controller}`, records, { headers: { "Content-Type": "application/json" } })
                             .then(response => navigate(`/${controller}/${response.data}`))
                             .catch(err => {
                                 if (err.response) {

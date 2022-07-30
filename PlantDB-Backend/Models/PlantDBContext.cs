@@ -27,7 +27,7 @@ namespace PlantDB_Backend.Models
             {
                 entity.ToTable("Cactus");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.PlantBaseId).HasColumnName("Plant Base ID");
 
@@ -41,7 +41,7 @@ namespace PlantDB_Backend.Models
             {
                 entity.ToTable("Fern");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.PlantBaseId).HasColumnName("Plant Base ID");
 
@@ -55,7 +55,7 @@ namespace PlantDB_Backend.Models
             {
                 entity.ToTable("Plant Base");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
 
                 entity.Property(e => e.AverageHeightInches)
                     .HasColumnType("DECIMAL")

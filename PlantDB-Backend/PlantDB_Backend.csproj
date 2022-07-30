@@ -23,9 +23,11 @@
     <None Remove="Microsoft.Data.Sqlite.Core" />
     <None Remove="Microsoft.EntityFrameworkCore.Design" />
     <None Remove="Helpers\" />
+    <None Remove="Services\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="Helpers\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 </Project>
