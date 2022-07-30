@@ -2,12 +2,11 @@ import React from "react"
 import Heading from "./Heading"
 import { Link } from "react-router-dom"
 import { Helmet } from "react-helmet"
+import { AppContext } from "../App"
 
 function Home() {
-    const databases = [
-        {name: 'ferns', displayName: 'Ferns'},
-    ]
-    
+    const plantApiInfo = React.useContext(AppContext)?.plantApiInfo;
+
     return (
         <>
             <Helmet>
@@ -20,9 +19,9 @@ function Home() {
               />
 
             {
-                databases.map(db => <div key={db.name} className="d-grid gap-2 m-2">
-                        <Link to={'/' + db.name} key={db.name} role="button" className="btn btn-dark btn-responsive mx-auto">
-                            {db.displayName}
+                plantApiInfo?.map(p => <div key={p.path} className="d-grid gap-2 m-2">
+                        <Link to={'/' + p.path} role="button" className="btn btn-dark btn-responsive mx-auto">
+                            {p.pluralDisplayName}
                         </Link>
                     </div>)
             }

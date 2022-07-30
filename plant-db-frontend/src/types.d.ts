@@ -5,6 +5,12 @@ export const enum PlantDataType {
     Enum
 }
 
+export type PlantApiInfo = {
+    singularDisplayName: string,
+    pluralDisplayName: string,
+    path: string
+}
+
 export type PlantInfo = {
     schema: PlantProperty[],
     records: PlantRecord[][],
