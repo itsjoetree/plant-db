@@ -97,7 +97,7 @@ namespace PlantDB_Backend.Controllers
                 .AsNoTracking()
                 .Single(c => c.Id == id);
 
-            await PlantService.EditAsync(fern, records);
+            await PlantService.EditAsync(fern, fern.PlantBase, records);
         }
 
         /// <summary>

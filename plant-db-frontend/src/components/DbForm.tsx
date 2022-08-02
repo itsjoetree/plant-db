@@ -30,7 +30,6 @@ function DbForm() {
     const [error, setError] = React.useState<string>()
     const [loading, setLoading] = React.useState<boolean>(true)
     
-
     const [currentImage, setCurrentImage] = React.useState<any>()
     const imageRef = React.useRef<any>()
 

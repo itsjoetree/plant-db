@@ -101,7 +101,7 @@ namespace PlantDB_Backend.Controllers
                 .AsNoTracking()
                 .Single(c => c.Id == id);
 
-            await PlantService.EditAsync(cactus, records);
+            await PlantService.EditAsync(cactus, cactus.PlantBase, records);
         }
 
         /// <summary>

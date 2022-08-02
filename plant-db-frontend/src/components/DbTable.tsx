@@ -22,7 +22,7 @@ function DbTable() {
     const plantApiInfo = React.useContext(AppContext)?.plantApiInfo.find(p => p.path === controller)
 
     const [plantInfo, setPlantInfo] = React.useState<PlantInfo>()
-    const [pgIndex, setPgIndex] = React.useState<number>(1)
+    const [pgIndex, setPgIndex] = React.useState<number>(0)
     const [pgSize, setPgSize] = React.useState<number>(20)
     const [error, setError] = React.useState<string>()
     const [loading, setLoading] = React.useState<boolean>(true)
@@ -31,7 +31,7 @@ function DbTable() {
     const changePgIndex =  (page: number) => setPgIndex(page)
 
     React.useEffect(() => {
-        const path = `/api/${controller}?skip=${(pgIndex - 1) * pgSize}&top=${pgSize}`
+        const path = `/api/${controller}?skip=${pgIndex * pgSize}&top=${pgSize}`
 
         axios.get<PlantInfo>(path)
             .then(response => {

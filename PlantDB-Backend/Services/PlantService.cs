@@ -61,7 +61,7 @@ namespace PlantDB_Backend.Services
         /// <param name="item">The plant object to edit.</param>
         /// <param name="records">Collection of <see cref="PlantRecord"/> to update plant object with.</param>
         /// <exception cref="NullReferenceException"></exception>
-        public async Task EditAsync<Plant>(Plant item, IEnumerable<PlantRecord> records)
+        public async Task EditAsync<Plant>(Plant item, PlantBase plantBase, IEnumerable<PlantRecord> records)
         {
             using IDbContextTransaction transaction = DbContext.Database.BeginTransaction();
 
@@ -72,7 +72,7 @@ namespace PlantDB_Backend.Services
 
             IEnumerable<PropertyInfo> plantProperties = item.GetType().GetProperties().Where(p => p.Name != "Id" && p.Name != "PlantBaseId");
 
-            ManipulatePlant(plantProperties, records, ref item);
+            ManipulatePlant(plantProperties, records, ref item, plantBase);
 
             if (item == null)
             {
@@ -116,14 +116,15 @@ namespace PlantDB_Backend.Services
         /// <param name="plantProperties">Collection of <see cref="PropertyInfo"/> regarding the currently passed in plant.</param>
         /// <param name="records">Collection of <see cref="PlantRecord"/> to manipulate plant object with.</param>
         /// <param name="plant">Reference of the plant object to manipulate.</param>
-        private void ManipulatePlant<Plant>(IEnumerable<PropertyInfo> plantProperties, IEnumerable<PlantRecord> records, ref Plant plant)
+        private void ManipulatePlant<Plant>(IEnumerable<PropertyInfo> plantProperties, IEnumerable<PlantRecord> records, ref Plant plant, PlantBase? pb = null)
         {
             foreach (PropertyInfo property in plantProperties)
             {
                 if (property.PropertyType.Name == "PlantBase")
                 {
                     IEnumerable<PropertyInfo> baseProps = property.PropertyType.GetProperties();
-                    PlantBase plantBase = new();
+
+                    PlantBase plantBase = pb ?? new();
 
                     foreach (PropertyInfo baseProp in baseProps)
                     {
