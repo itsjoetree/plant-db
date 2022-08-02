@@ -13,9 +13,10 @@ namespace PlantDB_Backend.Helpers
         /// </summary>
         /// <typeparam name="Plant">The plant to generate records for.</typeparam>
         /// <param name="item">The plant object to generate records from.</param>
+        /// <param name="isMultiple">Used to ignore images when fetching table data.</param>
         /// <returns>A collection of <see cref="PlantRecord"/> based off the provided item.</returns>
         /// <exception cref="NullReferenceException"></exception>
-        public static IEnumerable<PlantRecord> GenerateRecords<Plant>(Plant item)
+        public static IEnumerable<PlantRecord> GenerateRecords<Plant>(Plant item, bool isMultiple = false)
         {
             if (item == null)
             {
@@ -47,21 +48,31 @@ namespace PlantDB_Backend.Helpers
                                 PropertyName = plantBaseProp.Name,
                             };
 
+                            object? pbVal = plantBaseProp.GetValue(val);
+
+
+                            if (pbVal == null)
+                            {
+                                continue;
+                            }
+
                             if (plantBaseProp.PropertyType.Name == "WateringInterval" ||
                                 plantBaseProp.PropertyType.Name == "LightingCondition")
                             {
-                                object? pbVal = plantBaseProp.GetValue(val);
-
-                                if (pbVal == null)
+                                record.Value = ((byte)pbVal).ToString();
+                            }
+                            else if (plantBaseProp.Name == "Image")
+                            {
+                                if (isMultiple)
                                 {
                                     continue;
                                 }
 
-                                record.Value = ((byte)pbVal).ToString();
+                                record.Value = Convert.ToBase64String((byte[])pbVal);
                             }
                             else
                             {
-                                record.Value = plantBaseProp.GetValue(val)?.ToString();
+                                record.Value = pbVal?.ToString();
                             }
 
                             records.Add(record);

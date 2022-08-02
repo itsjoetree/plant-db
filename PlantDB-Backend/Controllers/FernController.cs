@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PlantDB_Backend.Helpers;
 using PlantDB_Backend.Models;
 using PlantDB_Backend.Services;
+using static PlantDB_Backend.Models.Extensions;
 
 namespace PlantDB_Backend.Controllers
 {

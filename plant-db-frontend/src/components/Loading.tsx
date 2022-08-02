@@ -1,9 +1,9 @@
-import { Spinner } from "react-bootstrap"
+import { Box, Loader } from "@mantine/core"
 
 function Loading() {
-    return (<div className="mt-4 text-center">
-        <Spinner className="color-midnightblue" animation="border" />
-    </div>)
+    return (<Box sx={{marginTop: 10, display: "flex", alignItems: "center", justifyContent: "center"}}>
+        <Loader sx={(theme) => ({color: theme.primaryColor})} />
+    </Box>)
 }
 
 export default Loading

@@ -3,6 +3,7 @@ using PlantDB_Backend.Models;
 using PlantDB_Backend.Helpers;
 using Microsoft.EntityFrameworkCore;
 using PlantDB_Backend.Services;
+using static PlantDB_Backend.Models.Extensions;
 
 namespace PlantDB_Backend.Controllers
 {
@@ -40,7 +41,7 @@ namespace PlantDB_Backend.Controllers
             List<List<PlantRecord>> records = new List<List<PlantRecord>>();
             foreach (Cactus cactus in cacti)
             {
-                records.Add(RecordBuilder.GenerateRecords(cactus).ToList());
+                records.Add(RecordBuilder.GenerateRecords(cactus, isMultiple: true).ToList());
             }
 
             return new()

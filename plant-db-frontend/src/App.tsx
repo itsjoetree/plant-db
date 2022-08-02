@@ -6,10 +6,13 @@ import DbTable from './components/DbTable';
 import DbForm from './components/DbForm';
 import DbItem from './components/DbItem';
 import SomethingWentWrong from './components/SomethingWentWrong';
-import Layout from './components/Layout';
 import { PlantApiInfo } from './types';
 import axios from 'axios';
 import Loading from './components/Loading';
+import { MantineProvider } from '@mantine/core';
+import Layout from './components/Layout';
+
+export const APP_COLOR = "#4188ff"
 
 function App() {
   const [plantApiInfo, setPlantApiInfo] = React.useState<PlantApiInfo[]>()
@@ -26,17 +29,16 @@ function App() {
 
   return (
     <AppContext.Provider value={{plantApiInfo: plantApiInfo}}>
-      <Layout>
+      <MantineProvider theme={{ primaryColor: "green" }}>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/:controller" element={<DbTable />} />
-          <Route path="/:controller/new" element={<DbForm />} />
+          <Route path="/" element={<Layout component={<Home />} />} />
+          <Route path="/:controller" element={<Layout component={<DbTable />} />} />
+          <Route path="/:controller/new" element={<Layout component={<DbForm />} />} />
           <Route path="/:controller/:id" element={<DbItem />} />
-          <Route path="/:controller/:id/edit" element={<DbForm />} />
           <Route path="/:controller/:id/:action" element={<DbItem />} />
-          <Route path="*" element={<SomethingWentWrong />} />
+          <Route path="*" element={<Layout component={<Layout component={<SomethingWentWrong />} />} />} />
         </Routes>
-      </Layout>
+      </MantineProvider>
     </AppContext.Provider>
   );
 }

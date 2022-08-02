@@ -15,6 +15,15 @@
             Sometimes,
             Seldom
         }
+
+        public enum PlantDataType : byte
+        {
+            String = 0,
+            Int,
+            Decimal,
+            Enum,
+            Image
+        }
     }
 }
 

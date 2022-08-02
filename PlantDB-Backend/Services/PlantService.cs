@@ -127,59 +127,36 @@ namespace PlantDB_Backend.Services
 
                     foreach (PropertyInfo baseProp in baseProps)
                     {
-                        if (baseProp.PropertyType.Name == "Int32")
+                        string? record = records.SingleOrDefault(r => r.PropertyName.ToLower() == baseProp.Name.ToLower())?.Value;
+
+                        if (string.IsNullOrEmpty(record))
                         {
-                            string? record = records.SingleOrDefault(r => r.PropertyName.ToLower() == baseProp.Name.ToLower())?.Value;
+                            continue;
+                        }
 
-                            if (string.IsNullOrEmpty(record))
-                            {
-                                continue;
-                            }
-
+                        if (baseProp.Name == "Image")
+                        {
+                            byte[] imgBytes = Convert.FromBase64String(record);
+                            baseProp.SetValue(plantBase, imgBytes);
+                        }
+                        else if (baseProp.PropertyType.Name == "Int32")
+                        {
                             baseProp.SetValue(plantBase, int.Parse(record));
                         }
                         else if (baseProp.PropertyType.Name == "WateringInterval")
                         {
-                            string? record = records.SingleOrDefault(r => r.PropertyName.ToLower() == baseProp.Name.ToLower())?.Value;
-
-                            if (string.IsNullOrEmpty(record))
-                            {
-                                continue;
-                            }
-
                             baseProp.SetValue(plantBase, (WateringInterval)int.Parse(record));
                         }
                         else if (baseProp.PropertyType.Name == "LightingCondition")
                         {
-                            string? record = records.SingleOrDefault(r => r.PropertyName.ToLower() == baseProp.Name.ToLower())?.Value;
-
-                            if (string.IsNullOrEmpty(record))
-                            {
-                                continue;
-                            }
-
                             baseProp.SetValue(plantBase, (LightingCondition)int.Parse(record));
                         }
                         else if (baseProp.PropertyType.Name == "Decimal")
                         {
-                            string? record = records.SingleOrDefault(r => r.PropertyName.ToLower() == baseProp.Name.ToLower())?.Value;
-
-                            if (string.IsNullOrEmpty(record))
-                            {
-                                continue;
-                            }
-
                             baseProp.SetValue(plantBase, decimal.Parse(record));
                         }
                         else if (baseProp.PropertyType.Name == "String")
                         {
-                            string? record = records.SingleOrDefault(r => r.PropertyName.ToLower() == baseProp.Name.ToLower())?.Value;
-
-                            if (string.IsNullOrEmpty(record))
-                            {
-                                continue;
-                            }
-
                             baseProp.SetValue(plantBase, record);
                         }
                     }

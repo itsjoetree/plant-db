@@ -76,6 +76,12 @@ namespace PlantDB_Backend.Models
                 entity.Property(e => e.WateringInterval)
                     .HasColumnType("TINYINT")
                     .HasColumnName("Watering Interval");
+
+                entity.Property(e => e.Image).HasColumnType("BLOB");
+
+                entity.Property(e => e.ImageType)
+                    .HasColumnType("VARCHAR(100)")
+                    .HasColumnName("Image Type");
             });
 
             OnModelCreatingPartial(modelBuilder);

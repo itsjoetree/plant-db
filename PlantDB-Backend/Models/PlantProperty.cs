@@ -1,13 +1,7 @@
-﻿namespace PlantDB_Backend.Models
-{
-    public enum PlantDataType : byte
-    {
-        String = 0,
-        Int,
-        Decimal,
-        Enum
-    }
+﻿using static PlantDB_Backend.Models.Extensions;
 
+namespace PlantDB_Backend.Models
+{
     public class PlantProperty
     {
         public string PropertyName { get; set; } = null!;
@@ -21,6 +15,8 @@
         public bool IsHidden { get; set; }
 
         public bool IsRequired { get; set; }
+
+        public bool IsIdentifier { get; set; }
 
         public int? MaxLength { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using PlantDB_Backend.Models;
+using static PlantDB_Backend.Models.Extensions;
 
 namespace PlantDB_Backend.Helpers
 {
@@ -30,6 +31,7 @@ namespace PlantDB_Backend.Helpers
                     DisplayName = "Name",
                     Type = PlantDataType.String,
                     IsRequired = true,
+                    IsIdentifier = true,
                     MaxLength = 200
                 },
                 new()
@@ -111,6 +113,12 @@ namespace PlantDB_Backend.Helpers
                     Type = PlantDataType.String,
                     MaxLength = 100,
                 }
+                /*new()
+                {
+                    PropertyName = nameof(PlantBase.PlantImage),
+                    DisplayName = "Image",
+                    Type = PlantDataType.Image,
+                }*/
             };
         }
     }
