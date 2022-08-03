@@ -1,15 +1,16 @@
-import { useState } from 'react';
-import { Navbar, Tooltip, UnstyledButton, createStyles, Stack } from '@mantine/core';
+import { useState } from 'react'
+import { Navbar, Tooltip, UnstyledButton, createStyles, Stack } from '@mantine/core'
 import {
   TablerIcon,
   IconTrash,
   IconEdit,
   IconFileInfo,
   IconArrowBack,
-} from '@tabler/icons';
-import { useParams } from 'react-router';
-import { DbItemParams } from './DbItem';
-import { Link } from 'react-router-dom';
+} from '@tabler/icons'
+import { useParams } from 'react-router'
+import { DbItemParams } from './DbItem'
+import { Link } from 'react-router-dom'
+import { useMediaQuery } from '@mantine/hooks'
 
 const useStyles = createStyles((theme) => ({
   link: {
@@ -64,6 +65,7 @@ function NavbarLink({ href, icon: Icon, label, active, onClick }: NavbarLinkProp
 }
 
 export function SideNavigation() {
+  const isSmallerScreen = useMediaQuery('(max-width: 600px)');
   const params = useParams<DbItemParams>()
 
   const [active, setActive] = useState<string | null>(params?.action ?? null);
@@ -90,8 +92,8 @@ export function SideNavigation() {
   return (
     <Navbar
       height="100vh"
-      width={{ base: 80 }}
-      p="md"
+      width={{ base: isSmallerScreen ? 50 : 80 }}
+      p={!isSmallerScreen ? "md" : "10"}
       sx={(theme) => ({
         backgroundColor: theme.fn.variant({ variant: 'filled', color: theme.primaryColor })
           .background,

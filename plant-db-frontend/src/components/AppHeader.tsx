@@ -51,7 +51,7 @@ const useStyles = createStyles((theme) => ({
   linkLabel: {
     marginRight: 5,
   },
-}));
+}))
 
 export function AppHeader() {
   const plantApiInfo = React.useContext(AppContext)?.plantApiInfo

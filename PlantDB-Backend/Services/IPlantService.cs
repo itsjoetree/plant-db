@@ -9,4 +9,3 @@ namespace PlantDB_Backend.Services
         Task DeleteAsync<Plant>(PlantBase plantBase, Plant item);
     }
 }
-

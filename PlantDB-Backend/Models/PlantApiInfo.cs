@@ -7,6 +7,8 @@ namespace PlantDB_Backend.Models
 
         public string SingularDisplayName { get; set; } = null!;
 
+        public string ImgUri { get; set; }
+
         public string Path { get; set; } = null!;
     }
 }

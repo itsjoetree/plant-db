@@ -8,7 +8,8 @@ export const enum PlantDataType {
 export type PlantApiInfo = {
     singularDisplayName: string,
     pluralDisplayName: string,
-    path: string
+    path: string,
+    imgUri: string
 }
 
 export type PlantInfo = {

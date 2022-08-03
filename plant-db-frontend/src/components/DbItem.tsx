@@ -25,7 +25,7 @@ function DbItem() {
     const { controller, id, action } = useParams<DbItemParams>()
     const navigate = useNavigate()
     const plantApiInfo = React.useContext(AppContext)?.plantApiInfo.find(pi => pi.path === controller)
-    
+
     const [contentView, setContentView] = React.useState<string | null>(action ?? null)
     const [itemInfo, setItemInfo] = React.useState<PlantInfo | null>()
     const [loading, setLoading] = React.useState<boolean>(true)
@@ -36,13 +36,20 @@ function DbItem() {
     const [hasInitialError, setHasInitialError] = React.useState<boolean>(
         action !== undefined && ACCEPTABLE_ACTIONS.indexOf(action ?? '') === -1
     )
-    const identifier = itemInfo?.records[0]
-        .find(r => r.propertyName === itemInfo?.schema.find(p => p.isIdentifier)?.propertyName)?.value
+
+    const updateItemInfo = (plantInfo: PlantInfo) => {
+        setItemInfo(plantInfo)
+    }
+
+    const identifier = React.useMemo(() => {
+        return itemInfo?.records[0]
+            .find(r => r.propertyName === itemInfo?.schema.find(p => p.isIdentifier)?.propertyName)?.value
+    }, [itemInfo])
 
     const getDisplayValue = (p: PlantProperty) => {
         switch (p.type) {
-            case PlantDataType.Enum:  
-                return p.options?.find(d => d.value === itemInfo?.records[0].find(r => r.propertyName === p.propertyName)?.value)?.name
+            case PlantDataType.Enum:
+                return p.options?.find(d => d.value === parseInt(itemInfo?.records[0].find(r => r.propertyName === p.propertyName)?.value))?.name
             default:
                 return itemInfo?.records[0].find(r => r.propertyName === p.propertyName)?.value
         }
@@ -62,21 +69,21 @@ function DbItem() {
         setLoading(true)
 
         axios.get<PlantInfo>(`/api/${controller}/${id}`)
-            .then(response => { 
+            .then(response => {
                 setItemInfo(response.data)
                 setLoading(false)
             })
             .catch(_err => setHasInitialError(true))
-    }, [controller, id, action])
+    }, [controller, id])
 
     React.useEffect(() => {
         setContentView(action ?? null)
         if (action === "delete") setShowDelete(true)
     }, [action])
 
-    if (hasInitialError || 
+    if (hasInitialError ||
         (action != null && ACCEPTABLE_ACTIONS.indexOf(action) === -1)
-    ) 
+    )
         return (<>
             <AppHeader />
             <SomethingWentWrong />
@@ -84,80 +91,79 @@ function DbItem() {
 
     const getBody = () => {
         if (contentView == null || contentView === "delete") return (<Container>
-            <Title sx={(theme) => ({color: theme.primaryColor, fontSize: "3rem"})} order={1}>
+            <Title sx={(theme) => ({ color: theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background, fontSize: "3rem" })} order={1}>
                 {plantApiInfo?.singularDisplayName}
             </Title>
 
-            <Title sx={(theme) => ({marginLeft: 15, color: theme.primaryColor, fontSize: "2rem"})} order={2}>
+            <Title sx={(theme) => ({ marginLeft: 15, color: theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background, fontSize: "2rem" })} order={2}>
                 {identifier}
             </Title>
 
-            <Box sx={{marginLeft: "auto", marginRight: "auto", width: 450, maxWidth: "100%"}}>
+            <Box sx={{ marginTop: 15, marginLeft: "auto", marginRight: "auto", width: 450, maxWidth: "100%" }}>
                 <Image
+                    sx={{maxWidth: "100%"}}
                     radius={20}
-                    width={450}
                     height={350}
                     src={getCurrentImage(itemInfo?.records[0]) ?? undefined}
                     alt="With default placeholder"
                     withPlaceholder
-                />   
+                />
             </Box>
 
-            <Grid justify="center" sx={{marginTop: 15}}>
+            <Grid justify="center" sx={{ marginTop: 15 }}>
                 {
-                    itemInfo?.schema.filter(s => !s.isHidden).map(s => <Grid.Col key={s.propertyName} sx={{display: "flex", alignItems: "center", justifyContent: "center"}} md={4} sm={6} xs={12}>
-                        <Card sx={{width: 400, maxWidth: "100%", height: "100%"}} withBorder key={s.propertyName}>
-                            <Title sx={{fontSize: "1rem"}} order={1}>{s.displayName}</Title>
-                            <Text sx={{marginLeft: 10, fontSize: "1.5rem"}}>{getDisplayValue(s) ?? "N/A"}</Text>
+                    itemInfo?.schema.filter(s => !s.isHidden).map(s => <Grid.Col key={s.propertyName} sx={{ display: "flex", alignItems: "center", justifyContent: "center" }} md={4} sm={6} xs={12}>
+                        <Card sx={{ width: 400, maxWidth: "100%", height: "100%" }} withBorder key={s.propertyName}>
+                            <Title sx={{ fontSize: "1rem" }} order={1}>{s.displayName}</Title>
+                            <Text sx={{ marginLeft: 10, fontSize: "1.5rem" }}>{getDisplayValue(s) ?? "N/A"}</Text>
                         </Card>
                     </Grid.Col>)
                 }
             </Grid>
         </Container>)
-        else if (contentView === "edit") return <DbForm />
+        else if (contentView === "edit") return <DbForm updateParentInfo={updateItemInfo} />
     }
-    
+
     return (<>
-            <Helmet>
-                <title>{ `${plantApiInfo?.singularDisplayName} ${identifier ? `(${action ? `${upperCase(action)} ` : ''}${identifier})` : ''} - Plant DB`}</title>
-            </Helmet>
+        <Helmet>
+            <title>{`${plantApiInfo?.singularDisplayName} ${identifier ? `(${action ? `${upperCase(action)} ` : ''}${identifier})` : ''} - Plant DB`}</title>
+        </Helmet>
 
-            <Modal
-                size="lg"
-                opened={showDelete}
-                onClose={handleCloseDeleteModal}
-                transition="fade"
-                transitionDuration={600}
-                transitionTimingFunction="ease"
-            >
-                <Title sx={(theme) => ({color: theme.primaryColor, fontSize: "3rem", textAlign: "center"})} order={1}>
-                    Delete {identifier ?? ""}?
-                </Title>
+        <Modal
+            size="lg"
+            opened={showDelete}
+            onClose={handleCloseDeleteModal}
+            transition="fade"
+            transitionDuration={600}
+            transitionTimingFunction="ease"
+        >
+            <Title sx={(theme) => ({ color: theme.fn.variant({ variant: 'filled', color: theme.primaryColor }).background, fontSize: "3rem", textAlign: "center" })} order={1}>
+                Delete {identifier ?? ""}?
+            </Title>
 
-                {hasDeleteError && <Alert icon={<IconAlertCircle size={16} />} title="Something went wrong!" color="red">
-                        Unable to delete record.
-                </Alert>}
+            {hasDeleteError && <Alert icon={<IconAlertCircle size={16} />} title="Something went wrong!" color="red">
+                Unable to delete record.
+            </Alert>}
 
-                <Button sx={{
-                    display: "block",
-                    marginTop: 15,
-                    marginLeft: "auto",
-                    marginRight: "auto"
-                }} onClick={handleDelete}>
-                    Confirm
-                </Button>
-            </Modal>
+            <Button sx={{
+                display: "block",
+                marginTop: 15,
+                marginLeft: "auto",
+                marginRight: "auto"
+            }} onClick={handleDelete}>
+                Confirm
+            </Button>
+        </Modal>
 
-            <AppShell
-                padding="md"
-                navbar={<SideNavigation />}
-                header={<AppHeader />}
-                sx={{overflowX: "hidden"}}
-            >
-                {loading ? <Loading /> : getBody()}
-            </AppShell>
-        </>
-    )
+        <AppShell
+            padding="md"
+            navbar={<SideNavigation />}
+            header={<AppHeader />}
+            sx={{ overflowX: "hidden" }}
+        >
+            {loading ? <Loading /> : getBody()}
+        </AppShell>
+    </>)
 }
 
 export default DbItem

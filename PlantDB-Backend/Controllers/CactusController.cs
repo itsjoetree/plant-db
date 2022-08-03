@@ -33,6 +33,7 @@ namespace PlantDB_Backend.Controllers
         public async Task<PlantInfo> GetPlantInfo(int skip, int top)
         {
             int totalCount = await DbContext.Cacti.CountAsync();
+
             IEnumerable <Cactus> cacti = DbContext.Cacti
                 .Include(c => c.PlantBase)
                 .Skip(skip)

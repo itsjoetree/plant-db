@@ -113,12 +113,6 @@ namespace PlantDB_Backend.Helpers
                     Type = PlantDataType.String,
                     MaxLength = 100,
                 }
-                /*new()
-                {
-                    PropertyName = nameof(PlantBase.PlantImage),
-                    DisplayName = "Image",
-                    Type = PlantDataType.Image,
-                }*/
             };
         }
     }

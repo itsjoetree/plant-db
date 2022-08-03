@@ -7,6 +7,9 @@ using static PlantDB_Backend.Models.Extensions;
 
 namespace PlantDB_Backend.Controllers
 {
+    /// <summary>
+    /// API to interact with <see cref="Fern"/> stored in the database.
+    /// </summary>
     [ApiController]
     [Route("/api/ferns")]
     public class FernController : ControllerBase
