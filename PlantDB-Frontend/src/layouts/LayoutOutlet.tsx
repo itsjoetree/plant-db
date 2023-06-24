@@ -1,24 +1,14 @@
-import { Suspense, useEffect } from "react";
+import type { PlantApiInfo } from "../../types";
+import {  useEffect } from "react";
 import { useQuery } from "react-query";
 import { Outlet } from "react-router-dom";
-import type { PlantApiInfo } from "../types";
-import { atom, useSetAtom } from "jotai";
-
-export const apiInfoAtom = atom<PlantApiInfo[] | null>(null);
+import { useSetAtom } from "jotai";
+import { apiInfoAtom } from "./Layout";
 
 /**
- * Shell of the application
+ * Renders outlet component to be used in router and sets global API info
  */
-function Layout() {
-
-  return (
-    <Suspense fallback={<span>Loading...</span>}>
-      <LayoutOutlet />
-    </Suspense>
-  );
-}
-
-function LayoutOutlet() {
+export function LayoutOutlet() {
   const setApiInfo = useSetAtom(apiInfoAtom);
 
   const { data } = useQuery("app-info", async () : Promise<PlantApiInfo[]> => {
@@ -35,5 +25,3 @@ function LayoutOutlet() {
 
   return <Outlet />;
 }
-
-export default Layout;
