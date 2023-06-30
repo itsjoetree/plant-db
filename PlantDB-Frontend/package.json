@@ -19,7 +19,8 @@
     "react-helmet": "^6.1.0",
     "react-i18next": "^13.0.1",
     "react-query": "^3.39.3",
-    "react-router-dom": "^6.14.0"
+    "react-router-dom": "^6.14.0",
+    "tabler-icons-react": "^1.56.0"
   },
   "devDependencies": {
     "@pandacss/dev": "^0.4.0",

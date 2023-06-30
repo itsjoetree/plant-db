@@ -5,9 +5,12 @@ import { css } from "../../styled-system/css";
 const styles = css({
   border: "none",
   borderRadius: "0.75rem",
+
   padding: "0.5rem 1rem",
   backgroundColor: "primary",
   color: "secondary",
+  fontWeight: "bold",
+
   _hover: {
     outlineStyle: "solid",
     outlineColor: "secondary",
@@ -21,14 +24,14 @@ type ButtonProps = ComponentProps<"button"> | (LinkProps & { to: string });
 /**
  * Button component that returns a button or a react-router Link depending if "to" is present. 
  */
-function Button({ children, ...props }: ButtonProps) {
+function Button({ children, className, ...props }: ButtonProps) {
   if ("to" in props)
-    return (<Link className={styles} {...props}>
+    return (<Link className={`${styles} ${className}`} {...props}>
       {children}
     </Link>);
 
   return (
-    <button className={styles} {...props}>
+    <button className={`${styles} ${className}`} {...props}>
       {children}
     </button>
   );

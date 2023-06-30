@@ -1,7 +1,16 @@
 {
-    "title": "Home",
-    "hero": {
-        "title": "Plant DB",
-        "text": "Explore the world of plants."
-    }
+  "title": "Home",
+  "browse": "Browse our Selection",
+  "hero": {
+    "title": "Plant DB",
+    "text": "Explore the world of plants."
+  },
+  "ferns": {
+    "title": "Ferns",
+    "text": "Plants that do not have flowers. Generally reproduce by producing spores. Similar to flowering plants, they have roots, stems and leaves."
+  },
+  "cacti": {
+    "title": "Cacti",
+    "text": "Plants that have succulent stems, pads or branches with scales and spines instead of leaves."
+  }
 }

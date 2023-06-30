@@ -1,29 +1,49 @@
-import { type ReactNode, Suspense } from "react";
-import { Link } from "react-router-dom";
+import { Suspense, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import NavBar, { type NavBarItem } from "../components/NavBar";
-import { logoStyles } from "./Layout";
-import { LayoutOutlet } from "./LayoutOutlet";
+import { Helmet } from "react-helmet";
+import { Outlet } from "react-router-dom";
+import { useAtomValue } from "jotai";
+import { apiInfoAtom } from "../App";
+import Logo from "../components/Logo";
+import LayoutBody from "./LayoutBody";
 
 type HomeLayoutProps = {
-    hero: ReactNode;
+  hero: ReactNode;
 }
 
-function HomeLayout({ hero } : HomeLayoutProps) {
-  const { t } = useTranslation();
-  const navItems: NavBarItem[] = t("navItems", { returnObjects: true});
+/**
+ * Home page layout of application.
+ */
+function HomeLayout({ hero }: HomeLayoutProps) {
+  const { t } = useTranslation("home");
+  const apiInfo = useAtomValue(apiInfoAtom);
+
+  const navItems: NavBarItem[] | undefined = apiInfo?.map(ai => {
+    return {
+      text: t(ai.path + ".plural"),
+      to: ai.path
+    };
+  });
 
   return (
     <>
+      <Helmet>
+        <title>{t("title", { ns: "app", page: t("title") })}</title>
+      </Helmet>
+
       <NavBar
-        logo={<Link to="/" className={logoStyles}>{t("name")}</Link>}
-        items={navItems}
+        logo={<Logo />}
+        items={navItems ?? []}
       />
+
       {hero}
 
-      <Suspense fallback={<span>Loading...</span>}>
-        <LayoutOutlet />
-      </Suspense>
+      <LayoutBody>
+        <Suspense fallback="">
+          <Outlet />
+        </Suspense>
+      </LayoutBody>
     </>
   );
 }

@@ -1,0 +1,15 @@
+{
+    "fields": {
+     "Name": "Name",
+     "Nickname": "Nickname",
+     "Description": "Description",
+     "LightingCondition": "Lighting",
+     "WateringInterval": "Watering",
+     "AverageHeightInches": "Avg. Height (In.)",
+     "Origin": "Origin",
+     "Blades": "Blades",
+     "Glochids": "Glochids"
+    },
+    "noEntries": "No entries were found for this species!",
+    "newEntry": "New entry"
+}

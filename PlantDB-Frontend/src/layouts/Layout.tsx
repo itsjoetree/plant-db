@@ -1,51 +1,55 @@
-import { type PropsWithChildren, Suspense } from "react";
-import { Link } from "react-router-dom";
-import type { PlantApiInfo } from "../../types";
-import { atom } from "jotai";
+import { Suspense } from "react";
 import { useTranslation } from "react-i18next";
-import { css } from "../../styled-system/css";
 import NavBar, { type NavBarItem } from "../components/NavBar";
-import { LayoutOutlet } from "./LayoutOutlet";
-
-export const apiInfoAtom = atom<PlantApiInfo[] | null>(null);
-
-export const logoStyles = css({
-  fontSize: "1.5rem",
-  fontWeight: "bold"
-});
+import { centeredStyles } from "../styles";
+import { Helmet } from "react-helmet";
+import { useAtomValue } from "jotai";
+import { apiInfoAtom } from "../App";
+import { Outlet, useLocation, useParams } from "react-router-dom";
+import Loading from "../components/Loading";
+import Logo from "../components/Logo";
+import LayoutBody from "./LayoutBody";
+import ErrorBoundary from "../components/ErrorBoundary";
+import NotFound from "../components/NotFound";
 
 /**
- * Shell of the application
+ * General layout of application.
  */
 function Layout() {
   const { t } = useTranslation();
-  const navItems: NavBarItem[] = t("navItems", { returnObjects: true});
+  const { species } = useParams();
+  const location = useLocation();
+  const apiInfo = useAtomValue(apiInfoAtom);
+
+  const navItems: NavBarItem[] | undefined = apiInfo?.map(ai => {
+    return {
+      text: t(ai.path + ".plural"),
+      to: "/" + ai.path
+    };
+  });
 
   return (
     <>
+      <Helmet>
+        <title>{t("title", { page: t(species?.toLocaleLowerCase() + ".plural", "") })}</title>
+      </Helmet>
+
       <NavBar
-        logo={<Link to="/" className={logoStyles}>{t("name")}</Link>}
-        items={navItems}
+        logo={<Logo />}
+        items={navItems ?? []}
       />
 
-      <Suspense fallback={<span>Loading...</span>}>
-        <LayoutBody>
-          <LayoutOutlet />
-        </LayoutBody>
-      </Suspense>
+      <LayoutBody>
+        <ErrorBoundary key={location.pathname} fallback={<NotFound />}>
+          <Suspense fallback={<div className={centeredStyles}>
+            <Loading />
+          </div>}>
+            <Outlet />
+          </Suspense>
+        </ErrorBoundary>
+      </LayoutBody>
     </>
   );
 }
 
 export default Layout;
-
-const bodyStyles = css({
-  padding: "1rem 0.5rem"
-});
-
-function LayoutBody ({ children } : PropsWithChildren) {
-
-  return (<div className={bodyStyles}>
-    {children}
-  </div>);
-}

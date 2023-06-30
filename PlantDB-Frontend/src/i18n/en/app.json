@@ -1,22 +1,16 @@
 {
-    "name": "Plant DB",
-    "title": "Plant DB - {{page}}",
-    "navItems": [
-        {
-            "text": "Home",
-            "to": "/"
-        },
-        {
-            "text": "Ferns",
-            "to": "/ferns"
-        },
-        {
-            "text": "Cacti",
-            "to": "/cacti"
-        }
-    ],
-    "notFound": {
-        "title": "404",
-        "text": "The requested page could not be found."
-    }
+  "name": "Plant DB",
+  "title": "Plant DB - {{page}}",
+  "ferns": {
+    "singular": "Fern",
+    "plural": "Ferns"
+  },
+  "cacti": {
+    "singular": "Cactus",
+    "plural": "Cacti"
+  },
+  "notFound": {
+    "title": "404",
+    "text": "The requested resource could not be found."
+  }
 }

@@ -5,7 +5,6 @@ const styles = css({
   backgroundColor: "primary",
   color: "secondary",
 
-  // Border styles
   borderRadius: "1rem",
   borderColor: "secondary",
   borderStyle: "solid",
@@ -14,6 +13,9 @@ const styles = css({
   padding: "1rem"
 });
 
+/**
+ * Styled container for content.
+ */
 function Card({ children, className, ...props }: ComponentProps<"div">) {
 
   return (<div className={`${styles} ${className}`} {...props}>

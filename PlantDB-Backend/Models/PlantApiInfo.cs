@@ -3,13 +3,9 @@ namespace PlantDB_Backend.Models
 {
     public class PlantApiInfo
     {
-        public string PluralDisplayName { get; set; } = null!;
-
-        public string SingularDisplayName { get; set; } = null!;
-
-        public string ImgUri { get; set; }
-
         public string Path { get; set; } = null!;
+
+        public string ImgSrc { get; set; } = null!;
     }
 }
 

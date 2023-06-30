@@ -23,25 +23,9 @@ const tokens = {
     "value": "5rem",
     "variable": "var(--font-sizes-lg)"
   },
-  "breakpoints.sm": {
-    "value": "640px",
-    "variable": "var(--breakpoints-sm)"
-  },
-  "breakpoints.md": {
-    "value": "768px",
-    "variable": "var(--breakpoints-md)"
-  },
-  "breakpoints.lg": {
-    "value": "1024px",
-    "variable": "var(--breakpoints-lg)"
-  },
-  "breakpoints.xl": {
-    "value": "1280px",
-    "variable": "var(--breakpoints-xl)"
-  },
-  "breakpoints.2xl": {
-    "value": "1536px",
-    "variable": "var(--breakpoints-2xl)"
+  "sizes.container": {
+    "value": "65rem",
+    "variable": "var(--sizes-container)"
   },
   "sizes.breakpoint-sm": {
     "value": "640px",
@@ -62,6 +46,26 @@ const tokens = {
   "sizes.breakpoint-2xl": {
     "value": "1536px",
     "variable": "var(--sizes-breakpoint-2xl)"
+  },
+  "breakpoints.sm": {
+    "value": "640px",
+    "variable": "var(--breakpoints-sm)"
+  },
+  "breakpoints.md": {
+    "value": "768px",
+    "variable": "var(--breakpoints-md)"
+  },
+  "breakpoints.lg": {
+    "value": "1024px",
+    "variable": "var(--breakpoints-lg)"
+  },
+  "breakpoints.xl": {
+    "value": "1280px",
+    "variable": "var(--breakpoints-xl)"
+  },
+  "breakpoints.2xl": {
+    "value": "1536px",
+    "variable": "var(--breakpoints-2xl)"
   }
 }
 

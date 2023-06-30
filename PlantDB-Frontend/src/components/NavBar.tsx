@@ -31,6 +31,9 @@ type NavBarProps = {
   items: NavBarItem[];
 };
 
+/**
+ * Navigation placed at top of app.
+ */
 function NavBar({ logo, items } : NavBarProps) {
 
   return (<nav className={styles}>
