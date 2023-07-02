@@ -28,7 +28,7 @@ type PlantRecord = {
 
 type DropdownOption = {
     name: string;
-    value: unknown;
+    value: string | number;
 }
 
 type PlantProperty = {
@@ -40,4 +40,5 @@ type PlantProperty = {
     isKey: boolean;
     isIdentifier: boolean;
     isHidden: boolean;
+    maxLength?: number;
 }

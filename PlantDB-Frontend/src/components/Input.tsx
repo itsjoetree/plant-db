@@ -16,7 +16,7 @@ const defaultStyles = css({ borderColor: "secondary", color: "secondary" });
 const errorStyles = css({ borderColor: "error", color: "error" });
 const fullWidthStyles = css({ width: "100%" });
 
-type InputProps = Omit<ComponentProps<"input">, "type"> & {
+export type InputProps = Omit<ComponentProps<"input">, "type"> & {
   type?: "text" | "password" | "email" | "number" | "date" | "datetime-local";
 
   /**

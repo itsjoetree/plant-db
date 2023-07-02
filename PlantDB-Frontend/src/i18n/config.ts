@@ -10,7 +10,7 @@ export const resources = {
   en: {
     app: enApp,
     home: enHome,
-    search: enEntries
+    entries: enEntries
   }
 };
 

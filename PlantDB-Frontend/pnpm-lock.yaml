@@ -19,6 +19,7 @@ specifiers:
   react: ^18.2.0
   react-dom: ^18.2.0
   react-helmet: ^6.1.0
+  react-hook-form: ^7.45.1
   react-i18next: ^13.0.1
   react-query: ^3.39.3
   react-router-dom: ^6.14.0
@@ -32,6 +33,7 @@ dependencies:
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-helmet: 6.1.0_react@18.2.0
+  react-hook-form: 7.45.1_react@18.2.0
   react-i18next: 13.0.1_vmxqo2xaafmzmlpsc57tlel7ve
   react-query: 3.39.3_biqbaboplfbrettd7655fr4n2y
   react-router-dom: 6.14.0_biqbaboplfbrettd7655fr4n2y
@@ -4838,6 +4840,15 @@ packages:
       react: 18.2.0
       react-fast-compare: 3.2.2
       react-side-effect: 2.1.2_react@18.2.0
+    dev: false
+
+  /react-hook-form/7.45.1_react@18.2.0:
+    resolution: {integrity: sha512-6dWoFJwycbuFfw/iKMcl+RdAOAOHDiF11KWYhNDRN/OkUt+Di5qsZHwA0OwsVnu9y135gkHpTw9DJA+WzCeR9w==}
+    engines: {node: '>=12.22.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react-i18next/13.0.1_vmxqo2xaafmzmlpsc57tlel7ve:

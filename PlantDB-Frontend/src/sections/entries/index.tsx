@@ -1,8 +1,8 @@
-import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { atom, useAtom } from "jotai";
 import { useQuery } from "react-query";
 import { useTranslation } from "react-i18next";
-import { useEffect } from "react";
 import Table, { type TableColumn } from "../../components/Table";
 import { css } from "../../../styled-system/css";
 import { centeredStyles } from "../../styles";
@@ -10,17 +10,21 @@ import type { PlantInfo } from "../../types";
 import Card from "../../components/Card";
 import Pagination from "../../components/Pagination";
 import Button from "../../components/Button";
+import getKey from "../../helpers/getKey";
 
 // Number of records to display per page, ideally this would be dynamic on resize.
 const pageSize = 5;
 
 // Used to preserve page number when navigating back to this page.
 const pageNumberAtom = atom(1);
+const previousSpeciesAtom = atom<string | undefined>(undefined);
 
 function Entries() {
-  const { t } = useTranslation("search");
+  const { t } = useTranslation("entries");
+  const navigate = useNavigate();
   const { species } = useParams();
   const [pageIndex, setPageIndex] = useAtom(pageNumberAtom);
+  const [prevSpecies, setPrevSpecies] = useAtom(previousSpeciesAtom);
 
   const { data: plantInfo } = useQuery(["plant-info", species, pageIndex], async (): Promise<PlantInfo> => {
     const response = await fetch(`/api/${species}?skip=${Math.abs((pageIndex - 1) * pageSize)}&top=${pageSize}`);
@@ -31,7 +35,15 @@ function Entries() {
   });
 
   // Reset page number when species changes.
-  useEffect(() => { setPageIndex(1); }, [species, setPageIndex]);
+  useEffect(() => {
+    if (prevSpecies && prevSpecies !== species) setPageIndex(1);
+
+    return () => {
+      setPrevSpecies(species);
+    };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prevSpecies, species]);
 
   const getRows = () => {
     const rows: {[key: string]: unknown}[] = [];
@@ -70,14 +82,15 @@ function Entries() {
         {t(species?.toLocaleLowerCase() + ".plural")}
       </h1>
 
-      <Button>{t("newEntry")}</Button>
+      <Button to={`/${species}/add`} className={css({ mt: "1rem" })}>{t("newEntry")}</Button>
     </div>
 
     <Card style={{overflowX: "auto"}}>
       <Table
         columns={columns}
         rows={getRows()}
-        onRowClick={() => console.log("clicked!")}
+        onRowClick={(e) => plantInfo ?
+          navigate(`/${species}/${e[getKey(plantInfo)?.propertyName ?? ""]}`) : undefined}
       />
     </Card>
 
@@ -97,7 +110,7 @@ export default Entries;
  * Screen displayed when there are no entries for the selected species.
  */
 function NoEntriesMessage() {
-  const { t } = useTranslation("search");
+  const { t } = useTranslation("entries");
   const { species } = useParams();
 
   return (
@@ -110,7 +123,7 @@ function NoEntriesMessage() {
         {t("noEntries")}
       </p>
 
-      <Button className={css({ mt: "1rem" })}>{t("newEntry")}</Button>
+      <Button to={`/${species}/add`} className={css({ mt: "1rem" })}>{t("newEntry")}</Button>
     </div>
   );
 }

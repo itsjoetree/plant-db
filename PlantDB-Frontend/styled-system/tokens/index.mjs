@@ -20,7 +20,7 @@ const tokens = {
     "variable": "var(--font-sizes-md)"
   },
   "fontSizes.lg": {
-    "value": "5rem",
+    "value": "4rem",
     "variable": "var(--font-sizes-lg)"
   },
   "sizes.container": {

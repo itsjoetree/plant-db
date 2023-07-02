@@ -3,7 +3,7 @@ import { css } from "../../styled-system/css";
 import { centeredStyles } from "../styles";
 
 const bodyStyles = css({
-  padding: "1rem 0.5rem",
+  padding: "2rem 1rem",
   width: "100%",
   maxWidth: "container",
 });

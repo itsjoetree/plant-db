@@ -30,7 +30,7 @@ export default defineConfig({
       fontSizes: {
         "sm": { value: "1.5rem" },
         "md": { value: "2.5rem" },
-        "lg": { value: "5rem" }
+        "lg": { value: "4rem" }
       },
       sizes: {
         "container": { value: "65rem" }

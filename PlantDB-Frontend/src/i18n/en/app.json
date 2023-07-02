@@ -1,6 +1,7 @@
 {
   "name": "Plant DB",
   "title": "Plant DB - {{page}}",
+  "entryTitle": "{{page}} - {{entry}}",
   "ferns": {
     "singular": "Fern",
     "plural": "Ferns"
@@ -9,8 +10,14 @@
     "singular": "Cactus",
     "plural": "Cacti"
   },
+  "formMessages": {
+    "required": "{{field}} is required.",
+    "maxLength": "{{field}} must be {{maxLength}} characters or less."
+  },
   "notFound": {
     "title": "404",
     "text": "The requested resource could not be found."
-  }
+  },
+  "submit": "Submit",
+  "continue": "Continue"
 }

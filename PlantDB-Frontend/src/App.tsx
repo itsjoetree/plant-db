@@ -8,8 +8,10 @@ import HomeLayout from "./layouts/HomeLayout";
 import Hero from "./sections/home/Hero";
 import Layout from "./layouts/Layout";
 
-const Home   =   lazy(() => import("./sections/home"));
-const Entries =  lazy(() => import("./sections/entries"));
+const Home      =   lazy(() => import("./sections/home"));
+const Entries   =   lazy(() => import("./sections/entries"));
+const Add       =   lazy(() => import("./sections/entries/add"));
+const Dashboard =   lazy(() => import("./sections/entries/dashboard"));
 
 export const apiInfoAtom = atom<PlantApiInfo[] | null>(null);
 
@@ -32,6 +34,14 @@ function App() {
         {
           index: true,
           element: <Entries />
+        },
+        {
+          path: "add",
+          element: <Add />
+        },
+        {
+          path: ":id",
+          element: <Dashboard />
         },
         {
           path: "*",
