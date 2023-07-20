@@ -16,6 +16,11 @@ const styles = css({
     outlineColor: "secondary",
     cursor: "pointer",
     transition: "outline 0.2s ease-in-out"
+  },
+
+  _disabled: {
+    opacity: 0.5,
+    pointerEvents: "none"
   }
 });
 

@@ -8,6 +8,12 @@ import getIdentifier from "../../../helpers/getIdentifier";
 import Loading from "../../../components/Loading";
 import Avatar from "../../../components/Avatar";
 import Card from "../../../components/Card";
+import { hstack, vstack } from "../../../../styled-system/patterns";
+import Button from "../../../components/Button";
+import Container from "../../../components/Container";
+import HeaderBar from "../../../components/HeaderBar";
+import Breadcrumbs from "../../../components/Breadcrumbs";
+import LoadingSkeleton from "../../../components/LoadingSkeleton";
 
 function Dashboard() {
   const { t } = useTranslation("entries");
@@ -15,6 +21,8 @@ function Dashboard() {
   const { data } = useQuery(["plant-dashboard", species, id], async (): Promise<PlantInfo> => {
     const response = await fetch(`/api/${species}/${id}`);
     return await response.json();
+  }, {
+    suspense: true
   });
 
   const identifier = data?.records && getIdentifier(data);
@@ -24,21 +32,39 @@ function Dashboard() {
       <title>{t("entryTitle", { page: t(species + ".plural"), entry: identifier?.value ?? "..." })}</title>
     </Helmet>
 
-    <div>
-      <div className={css({
-        display: "flex",
-        gap: "1rem",
-        pb: "2rem"
-      })}>
-        <Avatar size="lg" />
+    <HeaderBar>
+      <Breadcrumbs links={[
+        {
+          title: t(species?.toLocaleLowerCase() + ".plural"),
+          to: `/${species}`
+        },
+        {
+          title: identifier?.value?.toString() || "...",
+        }
+      ]} />
+    </HeaderBar>
 
-        <div className={css({ alignSelf: "center" })}>
-          <h1 className={css({ fontSize: "md", lineHeight: 1 })}>
-            {identifier?.value?.toString() || <Loading />}
-          </h1>
-          <h2 className={css({ fontSize: "sm" })}>
-            {t(species?.toLocaleLowerCase() + ".singular")}
-          </h2>
+    <Container>
+      <div className={vstack({ gap: "1rem", alignItems: "start", pb: "2rem" })}>
+        <div className={css({
+          display: "flex",
+          gap: "1rem"
+        })}>
+          <Avatar size="lg" />
+
+          <div className={css({ alignSelf: "center" })}>
+            <h1 className={css({ fontSize: "md", lineHeight: 1 })}>
+              {identifier?.value?.toString() || <Loading />}
+            </h1>
+            <h2 className={css({ fontSize: "sm" })}>
+              {t(species?.toLocaleLowerCase() + ".singular")}
+            </h2>
+          </div>
+        </div>
+
+        <div className={hstack({ gap: ".5rem" })}>
+          <Button to={`/${species}/${id}/edit`}>Edit</Button>
+          <Button>Delete</Button>
         </div>
       </div>
 
@@ -58,13 +84,58 @@ function Dashboard() {
                 {t("fields." + s.propertyName)}
               </h1>
 
-              <span className={css({ fontSize: "sm" })}>{value}</span>
+              <span>{value}</span>
             </Card>);
           })
         }
       </div>
-    </div>
+    </Container>
   </>);
 }
 
 export default Dashboard;
+
+export function Skeleton() {
+  const { species } = useParams();
+  const { t } = useTranslation();
+
+  return (<>
+    <HeaderBar>
+      <Breadcrumbs links={[
+        {
+          title: t(species?.toLocaleLowerCase() + ".plural"),
+          to: `/${species}`
+        },
+        {
+          title: "...",
+        }
+      ]} />
+    </HeaderBar>
+
+    <Container>
+      <div className={vstack({ gap: "1rem", alignItems: "start", pb: "2rem" })}>
+        <div className={css({
+          display: "flex",
+          gap: "1rem"
+        })}>
+
+          <LoadingSkeleton className={css({height: "8rem", width: "8rem", borderRadius: "9999px",})} />
+
+          <div className={vstack({ gap: ".5rem", alignItems: "start", justifyContent: "center" })}>
+            <LoadingSkeleton className={css({height: "2.5rem", width: "6rem"})} />
+            <LoadingSkeleton className={css({height: "2.25rem", width: "4rem"})} />
+          </div>
+        </div>
+      </div>
+
+      <div className={css({ display: "flex", justifyContent: "center", gap: "1rem", flexWrap: "wrap" })}>
+        {
+          Array(6).fill("").map((_, i) => <LoadingSkeleton key={i} className={css({ borderRadius: "1rem",
+            width: "100%",
+            height: "6rem",
+            sm: { width: "20rem" } })} />)
+        }
+      </div>
+    </Container>
+  </>);
+}

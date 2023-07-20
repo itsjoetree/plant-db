@@ -5,10 +5,9 @@ import { centeredStyles } from "../styles";
 import { Helmet } from "react-helmet";
 import { useAtomValue } from "jotai";
 import { apiInfoAtom } from "../App";
-import { Outlet, useLocation, useParams } from "react-router-dom";
+import { Outlet, useLocation, useMatches, useParams } from "react-router-dom";
 import Loading from "../components/Loading";
 import Logo from "../components/Logo";
-import LayoutBody from "./LayoutBody";
 import ErrorBoundary from "../components/ErrorBoundary";
 import NotFound from "../components/NotFound";
 
@@ -18,6 +17,7 @@ import NotFound from "../components/NotFound";
 function Layout() {
   const { t } = useTranslation();
   const { species } = useParams();
+  const matches = useMatches();
   const location = useLocation();
   const apiInfo = useAtomValue(apiInfoAtom);
 
@@ -28,26 +28,27 @@ function Layout() {
     };
   });
 
+  const handle = matches?.find(m => m.pathname === location.pathname)?.handle as { hideNav: boolean };
+  console.log(handle);
+
   return (
     <>
       <Helmet>
         <title>{t("title", { page: t(species?.toLocaleLowerCase() + ".plural", "") })}</title>
       </Helmet>
 
-      <NavBar
+      {!handle?.hideNav && <NavBar
         logo={<Logo />}
         items={navItems ?? []}
-      />
+      />}
 
-      <LayoutBody>
-        <ErrorBoundary key={location.pathname} fallback={<NotFound />}>
-          <Suspense fallback={<div className={centeredStyles}>
-            <Loading />
-          </div>}>
-            <Outlet />
-          </Suspense>
-        </ErrorBoundary>
-      </LayoutBody>
+      <ErrorBoundary key={location.pathname} fallback={<NotFound />}>
+        <Suspense fallback={<div className={centeredStyles}>
+          <Loading />
+        </div>}>
+          <Outlet />
+        </Suspense>
+      </ErrorBoundary>
     </>
   );
 }

@@ -1,18 +1,7 @@
 import { type ReactNode } from "react";
 import { css } from "../../styled-system/css";
 import { Link } from "react-router-dom";
-
-const styles = css({
-  padding: "1rem",
-  position: "sticky",
-  top: 0,
-
-  borderBottomColor: "secondary",
-  borderBottomStyle: "solid",
-  borderBottomWidth: "0.25rem",
-
-  backgroundColor: "primary",
-});
+import { styles } from "./HeaderBar";
 
 const listStyles = css({
   color: "secondary",

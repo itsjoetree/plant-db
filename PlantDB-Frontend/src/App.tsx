@@ -1,12 +1,14 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { lazy, useEffect } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import type { PlantApiInfo } from "./types";
 import { atom, useSetAtom } from "jotai";
 import { useQuery } from "react-query";
+import { Skeleton as EntriesDashSkeleton } from "./sections/entries/dashboard";
+import { Skeleton as EntryEditSkeleton } from "./sections/entries/edit";
+import { Skeleton as EntryAddSkeleton } from "./sections/entries/add";
 import NotFound from "./components/NotFound";
-import HomeLayout from "./layouts/HomeLayout";
-import Hero from "./sections/home/Hero";
 import Layout from "./layouts/Layout";
+import Edit from "./sections/entries/edit";
 
 const Home      =   lazy(() => import("./sections/home"));
 const Entries   =   lazy(() => import("./sections/entries"));
@@ -24,6 +26,7 @@ function App() {
     return data;
   });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { if (data) setApiInfo(data); }, [data]);
 
   const routes = [
@@ -37,11 +40,30 @@ function App() {
         },
         {
           path: "add",
-          element: <Add />
+          element: (<Suspense fallback={<EntryAddSkeleton />}>
+            <Add />
+          </Suspense>),
+          handle: {
+            hideNav: true
+          }
         },
         {
           path: ":id",
-          element: <Dashboard />
+          element: (<Suspense fallback={<EntriesDashSkeleton />}>
+            <Dashboard />
+          </Suspense>),
+          handle: {
+            hideNav: true
+          }
+        },
+        {
+          path: ":id/edit",
+          element: (<Suspense fallback={<EntryEditSkeleton />}>
+            <Edit />
+          </Suspense>),
+          handle: {
+            hideNav: true
+          }
         },
         {
           path: "*",
@@ -51,13 +73,9 @@ function App() {
     },
     {
       path: "/",
-      element: <HomeLayout hero={<Hero />} />,
-      children: [
-        {
-          index: true,
-          element: <Home />
-        }
-      ],
+      element: (<Suspense>
+        <Home />
+      </Suspense>)
     }
   ];
 

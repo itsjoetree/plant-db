@@ -11,6 +11,7 @@ import Card from "../../components/Card";
 import Pagination from "../../components/Pagination";
 import Button from "../../components/Button";
 import getKey from "../../helpers/getKey";
+import Container from "../../components/Container";
 
 // Number of records to display per page, ideally this would be dynamic on resize.
 const pageSize = 5;
@@ -72,7 +73,7 @@ function Entries() {
 
   if (plantInfo?.totalCount === 0) return <NoEntriesMessage />;
 
-  return (<div className={css({
+  return (<Container className={css({
     display: "flex",
     flexDirection: "column",
     gap: "1rem"
@@ -101,7 +102,7 @@ function Entries() {
         totalPages={Math.ceil((plantInfo?.totalCount ?? 0 ) / pageSize)}
       />
     </div>
-  </div>);
+  </Container>);
 }
 
 export default Entries;

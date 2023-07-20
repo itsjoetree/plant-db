@@ -35,7 +35,7 @@ function SpeciesForm({
   formMethods: {
     register,
     handleSubmit,
-    formState: { errors }
+    formState: { errors, isDirty }
   },
   schema,
   onSubmit,
@@ -92,7 +92,7 @@ function SpeciesForm({
       }
     </div>
 
-    <Button type="submit">{submitButtonText}</Button>
+    <Button disabled={!isDirty} type="submit">{submitButtonText}</Button>
   </form>);
 }
 

@@ -1,37 +1,51 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { css } from "../../../../styled-system/css";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { type PlantRecord, type PlantInfo } from "../../../types";
-import SuccessMessage from "../../../components/SuccessMessage";
 import SpeciesForm from "../../../components/SpeciesForm";
 import Loading from "../../../components/Loading";
+import Container from "../../../components/Container";
 import HeaderBar from "../../../components/HeaderBar";
 import Breadcrumbs from "../../../components/Breadcrumbs";
-import Container from "../../../components/Container";
+import getIdentifier from "../../../helpers/getIdentifier";
 import FormSkeleton from "../FormSkeleton";
 
-function Add() {
+function Edit() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { t } = useTranslation("entries");
-  const { species } = useParams();
-  const formMethods = useForm({ mode: "onBlur" });
+  const { species, id } = useParams();
   const { data } = useQuery(["schema", species], async (): Promise<PlantInfo> => {
-    const response = await fetch(`/api/${species}`);
+    const response = await fetch(`/api/${species}/${id}`);
     return await response.json();
   }, {
     suspense: true
   });
 
+  const identifier = data?.records && getIdentifier(data);
+
+  const formMethods = useForm({
+    mode: "onBlur", defaultValues: Object.assign({}, ...data?.schema?.filter(s => !s.isHidden)?.map(s => {
+      const record = data?.records[0]?.find(r => r.propertyName === s.propertyName);
+
+      const obj: { [key: string]: unknown } = {};
+      obj[s.propertyName] = record?.value;
+      return obj;
+    }) ?? [])
+  });
+
   const submitMutation = useMutation(async (plantRecords: PlantRecord[]) => {
-    await fetch(`/api/${species}`, {
-      method: "POST",
+    const resp = await fetch(`/api/${species}/${id}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(plantRecords)
     });
+
+    if (!resp.ok) throw new Error();
   });
 
   const onSubmit: SubmitHandler<{ [key: string]: string }> = async (data) => {
@@ -45,29 +59,14 @@ function Add() {
     try {
       await submitMutation.mutateAsync(plantRecords);
       await queryClient.invalidateQueries(["plant-info", species]);
+      await queryClient.invalidateQueries(["plant-dashboard", species, id]);
       formMethods.reset();
+      navigate(`/${species}/${id}`);
     } catch {
       // TODO: Replace with toast or something indicating an error message.
       console.error("Unable to add record.");
     }
   };
-
-  if (submitMutation.isSuccess) return (<SuccessMessage
-    title={t("success")}
-    text={t("add.success", { species: t(species + ".singular") })}
-    actionLinks={[
-      {
-        title: t("continue"),
-        to: `/${species}`
-      },
-      {
-        title: t("add.reset"),
-        onAction: () => {
-          submitMutation.reset();
-        }
-      }
-    ]}
-  />);
 
   return (<>
     <HeaderBar>
@@ -77,7 +76,11 @@ function Add() {
           to: `/${species}`
         },
         {
-          title: t("add.title")
+          title: identifier?.value?.toString() || "...",
+          to: `/${species}/${id}`
+        },
+        {
+          title: t("edit.title")
         }
       ]} />
     </HeaderBar>
@@ -90,7 +93,7 @@ function Add() {
           {t(species?.toLocaleLowerCase() + ".singular")}
         </h1>
         <h2 className={css({ fontSize: "sm" })}>
-          {t("add.title")}
+          {t("edit.title")}
         </h2>
       </div>
 
@@ -104,10 +107,10 @@ function Add() {
   </>);
 }
 
-export default Add;
+export default Edit;
 
 export function Skeleton() {
-  const { species } = useParams();
+  const { species, id } = useParams();
   const { t } = useTranslation("entries");
 
   return (<>
@@ -118,7 +121,11 @@ export function Skeleton() {
           to: `/${species}`
         },
         {
-          title: t("add.title")
+          title: "...",
+          to: `/${species}/${id}`
+        },
+        {
+          title: t("edit.title")
         }
       ]} />
     </HeaderBar>

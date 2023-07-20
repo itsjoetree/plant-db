@@ -4,6 +4,9 @@
     "success": "Successfully added a new {{species}}!",
     "reset": "Add another entry"
   },
+  "edit": {
+    "title": "Edit entry"
+  },
   "fields": {
     "Name": "Name",
     "Nickname": "Nickname",
