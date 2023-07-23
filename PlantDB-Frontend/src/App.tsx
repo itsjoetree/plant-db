@@ -6,6 +6,8 @@ import { useQuery } from "react-query";
 import { Skeleton as EntriesDashSkeleton } from "./sections/entries/dashboard";
 import { Skeleton as EntryEditSkeleton } from "./sections/entries/edit";
 import { Skeleton as EntryAddSkeleton } from "./sections/entries/add";
+import { ToastProvider } from "./components/Toast";
+import { useTranslation } from "react-i18next";
 import NotFound from "./components/NotFound";
 import Layout from "./layouts/Layout";
 import Edit from "./sections/entries/edit";
@@ -18,6 +20,7 @@ const Dashboard =   lazy(() => import("./sections/entries/dashboard"));
 export const apiInfoAtom = atom<PlantApiInfo[] | null>(null);
 
 function App() {
+  const { t } = useTranslation();
   const setApiInfo = useSetAtom(apiInfoAtom);
 
   const { data } = useQuery("app-info", async () : Promise<PlantApiInfo[]> => {
@@ -80,7 +83,9 @@ function App() {
   ];
 
   const router = createBrowserRouter(routes);
-  return <RouterProvider router={router} />;
+  return (<ToastProvider timeoutAfterMs={5000} aria-label-close={t("close")}>
+    <RouterProvider router={router} />
+  </ToastProvider>);
 }
 
 export default App;

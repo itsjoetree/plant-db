@@ -4,6 +4,8 @@ import Logo from "./Logo";
 
 export const styles = css({
   padding: "1rem",
+  position: "sticky",
+  zIndex: 10,
   top: 0,
 
   borderBottomColor: "secondary",

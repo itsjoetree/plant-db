@@ -1,10 +1,10 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { css } from "../../../../styled-system/css";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { type PlantRecord, type PlantInfo } from "../../../types";
-import SuccessMessage from "../../../components/SuccessMessage";
+import { useToast } from "../../../components/Toast";
 import SpeciesForm from "../../../components/SpeciesForm";
 import Loading from "../../../components/Loading";
 import HeaderBar from "../../../components/HeaderBar";
@@ -14,8 +14,10 @@ import FormSkeleton from "../FormSkeleton";
 
 function Add() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { t } = useTranslation("entries");
   const { species } = useParams();
+  const { showToast } = useToast();
   const formMethods = useForm({ mode: "onBlur" });
   const { data } = useQuery(["schema", species], async (): Promise<PlantInfo> => {
     const response = await fetch(`/api/${species}`);
@@ -44,30 +46,13 @@ function Add() {
 
     try {
       await submitMutation.mutateAsync(plantRecords);
-      await queryClient.invalidateQueries(["plant-info", species]);
-      formMethods.reset();
+      await queryClient.invalidateQueries(["info", species]);
+      navigate("..");
+      showToast(t("successMessages.AddSuccess"), "success");
     } catch {
-      // TODO: Replace with toast or something indicating an error message.
-      console.error("Unable to add record.");
+      showToast(t("clientErrors.AddFailed"), "error");
     }
   };
-
-  if (submitMutation.isSuccess) return (<SuccessMessage
-    title={t("success")}
-    text={t("add.success", { species: t(species + ".singular") })}
-    actionLinks={[
-      {
-        title: t("continue"),
-        to: `/${species}`
-      },
-      {
-        title: t("add.reset"),
-        onAction: () => {
-          submitMutation.reset();
-        }
-      }
-    ]}
-  />);
 
   return (<>
     <HeaderBar>

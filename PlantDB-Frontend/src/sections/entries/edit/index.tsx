@@ -11,13 +11,15 @@ import HeaderBar from "../../../components/HeaderBar";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import getIdentifier from "../../../helpers/getIdentifier";
 import FormSkeleton from "../FormSkeleton";
+import { useToast } from "../../../components/Toast";
 
 function Edit() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { t } = useTranslation("entries");
+  const { showToast } = useToast();
   const { species, id } = useParams();
-  const { data } = useQuery(["schema", species], async (): Promise<PlantInfo> => {
+  const { data } = useQuery(["speciesById", species, id], async (): Promise<PlantInfo> => {
     const response = await fetch(`/api/${species}/${id}`);
     return await response.json();
   }, {
@@ -58,13 +60,13 @@ function Edit() {
 
     try {
       await submitMutation.mutateAsync(plantRecords);
-      await queryClient.invalidateQueries(["plant-info", species]);
-      await queryClient.invalidateQueries(["plant-dashboard", species, id]);
+      await queryClient.invalidateQueries(["info", species]);
+      await queryClient.invalidateQueries(["speciesById", species, id]);
       formMethods.reset();
       navigate(`/${species}/${id}`);
+      showToast(t("successMessages.EditSuccess"), "success");
     } catch {
-      // TODO: Replace with toast or something indicating an error message.
-      console.error("Unable to add record.");
+      showToast(t("clientErrors.EditFailed"), "error");
     }
   };
 

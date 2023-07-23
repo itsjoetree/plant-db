@@ -25,7 +25,9 @@ export default defineConfig({
       colors: {
         primary: { value: "rgb(53, 53, 54)" },
         secondary: { value: "rgb(207, 252, 229)" },
-        error: { value: "rgb(255, 138, 112)" }
+        error: { value: "rgb(255, 138, 112)" },
+        red: { 300: { value: "#fca5a5" }, 800: { value: "#991b1b" } },
+        green: { 300: { value: "#86efac" }, 800: { value: "#166534" } },
       },
       fontSizes: {
         "sm": { value: "1.5rem" },

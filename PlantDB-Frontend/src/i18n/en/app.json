@@ -18,6 +18,9 @@
     "title": "404",
     "text": "The requested resource could not be found."
   },
+  "close": "Close",
   "submit": "Submit",
-  "continue": "Continue"
+  "continue": "Continue",
+  "cancel": "Cancel",
+  "confirm": "Confirm"
 }

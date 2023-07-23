@@ -11,6 +11,22 @@ const tokens = {
     "value": "rgb(255, 138, 112)",
     "variable": "var(--colors-error)"
   },
+  "colors.red.300": {
+    "value": "#fca5a5",
+    "variable": "var(--colors-red-300)"
+  },
+  "colors.red.800": {
+    "value": "#991b1b",
+    "variable": "var(--colors-red-800)"
+  },
+  "colors.green.300": {
+    "value": "#86efac",
+    "variable": "var(--colors-green-300)"
+  },
+  "colors.green.800": {
+    "value": "#166534",
+    "variable": "var(--colors-green-800)"
+  },
   "fontSizes.sm": {
     "value": "1.5rem",
     "variable": "var(--font-sizes-sm)"
@@ -66,6 +82,14 @@ const tokens = {
   "breakpoints.2xl": {
     "value": "1536px",
     "variable": "var(--breakpoints-2xl)"
+  },
+  "colors.colorPalette.300": {
+    "value": "var(--colors-color-palette-300)",
+    "variable": "var(--colors-color-palette-300)"
+  },
+  "colors.colorPalette.800": {
+    "value": "var(--colors-color-palette-800)",
+    "variable": "var(--colors-color-palette-800)"
   }
 }
 

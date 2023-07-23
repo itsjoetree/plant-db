@@ -27,7 +27,7 @@ function Entries() {
   const [pageIndex, setPageIndex] = useAtom(pageNumberAtom);
   const [prevSpecies, setPrevSpecies] = useAtom(previousSpeciesAtom);
 
-  const { data: plantInfo } = useQuery(["plant-info", species, pageIndex], async (): Promise<PlantInfo> => {
+  const { data: plantInfo } = useQuery(["info", species, pageIndex], async (): Promise<PlantInfo> => {
     const response = await fetch(`/api/${species}?skip=${Math.abs((pageIndex - 1) * pageSize)}&top=${pageSize}`);
     return await response.json();
   }, {
@@ -63,11 +63,13 @@ function Entries() {
   };
 
   const columns = plantInfo?.schema.map(schema => {
+
     return {
       field: schema.propertyName,
       displayName: !schema.isHidden && t("fields." + schema.propertyName),
       hidden: schema.isHidden,
-      render: row => row[schema.propertyName]
+      render: row => schema?.options ? schema.options?.find(o => o.value?.toString() === row[schema.propertyName])?.name
+        : row[schema.propertyName]
     };
   }) as TableColumn<{[key: string]: unknown}>[];
 

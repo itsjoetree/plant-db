@@ -1,36 +1,66 @@
 import { Helmet } from "react-helmet";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { css } from "../../../../styled-system/css";
 import { useTranslation } from "react-i18next";
 import { type PlantInfo } from "../../../types";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useState } from "react";
+import { hstack, vstack } from "../../../../styled-system/patterns";
+import { useToast } from "../../../components/Toast";
 import getIdentifier from "../../../helpers/getIdentifier";
 import Loading from "../../../components/Loading";
 import Avatar from "../../../components/Avatar";
 import Card from "../../../components/Card";
-import { hstack, vstack } from "../../../../styled-system/patterns";
 import Button from "../../../components/Button";
 import Container from "../../../components/Container";
 import HeaderBar from "../../../components/HeaderBar";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import LoadingSkeleton from "../../../components/LoadingSkeleton";
+import ActionModal from "../../../components/ActionModal";
 
 function Dashboard() {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const { t } = useTranslation("entries");
+  const { showToast } = useToast();
   const { species, id } = useParams();
-  const { data } = useQuery(["plant-dashboard", species, id], async (): Promise<PlantInfo> => {
+  const { data } = useQuery(["speciesById", species, id], async (): Promise<PlantInfo> => {
     const response = await fetch(`/api/${species}/${id}`);
     return await response.json();
   }, {
     suspense: true
   });
-
+  const deleteMutation = useMutation(["deleteSpecies", species, id], async () => {
+    await fetch(`/api/${species}/${id}`, {
+      method: "DELETE"
+    });
+  });
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const identifier = data?.records && getIdentifier(data);
 
   return (<>
     <Helmet>
       <title>{t("entryTitle", { page: t(species + ".plural"), entry: identifier?.value ?? "..." })}</title>
     </Helmet>
+
+    <ActionModal
+      title={t("deleteModal.title")}
+      text={t("deleteModal.text")}
+      show={showDeleteModal}
+      confirmText={t("confirm")}
+      cancelText={t("cancel")}
+      onCancel={() => setShowDeleteModal(false)}
+      onConfirm={async () => {
+        try {
+          await deleteMutation.mutateAsync();
+          navigate("..");
+          queryClient.invalidateQueries("info");
+          showToast(t("successMessages.DeletionSuccess"), "success");
+        } catch {
+          showToast(t("clientErrors.DeletionFailed"), "error");
+        }
+      }}
+    />
 
     <HeaderBar>
       <Breadcrumbs links={[
@@ -64,7 +94,7 @@ function Dashboard() {
 
         <div className={hstack({ gap: ".5rem" })}>
           <Button to={`/${species}/${id}/edit`}>Edit</Button>
-          <Button>Delete</Button>
+          <Button onClick={() => setShowDeleteModal(true)}>Delete</Button>
         </div>
       </div>
 

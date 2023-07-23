@@ -3,6 +3,10 @@
   --colors-primary: rgb(53, 53, 54);
   --colors-secondary: rgb(207, 252, 229);
   --colors-error: rgb(255, 138, 112);
+  --colors-red-300: #fca5a5;
+  --colors-red-800: #991b1b;
+  --colors-green-300: #86efac;
+  --colors-green-800: #166534;
   --font-sizes-sm: 1.5rem;
   --font-sizes-md: 2.5rem;
   --font-sizes-lg: 4rem;
@@ -16,7 +20,9 @@
   --breakpoints-md: 768px;
   --breakpoints-lg: 1024px;
   --breakpoints-xl: 1280px;
-  --breakpoints-2xl: 1536px
+  --breakpoints-2xl: 1536px;
+  --colors-color-palette-300: var(--colors-color-palette-300);
+  --colors-color-palette-800: var(--colors-color-palette-800)
 }
   }
   

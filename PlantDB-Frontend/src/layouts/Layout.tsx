@@ -29,7 +29,6 @@ function Layout() {
   });
 
   const handle = matches?.find(m => m.pathname === location.pathname)?.handle as { hideNav: boolean };
-  console.log(handle);
 
   return (
     <>
