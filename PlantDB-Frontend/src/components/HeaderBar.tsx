@@ -1,9 +1,13 @@
 import type { ComponentProps } from "react";
-import { css } from "../../styled-system/css";
+import { css, cx } from "../../styled-system/css";
 import Logo from "./Logo";
 
 export const styles = css({
-  padding: "1rem",
+  display: "flex",
+  gap: "4",
+  alignItems: "center",
+
+  padding: "4",
   position: "sticky",
   zIndex: 10,
   top: 0,
@@ -15,9 +19,12 @@ export const styles = css({
   backgroundColor: "primary",
 });
 
+/**
+ * Bar at top of app.
+ */
 function HeaderBar({ className, children, ...props }: ComponentProps<"div">) {
 
-  return (<div className={`${styles} ${css({display: "flex", gap: "1rem", alignItems: "center"})} ${className}`} {...props}>
+  return (<div className={cx(styles, css({display: "flex", gap: "4", alignItems: "center"}), className)} {...props}>
     <Logo />
     {children}
   </div>);

@@ -3,13 +3,6 @@ import { css } from "../../styled-system/css";
 import { Link } from "react-router-dom";
 import { styles } from "./HeaderBar";
 
-const listStyles = css({
-  color: "secondary",
-  display: "flex",
-  gap: "1rem",
-  alignItems: "center",
-});
-
 export type NavBarItem = {
   text: string;
   to: string;
@@ -26,7 +19,12 @@ type NavBarProps = {
 function NavBar({ logo, items } : NavBarProps) {
 
   return (<nav className={styles}>
-    <ul className={listStyles}>
+    <ul className={css({
+      color: "secondary",
+      display: "flex",
+      gap: "4",
+      alignItems: "center",
+    })}>
       <li>{logo}</li>
       {
         items.map(item => <li key={item.text}>

@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { type PlantInfo } from "../../../types";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useState } from "react";
-import { hstack, vstack } from "../../../../styled-system/patterns";
+import { circle, hstack, vstack } from "../../../../styled-system/patterns";
 import { useToast } from "../../../components/Toast";
 import getIdentifier from "../../../helpers/getIdentifier";
 import Loading from "../../../components/Loading";
@@ -75,30 +75,30 @@ function Dashboard() {
     </HeaderBar>
 
     <Container>
-      <div className={vstack({ gap: "1rem", alignItems: "start", pb: "2rem" })}>
+      <div className={vstack({ gap: "4", alignItems: "start", pb: "8" })}>
         <div className={css({
           display: "flex",
-          gap: "1rem"
+          gap: "4"
         })}>
           <Avatar size="lg" />
 
           <div className={css({ alignSelf: "center" })}>
-            <h1 className={css({ fontSize: "md", lineHeight: 1 })}>
+            <h1 className={css({ fontSize: "4xl", lineHeight: 1 })}>
               {identifier?.value?.toString() || <Loading />}
             </h1>
-            <h2 className={css({ fontSize: "sm" })}>
+            <h2 className={css({ fontSize: "2xl" })}>
               {t(species?.toLocaleLowerCase() + ".singular")}
             </h2>
           </div>
         </div>
 
-        <div className={hstack({ gap: ".5rem" })}>
+        <div className={hstack({ gap: "2" })}>
           <Button to={`/${species}/${id}/edit`}>Edit</Button>
           <Button onClick={() => setShowDeleteModal(true)}>Delete</Button>
         </div>
       </div>
 
-      <div className={css({ display: "flex", justifyContent: "center", gap: "1rem", flexWrap: "wrap" })}>
+      <div className={css({ display: "flex", justifyContent: "center", gap: "4", flexWrap: "wrap" })}>
         {
           data?.schema?.filter(s => !s.isHidden)?.map(s => {
             let value = "";
@@ -110,7 +110,7 @@ function Dashboard() {
             } else value = record?.value?.toString()!;
 
             return (<Card key={s.propertyName} className={css({ width: "100%", sm: { width: "20rem" } })}>
-              <h1 className={css({ fontSize: "sm", fontWeight: "bold" })}>
+              <h1 className={css({ fontSize: "2xl", fontWeight: "bold" })}>
                 {t("fields." + s.propertyName)}
               </h1>
 
@@ -143,24 +143,24 @@ export function Skeleton() {
     </HeaderBar>
 
     <Container>
-      <div className={vstack({ gap: "1rem", alignItems: "start", pb: "2rem" })}>
+      <div className={vstack({ gap: "4", alignItems: "start", pb: "8" })}>
         <div className={css({
           display: "flex",
-          gap: "1rem"
+          gap: "4"
         })}>
 
-          <LoadingSkeleton className={css({height: "8rem", width: "8rem", borderRadius: "9999px",})} />
+          <LoadingSkeleton className={circle({height: "8rem", width: "8rem"})} />
 
-          <div className={vstack({ gap: ".5rem", alignItems: "start", justifyContent: "center" })}>
+          <div className={vstack({ gap: "2", alignItems: "start", justifyContent: "center" })}>
             <LoadingSkeleton className={css({height: "2.5rem", width: "6rem"})} />
             <LoadingSkeleton className={css({height: "2.25rem", width: "4rem"})} />
           </div>
         </div>
       </div>
 
-      <div className={css({ display: "flex", justifyContent: "center", gap: "1rem", flexWrap: "wrap" })}>
+      <div className={css({ display: "flex", justifyContent: "center", gap: "2", flexWrap: "wrap" })}>
         {
-          Array(6).fill("").map((_, i) => <LoadingSkeleton key={i} className={css({ borderRadius: "1rem",
+          Array(6).fill("").map((_, i) => <LoadingSkeleton key={i} className={css({ borderRadius: "xl",
             width: "100%",
             height: "6rem",
             sm: { width: "20rem" } })} />)

@@ -1,30 +1,30 @@
 import type { ComponentProps } from "react";
-import { css } from "../../styled-system/css";
+import { css, cx } from "../../styled-system/css";
+import { circle } from "../../styled-system/patterns";
 
 type AvatarProps = ComponentProps<"div"> & {
   /**
    * Size of avatar.
    * 
-   * @default " md"
+   * @default "md"
    */
   size?: "md" | "lg"
 };
 
-const avatarStyles = css({
-  borderRadius: "9999px",
-  borderWidth: ".25rem",
-  borderStyle: "solid",
-  borderColor: "secondary",
-});
-
+/**
+ * Circle component that displays image
+ */
 function Avatar({ className, size, ...props }: AvatarProps) {
 
   return (<div className={
-    `${className}
-    ${avatarStyles}
-    ${size === "lg" ? css({ height: "8rem", width: "8rem" }) : css({ height: "3rem", width: "3rem" })}
-  `} {...props}>
-
+    cx(circle({
+      borderWidth: ".25rem",
+      borderStyle: "solid",
+      borderColor: "secondary",
+    }),
+    size === "lg" ? css({ height: "8rem", width: "8rem" }) : css({ height: "3rem", width: "3rem" }),
+    className)
+  } {...props}>
   </div>);
 }
 

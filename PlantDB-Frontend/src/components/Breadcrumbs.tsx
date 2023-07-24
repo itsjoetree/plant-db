@@ -11,9 +11,12 @@ type BreadcrumbsProps = {
   links: BreadcrumbLink[];
 }
 
+/**
+ * Breadcrumbs for navigation.
+ */
 function Breadcrumbs({ links }: BreadcrumbsProps) {
 
-  return (<div className={css({ display: "flex", gap: ".5rem" })}>
+  return (<div className={css({ display: "flex", gap: "2" })}>
     {
       links.map((l, i) => <Fragment key={l.title}>
         {l.to ? (<Link to={l.to ?? ""} className={css({ fontWeight: "bold" })}>

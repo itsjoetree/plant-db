@@ -57,7 +57,7 @@ function Toast({ id, message, severity }: ToastProps) {
 
   return (
     <div className={
-      cx(css({ zIndex: 10, display: "flex", gap: ".75rem", borderRadius: "1rem", p: "1rem" }),
+      cx(css({ zIndex: 10, display: "flex", gap: "3", borderRadius: "lg", p: "4" }),
         severity === "error" && css({ color: "red.800", bg: "red.300" }),
         severity === "success" && css({ color: "green.800", bg: "green.300" }))
     }>
@@ -72,7 +72,7 @@ function Stack() {
 
   return (
     <div className={css({
-      position: "absolute", display: "flex", flexDir: "column", gap: ".5rem",
+      position: "absolute", display: "flex", flexDir: "column", gap: "2",
       right: 5, bottom: 5 })}>
       {toasts.map(toast => <Toast key={toast.id} {...toast} />)}
     </div>

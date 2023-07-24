@@ -3,18 +3,7 @@ import { useTranslation } from "react-i18next";
 import { type TitleText } from "../types";
 import { MoodSad } from "tabler-icons-react";
 import { Helmet } from "react-helmet";
-
-const styles = css({
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center"
-});
-
-const heading = css({
-  fontSize: "md",
-  fontWeight: "bold"
-});
+import { vstack } from "../../styled-system/patterns";
 
 function NotFound() {
   const { t } = useTranslation();
@@ -24,9 +13,12 @@ function NotFound() {
     <Helmet>
       <title>{t("title", { ns: "app", page: notFound.title})}</title>
     </Helmet>
-    <div className={styles}>
+    <div className={vstack()}>
       <MoodSad size={100} />
-      <h1 className={heading}>{notFound.title}</h1>
+      <h1 className={css({
+        fontSize: "4xl",
+        fontWeight: "bold"
+      })}>{notFound.title}</h1>
       <p>{notFound.text}</p>
     </div>
   </>);

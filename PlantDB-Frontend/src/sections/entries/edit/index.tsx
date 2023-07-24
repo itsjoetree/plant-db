@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { type PlantRecord, type PlantInfo } from "../../../types";
+import { useToast } from "../../../components/Toast";
 import SpeciesForm from "../../../components/SpeciesForm";
 import Loading from "../../../components/Loading";
 import Container from "../../../components/Container";
@@ -11,7 +12,6 @@ import HeaderBar from "../../../components/HeaderBar";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import getIdentifier from "../../../helpers/getIdentifier";
 import FormSkeleton from "../FormSkeleton";
-import { useToast } from "../../../components/Toast";
 
 function Edit() {
   const queryClient = useQueryClient();
@@ -91,10 +91,10 @@ function Edit() {
       <div className={css({
         pb: "1rem"
       })}>
-        <h1 className={css({ fontSize: "lg", lineHeight: 1 })}>
-          {t(species?.toLocaleLowerCase() + ".singular")}
+        <h1 className={css({ fontSize: "6xl", lineHeight: 1 })}>
+          {identifier?.value?.toString()}
         </h1>
-        <h2 className={css({ fontSize: "sm" })}>
+        <h2 className={css({ fontSize: "2xl" })}>
           {t("edit.title")}
         </h2>
       </div>

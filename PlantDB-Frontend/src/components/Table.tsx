@@ -1,34 +1,6 @@
 import { type ReactNode } from "react";
 import { css } from "../../styled-system/css";
 
-const tableStyles = css({
-  borderCollapse: "collapse",
-  color: "secondary",
-  "& th": {
-    whiteSpace: "nowrap",
-    textAlign: "left",
-    fontWeight: "bold",
-    pb: "0.5rem",
-  },
-  "& tr": {
-    display: "flex",
-    py: "1rem",
-    px: "0.5rem",
-  },
-  "& tbody td": {
-    textOverflow: "ellipsis",
-    overflow: "hidden",
-    whiteSpace: "nowrap"
-  },
-  "& tbody tr": {
-    _hover: {
-      backgroundColor: "secondary",
-      color: "primary",
-      cursor: "pointer"
-    }
-  }
-});
-
 type TableProps<T> = {
   columns: TableColumn<T>[];
   rows: T[];
@@ -61,7 +33,33 @@ export type TableColumn<T> = {
 function Table<T>({ columns, rows, gap, onRowClick }: TableProps<T>) {
   const visibleColumns = columns.filter(column => !column.hidden);
 
-  return (<table className={`${tableStyles} ${css({ "& tr": { gap: gap ?? "5rem" } })}`}>
+  return (<table className={css({
+    borderCollapse: "collapse",
+    color: "secondary",
+    "& th": {
+      whiteSpace: "nowrap",
+      textAlign: "left",
+      fontWeight: "bold",
+      pb: "2",
+    },
+    "& tr": {
+      display: "flex",
+      py: "4",
+      px: "2",
+      gap: gap ?? "5rem"
+    },
+    "& tbody td": {
+      textOverflow: "ellipsis",
+      overflow: "hidden",
+      whiteSpace: "nowrap"
+    },
+    "& tbody tr": {
+      _hover: {
+        backgroundColor: "secondary",
+        color: "primary",
+        cursor: "pointer"
+      }
+    }})}>
     <thead>
       <tr className={css({ borderBottomColor: "secondary", borderBottomWidth: "0.05rem"})}>
         {

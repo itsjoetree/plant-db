@@ -69,12 +69,12 @@ function Add() {
 
     <Container>
       <div className={css({
-        pb: "1rem"
+        pb: "4"
       })}>
-        <h1 className={css({ fontSize: "lg", lineHeight: 1 })}>
+        <h1 className={css({ fontSize: "6xl", lineHeight: 1 })}>
           {t(species?.toLocaleLowerCase() + ".singular")}
         </h1>
-        <h2 className={css({ fontSize: "sm" })}>
+        <h2 className={css({ fontSize: "2xl" })}>
           {t("add.title")}
         </h2>
       </div>

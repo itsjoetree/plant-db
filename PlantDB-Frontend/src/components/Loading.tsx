@@ -6,6 +6,9 @@ const styles = css({
   animation: "spin 2s linear infinite"
 });
 
+/**
+ * Simple loading spinner.
+ */
 function Loading() {
 
   return (

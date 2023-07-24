@@ -1,12 +1,12 @@
 import { type ComponentProps } from "react";
 import { Link, type LinkProps } from "react-router-dom";
-import { css } from "../../styled-system/css";
+import { css, cx } from "../../styled-system/css";
 
 const styles = css({
   border: "none",
-  borderRadius: "0.75rem",
-
-  padding: "0.5rem 1rem",
+  borderRadius: "lg",
+  py: "2",
+  px: "4",
   backgroundColor: "primary",
   color: "secondary",
   fontWeight: "bold",
@@ -36,7 +36,7 @@ function Button({ children, className, ...props }: ButtonProps) {
     </Link>);
 
   return (
-    <button className={`${styles} ${className}`} {...props}>
+    <button className={cx(styles, className)} {...props}>
       {children}
     </button>
   );

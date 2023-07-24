@@ -81,7 +81,7 @@ function Entries() {
     gap: "1rem"
   })}>
     <div className={css({ display: "flex", gap: "1rem", alignItems: "center" })}>
-      <h1 className={css({ fontSize: "lg" })}>
+      <h1 className={css({ fontSize: "6xl" })}>
         {t(species?.toLocaleLowerCase() + ".plural")}
       </h1>
 
@@ -118,7 +118,7 @@ function NoEntriesMessage() {
 
   return (
     <div className={`${centeredStyles} ${css({flexDirection: "column"})}`}>
-      <h1 className={css({ fontSize: "lg" })}>
+      <h1 className={css({ fontSize: "6xl" })}>
         {t(species?.toLocaleLowerCase() + ".plural")}
       </h1>
 

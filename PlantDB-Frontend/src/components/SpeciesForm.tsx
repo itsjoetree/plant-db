@@ -43,7 +43,7 @@ function SpeciesForm({
   const { t } = useTranslation("entries");
 
   return (<form onSubmit={handleSubmit(onSubmit)}>
-    <div className={css({ display: "flex", flexDir: "column", gap: "1rem", pb: "1rem" })}>
+    <div className={css({ display: "flex", flexDir: "column", gap: "2", pb: "2" })}>
       {
         schema.filter(s => !s.isHidden).map(s => {
           const pdt = PlantDataType[s.type];

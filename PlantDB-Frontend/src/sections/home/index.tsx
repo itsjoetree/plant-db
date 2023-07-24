@@ -41,13 +41,13 @@ function Home() {
 
     <Hero />
 
-    <Container className={css({ display: "flex", flexDir: "column", gap: "2rem"})}>
-      <h1 className={css({ alignSelf: "center", fontSize: "md", fontWeight: "bold" })}>{t("browse")}</h1>
+    <Container className={css({ display: "flex", flexDir: "column", gap: "8"})}>
+      <h1 className={css({ alignSelf: "center", fontSize: "4xl", fontWeight: "bold" })}>{t("browse")}</h1>
       <div className={css({
         display: "flex",
         justifyContent: "center",
         alignItems: "stretch",
-        gap: "1rem",
+        gap: "4",
         flexWrap: "wrap"
       })}>
         {
@@ -63,7 +63,7 @@ function Home() {
               }
             })}
           >
-            <h1 className={css({ fontSize: "md" })}>{info.title}</h1>
+            <h1 className={css({ fontSize: "4xl" })}>{info.title}</h1>
             <p>{info.text}</p>
           </Card>)
         }

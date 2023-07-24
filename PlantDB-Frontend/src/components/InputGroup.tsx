@@ -18,11 +18,14 @@ type InputGroupProps = {
   error?: string;
 }
 
+/**
+ * Input group for forms consisting of label, input, and error message.
+ */
 function InputGroup({ label, input, error }: InputGroupProps) {
-  return (<div className={css({ display: "flex", flexDir: "column", gap: "1rem" })}>
+  return (<div className={css({ display: "flex", flexDir: "column", gap: "4" })}>
     {label}
 
-    <div className={css({ display: "flex", flexDir: "column", gap: "0.5rem"})}>
+    <div className={css({ display: "flex", flexDir: "column", gap: "2"})}>
       {input}
       {error && <span className={css({ color: "error" })}>{error}</span>}
     </div>
