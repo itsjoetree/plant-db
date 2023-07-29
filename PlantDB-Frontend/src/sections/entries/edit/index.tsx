@@ -19,7 +19,7 @@ function Edit() {
   const { t } = useTranslation("entries");
   const { showToast } = useToast();
   const { species, id } = useParams();
-  const { data } = useQuery(["speciesById", species, id], async (): Promise<PlantInfo> => {
+  const { data } = useQuery(["entries", species, id], async (): Promise<PlantInfo> => {
     const response = await fetch(`/api/${species}/${id}`);
     return await response.json();
   }, {
@@ -48,6 +48,13 @@ function Edit() {
     });
 
     if (!resp.ok) throw new Error();
+  }, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(["entries", species]);
+      formMethods.reset();
+      navigate(`/${species}/${id}`);
+      showToast(t("successMessages.EditSuccess"), "success");
+    }
   });
 
   const onSubmit: SubmitHandler<{ [key: string]: string }> = async (data) => {
@@ -60,11 +67,6 @@ function Edit() {
 
     try {
       await submitMutation.mutateAsync(plantRecords);
-      await queryClient.invalidateQueries(["info", species]);
-      await queryClient.invalidateQueries(["speciesById", species, id]);
-      formMethods.reset();
-      navigate(`/${species}/${id}`);
-      showToast(t("successMessages.EditSuccess"), "success");
     } catch {
       showToast(t("clientErrors.EditFailed"), "error");
     }

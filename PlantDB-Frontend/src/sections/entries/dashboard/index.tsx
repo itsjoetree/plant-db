@@ -24,7 +24,7 @@ function Dashboard() {
   const { t } = useTranslation("entries");
   const { showToast } = useToast();
   const { species, id } = useParams();
-  const { data } = useQuery(["speciesById", species, id], async (): Promise<PlantInfo> => {
+  const { data } = useQuery(["entries", species, id], async (): Promise<PlantInfo> => {
     const response = await fetch(`/api/${species}/${id}`);
     return await response.json();
   }, {
@@ -34,6 +34,12 @@ function Dashboard() {
     await fetch(`/api/${species}/${id}`, {
       method: "DELETE"
     });
+  }, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(["entries", species, "index"]);
+      showToast(t("successMessages.DeletionSuccess"), "success");
+      navigate("..");
+    }
   });
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const identifier = data?.records && getIdentifier(data);
@@ -53,9 +59,6 @@ function Dashboard() {
       onConfirm={async () => {
         try {
           await deleteMutation.mutateAsync();
-          navigate("..");
-          queryClient.invalidateQueries("info");
-          showToast(t("successMessages.DeletionSuccess"), "success");
         } catch {
           showToast(t("clientErrors.DeletionFailed"), "error");
         }

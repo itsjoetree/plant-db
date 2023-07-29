@@ -27,13 +27,21 @@ function Add() {
   });
 
   const submitMutation = useMutation(async (plantRecords: PlantRecord[]) => {
-    await fetch(`/api/${species}`, {
+    const resp = await fetch(`/api/${species}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(plantRecords)
     });
+
+    return resp.json();
+  }, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(["entries", species, "index"]);
+      showToast(t("successMessages.AddSuccess"), "success");
+      navigate("..");
+    }
   });
 
   const onSubmit: SubmitHandler<{ [key: string]: string }> = async (data) => {
@@ -46,9 +54,6 @@ function Add() {
 
     try {
       await submitMutation.mutateAsync(plantRecords);
-      await queryClient.invalidateQueries(["info", species]);
-      navigate("..");
-      showToast(t("successMessages.AddSuccess"), "success");
     } catch {
       showToast(t("clientErrors.AddFailed"), "error");
     }

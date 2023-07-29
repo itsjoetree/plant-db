@@ -27,7 +27,7 @@ function Entries() {
   const [pageIndex, setPageIndex] = useAtom(pageNumberAtom);
   const [prevSpecies, setPrevSpecies] = useAtom(previousSpeciesAtom);
 
-  const { data: plantInfo } = useQuery(["info", species, pageIndex], async (): Promise<PlantInfo> => {
+  const { data: plantInfo } = useQuery(["entries", species, "index", pageIndex], async (): Promise<PlantInfo> => {
     const response = await fetch(`/api/${species}?skip=${Math.abs((pageIndex - 1) * pageSize)}&top=${pageSize}`);
     return await response.json();
   }, {
