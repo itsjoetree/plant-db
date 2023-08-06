@@ -7,6 +7,7 @@ import { vstack } from "../../styled-system/patterns";
 import HeaderBar from "./HeaderBar";
 import Logo from "./Logo";
 import Container from "./Container";
+import Button from "./Button";
 
 /**
  * Provides a fallback page for when the server is offline.
@@ -31,6 +32,7 @@ function Offline() {
         fontWeight: "bold"
       })}>{offline.title}</h1>
       <p>{offline.text}</p>
+      <Button onClick={() => window.location.reload()}>{t("reload")}</Button>
     </Container>
   </>);
 }

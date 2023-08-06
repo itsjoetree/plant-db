@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { type PlantRecord, type PlantInfo } from "../../../types";
 import { useToast } from "../../../components/Toast";
-import SpeciesForm from "../../../components/SpeciesForm";
+import EntryForm from "../EntryForm";
 import Loading from "../../../components/Loading";
 import Container from "../../../components/Container";
 import HeaderBar from "../../../components/HeaderBar";
@@ -104,7 +104,7 @@ function Edit() {
         </h2>
       </div>
 
-      {data?.schema ? <SpeciesForm
+      {data?.schema ? <EntryForm
         formMethods={formMethods}
         onSubmit={onSubmit}
         schema={data?.schema}

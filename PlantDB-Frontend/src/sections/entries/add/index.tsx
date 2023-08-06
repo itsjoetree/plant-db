@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { type PlantRecord, type PlantInfo } from "../../../types";
 import { useToast } from "../../../components/Toast";
-import SpeciesForm from "../../../components/SpeciesForm";
+import EntryForm from "../EntryForm";
 import Loading from "../../../components/Loading";
 import HeaderBar from "../../../components/HeaderBar";
 import Breadcrumbs from "../../../components/Breadcrumbs";
@@ -13,6 +13,7 @@ import Container from "../../../components/Container";
 import FormSkeleton from "../FormSkeleton";
 import getRequestFormData from "../../../helpers/getRequestFormData";
 import Logo from "../../../components/Logo";
+import { Helmet } from "react-helmet";
 
 function Add() {
   const queryClient = useQueryClient();
@@ -59,6 +60,10 @@ function Add() {
   };
 
   return (<>
+    <Helmet>
+      <title>{t(species?.toLocaleLowerCase() + ".plural")} - {t("add.title")}</title>
+    </Helmet>
+
     <HeaderBar>
       <Logo />
       <Breadcrumbs links={[
@@ -84,7 +89,7 @@ function Add() {
         </h2>
       </div>
 
-      {data?.schema ? <SpeciesForm
+      {data?.schema ? <EntryForm
         formMethods={formMethods}
         onSubmit={onSubmit}
         schema={data?.schema}

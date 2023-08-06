@@ -26,5 +26,7 @@
   "submit": "Submit",
   "continue": "Continue",
   "cancel": "Cancel",
-  "confirm": "Confirm"
+  "confirm": "Confirm",
+  "reload": "Reload",
+  "pagination": "{{current}} of {{total}}"
 }

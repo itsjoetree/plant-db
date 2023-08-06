@@ -24,7 +24,7 @@ function App() {
   const { t } = useTranslation();
   const setApiInfo = useSetAtom(apiInfoAtom);
 
-  const { data, isError } = useQuery("app-info", async () : Promise<PlantApiInfo[]> => {
+  const { data, isError, isLoading } = useQuery("app-info", async () : Promise<PlantApiInfo[]> => {
     const response = await fetch("/api/app-info");
     const data = await response.json();
     return data;
@@ -84,6 +84,7 @@ function App() {
   ];
 
   if (isError) return (<Offline />);
+  else if (isLoading) return;
 
   const router = createBrowserRouter(routes);
   return (<ToastProvider timeoutAfterMs={5000} aria-label-close={t("close")}>

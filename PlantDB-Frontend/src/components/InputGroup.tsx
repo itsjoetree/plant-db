@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { css } from "../../styled-system/css";
+import { css, cx } from "../../styled-system/css";
 
 type InputGroupProps = {
   /**
@@ -16,13 +16,21 @@ type InputGroupProps = {
    * Error message shown below input
    */
   error?: string;
+
+  /**
+   * Determines if input should be full width
+   */
+  fullWidth?: boolean
 }
 
 /**
  * Input group for forms consisting of label, input, and error message.
  */
-function InputGroup({ label, input, error }: InputGroupProps) {
-  return (<div className={css({ display: "flex", flexDir: "column", gap: "4" })}>
+function InputGroup({ label, input, error, fullWidth }: InputGroupProps) {
+  return (<div className={cx(
+    css({ display: "flex", flexDir: "column", gap: "4" }),
+    fullWidth && css({ w: "100%" })
+  )}>
     {label}
 
     <div className={css({ display: "flex", flexDir: "column", gap: "2"})}>

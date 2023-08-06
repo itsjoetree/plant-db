@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import NavBar, { type NavBarItem } from "../components/NavBar";
-import { centeredStyles } from "../styles";
 import { Helmet } from "react-helmet";
 import { useAtomValue } from "jotai";
 import { apiInfoAtom } from "../App";
@@ -10,6 +9,7 @@ import Loading from "../components/Loading";
 import Logo from "../components/Logo";
 import ErrorBoundary from "../components/ErrorBoundary";
 import NotFound from "../components/NotFound";
+import { vstack } from "../../styled-system/patterns";
 
 /**
  * General layout of application.
@@ -42,7 +42,7 @@ function Layout() {
       />}
 
       <ErrorBoundary key={location.pathname} fallback={<NotFound />}>
-        <Suspense fallback={<div className={centeredStyles}>
+        <Suspense fallback={<div className={vstack()}>
           <Loading />
         </div>}>
           <Outlet />

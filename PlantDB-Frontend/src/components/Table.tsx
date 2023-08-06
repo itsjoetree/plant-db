@@ -79,7 +79,7 @@ function Table<T>({ columns, rows, gap, onRowClick }: TableProps<T>) {
           {
             visibleColumns.map(vc => <td className={css({
               flex: vc.flex ?? 1,
-              width: vc.width ?? "5rem"
+              width: vc.width ?? "6rem"
             })}
             key={vc.field.toString()}>
               {vc.render(row)}

@@ -39,8 +39,7 @@ function FileSelection({ title, message, imagePreview, error, showDelete, onFile
           }} className={circle({
             position: "absolute", height: "8", width: "8",
             background: "primary", bottom: 0, right: 0,
-            cursor: "pointer",
-            zIndex: 10
+            cursor: "pointer"
           })}>
             <Trash size={18} />
           </div>}
