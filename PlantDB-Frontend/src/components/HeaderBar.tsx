@@ -1,6 +1,5 @@
 import type { ComponentProps } from "react";
 import { css, cx } from "../../styled-system/css";
-import Logo from "./Logo";
 
 export const styles = css({
   display: "flex",
@@ -25,7 +24,6 @@ export const styles = css({
 function HeaderBar({ className, children, ...props }: ComponentProps<"div">) {
 
   return (<div className={cx(styles, css({display: "flex", gap: "4", alignItems: "center"}), className)} {...props}>
-    <Logo />
     {children}
   </div>);
 }

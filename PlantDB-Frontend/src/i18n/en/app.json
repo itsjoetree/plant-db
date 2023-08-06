@@ -18,6 +18,10 @@
     "title": "404",
     "text": "The requested resource could not be found."
   },
+  "offline": {
+    "title": "Offline",
+    "text": "Unable to connect to the server."
+  },
   "close": "Close",
   "submit": "Submit",
   "continue": "Continue",

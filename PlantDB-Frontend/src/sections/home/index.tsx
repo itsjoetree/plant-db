@@ -1,5 +1,4 @@
 import { useTranslation } from "react-i18next";
-import type { TitleText } from "../../types";
 import { css } from "../../../styled-system/css";
 import { useNavigate } from "react-router-dom";
 import Card from "../../components/Card";
@@ -19,8 +18,6 @@ function Home() {
   const { t } = useTranslation("home");
   const navigate = useNavigate();
   const apiInfo = useAtomValue(apiInfoAtom);
-  const fern: TitleText = t("ferns", { returnObjects: true });
-  const cactus: TitleText = t("cacti", { returnObjects: true });
 
   const navItems: NavBarItem[] | undefined = apiInfo?.map(ai => {
     return {
@@ -51,9 +48,10 @@ function Home() {
         flexWrap: "wrap"
       })}>
         {
-          [fern, cactus].map(info => <Card
-            key={info.title}
-            onClick={() => navigate("/" + info.title.toLocaleLowerCase())}
+
+          apiInfo?.map(({ path }) => <Card
+            key={path}
+            onClick={() => navigate("/" + path)}
             className={css({
               maxWidth: "30rem",
               cursor: "pointer",
@@ -63,8 +61,8 @@ function Home() {
               }
             })}
           >
-            <h1 className={css({ fontSize: "4xl" })}>{info.title}</h1>
-            <p>{info.text}</p>
+            <h1 className={css({ fontSize: "4xl" })}>{t(path + ".title")}</h1>
+            <p>{t(path + ".text")}</p>
           </Card>)
         }
       </div>

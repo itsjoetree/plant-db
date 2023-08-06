@@ -24,7 +24,7 @@ namespace PlantDB_Backend.Services
         /// <param name="records">Collection of <see cref="PlantRecord"/> to create plant object with.</param>
         /// <returns>Id of created plant.</returns>
         /// <exception cref="NullReferenceException"></exception>
-        public async Task<int> CreateAsync<Plant>(IEnumerable<PlantRecord> records) where Plant : new()
+        public async Task<int> CreateAsync<Plant>(IEnumerable<PlantRecord> records, IFormFile? image) where Plant : new()
         {
             using IDbContextTransaction transaction = DbContext.Database.BeginTransaction();
 
@@ -33,7 +33,7 @@ namespace PlantDB_Backend.Services
 
             IEnumerable<PropertyInfo> plantProperties = plantType.GetProperties().Where(p => p.Name != "Id" && p.Name != "PlantBaseId");
 
-            ManipulatePlant(plantProperties, records, ref plant);
+            ManipulatePlant(plantProperties, records, ref plant, null, image);
 
             if (plant == null)
             {
@@ -61,7 +61,7 @@ namespace PlantDB_Backend.Services
         /// <param name="item">The plant object to edit.</param>
         /// <param name="records">Collection of <see cref="PlantRecord"/> to update plant object with.</param>
         /// <exception cref="NullReferenceException"></exception>
-        public async Task EditAsync<Plant>(Plant item, PlantBase plantBase, IEnumerable<PlantRecord> records)
+        public async Task EditAsync<Plant>(Plant item, PlantBase plantBase, IEnumerable<PlantRecord> records, IFormFile? image, bool? removeImage)
         {
             using IDbContextTransaction transaction = DbContext.Database.BeginTransaction();
 
@@ -72,7 +72,7 @@ namespace PlantDB_Backend.Services
 
             IEnumerable<PropertyInfo> plantProperties = item.GetType().GetProperties().Where(p => p.Name != "Id" && p.Name != "PlantBaseId");
 
-            ManipulatePlant(plantProperties, records, ref item, plantBase);
+            ManipulatePlant(plantProperties, records, ref item, plantBase, image, removeImage);
 
             if (item == null)
             {
@@ -116,7 +116,7 @@ namespace PlantDB_Backend.Services
         /// <param name="plantProperties">Collection of <see cref="PropertyInfo"/> regarding the currently passed in plant.</param>
         /// <param name="records">Collection of <see cref="PlantRecord"/> to manipulate plant object with.</param>
         /// <param name="plant">Reference of the plant object to manipulate.</param>
-        private void ManipulatePlant<Plant>(IEnumerable<PropertyInfo> plantProperties, IEnumerable<PlantRecord> records, ref Plant plant, PlantBase? pb = null)
+        private void ManipulatePlant<Plant>(IEnumerable<PropertyInfo> plantProperties, IEnumerable<PlantRecord> records, ref Plant plant, PlantBase? pb = null, IFormFile? image = null, bool? removeImage = false)
         {
             foreach (PropertyInfo property in plantProperties)
             {
@@ -128,17 +128,57 @@ namespace PlantDB_Backend.Services
 
                     foreach (PropertyInfo baseProp in baseProps)
                     {
+                        if (baseProp.Name == "Image")
+                        {
+                            if (removeImage is true)
+                            {
+                                baseProp.SetValue(plantBase, null);
+                            }
+                            else if (image is not null)
+                            {
+                                if (image.Length / (1024 * 1024) > 2)
+                                {
+                                    throw new FileLoadException();
+                                }
+
+                                /* 
+                                * Ideally with performance in mind this would be stored
+                                * in a file system such as Azure Blob Storage but to simplify
+                                * this template we will store as base64.
+                                */
+                                using (var ms = new MemoryStream())
+                                {
+                                    image.CopyTo(ms);
+                                    var fileBytes = ms.ToArray();
+                                    baseProp.SetValue(plantBase, Convert.ToBase64String(fileBytes));
+                                }
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+                        else if (baseProp.Name == "ImageType")
+                        {
+                            if (removeImage is true)
+                            {
+                                baseProp.SetValue(plantBase, null);
+                            }
+                            else if (image is not null)
+                            {
+                                baseProp.SetValue(plantBase, image.ContentType);
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+
                         string? record = records.SingleOrDefault(r => r.PropertyName.ToLower() == baseProp.Name.ToLower())?.Value;
 
                         if (string.IsNullOrEmpty(record))
                         {
                             continue;
-                        }
-
-                        if (baseProp.Name == "Image")
-                        {
-                            byte[] imgBytes = Convert.FromBase64String(record);
-                            baseProp.SetValue(plantBase, imgBytes);
                         }
                         else if (baseProp.PropertyType.Name == "Int32")
                         {

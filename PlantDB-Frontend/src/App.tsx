@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import NotFound from "./components/NotFound";
 import Layout from "./layouts/Layout";
 import Edit from "./sections/entries/edit";
+import Offline from "./components/Offline";
 
 const Home      =   lazy(() => import("./sections/home"));
 const Entries   =   lazy(() => import("./sections/entries"));
@@ -23,7 +24,7 @@ function App() {
   const { t } = useTranslation();
   const setApiInfo = useSetAtom(apiInfoAtom);
 
-  const { data } = useQuery("app-info", async () : Promise<PlantApiInfo[]> => {
+  const { data, isError } = useQuery("app-info", async () : Promise<PlantApiInfo[]> => {
     const response = await fetch("/api/app-info");
     const data = await response.json();
     return data;
@@ -81,6 +82,8 @@ function App() {
       </Suspense>)
     }
   ];
+
+  if (isError) return (<Offline />);
 
   const router = createBrowserRouter(routes);
   return (<ToastProvider timeoutAfterMs={5000} aria-label-close={t("close")}>

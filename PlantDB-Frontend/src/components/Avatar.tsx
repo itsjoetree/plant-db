@@ -9,14 +9,16 @@ type AvatarProps = ComponentProps<"div"> & {
    * @default "md"
    */
   size?: "md" | "lg"
+
+  src?: string
 };
 
 /**
  * Circle component that displays image
  */
-function Avatar({ className, size, ...props }: AvatarProps) {
+function Avatar({ src, className, size, ...props }: AvatarProps) {
 
-  return (<div className={
+  return (<div style={{ backgroundImage: `url(${src})`, backgroundSize: "cover", backgroundRepeat: "no-repeat" }} className={
     cx(circle({
       borderWidth: ".25rem",
       borderStyle: "solid",

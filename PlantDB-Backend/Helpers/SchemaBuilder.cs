@@ -19,7 +19,6 @@ namespace PlantDB_Backend.Helpers
                 new()
                 {
                     PropertyName = nameof(PlantBase.Id),
-                    DisplayName = "Id",
                     Type = PlantDataType.Int,
                     IsRequired = true,
                     IsKey = true,
@@ -28,7 +27,6 @@ namespace PlantDB_Backend.Helpers
                 new()
                 {
                     PropertyName = nameof(PlantBase.Name),
-                    DisplayName = "Name",
                     Type = PlantDataType.String,
                     IsRequired = true,
                     IsIdentifier = true,
@@ -37,14 +35,12 @@ namespace PlantDB_Backend.Helpers
                 new()
                 {
                     PropertyName = nameof(PlantBase.Nickname),
-                    DisplayName = "Nickname",
                     Type = PlantDataType.String,
                     MaxLength = 200
                 },
                 new()
                 {
                     PropertyName = nameof(PlantBase.Description),
-                    DisplayName = "Description",
                     Type = PlantDataType.String,
                     IsRequired = true,
                     MaxLength = 250
@@ -52,7 +48,6 @@ namespace PlantDB_Backend.Helpers
                 new()
                 {
                     PropertyName = nameof(PlantBase.LightingCondition),
-                    DisplayName = "Lighting Condition",
                     Type = PlantDataType.Enum,
                     Options = new List<DropdownOption>(3)
                     {
@@ -77,7 +72,6 @@ namespace PlantDB_Backend.Helpers
                 new()
                 {
                     PropertyName = nameof(PlantBase.WateringInterval),
-                    DisplayName = "Watering Interval",
                     Type = PlantDataType.Enum,
                     Options = new List<DropdownOption>(3)
                     {
@@ -102,16 +96,21 @@ namespace PlantDB_Backend.Helpers
                 new()
                 {
                     PropertyName = nameof(PlantBase.AverageHeightInches),
-                    DisplayName = "Avg. Height (in.)",
                     Type = PlantDataType.Decimal,
                     IsRequired = true
                 },
                 new()
                 {
                     PropertyName = nameof(PlantBase.Origin),
-                    DisplayName = "Origin",
                     Type = PlantDataType.String,
                     MaxLength = 100,
+                },
+                new()
+                {
+                    PropertyName = nameof(PlantBase.Image),
+                    Type = PlantDataType.String,
+                    IsHidden = true,
+                    IsImage = true                    
                 }
             };
         }

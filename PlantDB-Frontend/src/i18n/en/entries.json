@@ -18,6 +18,10 @@
     "Blades": "Blades",
     "Glochids": "Glochids"
   },
+  "photoSelect": {
+    "title": "Select a photo",
+    "message": "Max size 2MB; JPG, PNG accepted."
+  },
   "choices": {
     "Bright": "Bright",
     "Partial Sun": "Partial Sun",
@@ -35,7 +39,9 @@
   "clientErrors": {
     "DeletionFailed": "Failed to delete entry.",
     "EditFailed": "Failed to edit entry.",
-    "AddFailed": "Failed to add entry."
+    "AddFailed": "Failed to add entry.",
+    "InvalidFileType": "Invalid file type selected.",
+    "InvalidFileSize": "File size exceeds 2MB."
   },
   "successMessages": {
     "DeletionSuccess": "Successfully deleted entry.",

@@ -12,7 +12,6 @@ type TitleText = {
 
 type PlantApiInfo = {
     path: string;
-    imgSrc?: string;
 }
 
 type PlantInfo = {
@@ -40,5 +39,6 @@ type PlantProperty = {
     isKey: boolean;
     isIdentifier: boolean;
     isHidden: boolean;
+    isImage: boolean;
     maxLength?: number;
 }

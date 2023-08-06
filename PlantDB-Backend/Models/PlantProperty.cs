@@ -18,6 +18,8 @@ namespace PlantDB_Backend.Models
 
         public bool IsIdentifier { get; set; }
 
+        public bool IsImage { get; set; }
+
         public int? MaxLength { get; set; }
 
         public IEnumerable<DropdownOption>? Options { get; set; }

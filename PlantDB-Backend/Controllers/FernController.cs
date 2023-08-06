@@ -77,30 +77,30 @@ namespace PlantDB_Backend.Controllers
         /// <summary>
         /// Creates a new <see cref="Fern"/>.
         /// </summary>
-        /// <param name="records">A collection of<see cref="PlantRecord"/> to build new <see cref="Fern"/></param>
+        /// <param name="records">Contains a collection of <see cref="PlantRecord"/>, <see cref="IFormFile"/> information to build new <see cref="Fern"/></param>
         /// <returns>Id of new <see cref="Fern"/></returns>
         [HttpPost]
-        [Consumes("application/json")]
-        public async Task<int> CreateAsync([FromBody] IEnumerable<PlantRecord> records)
+        [Consumes("multipart/form-data")]
+        public async Task<int> CreateAsync([FromForm] PlantRequest request)
         {
-            return await PlantService.CreateAsync<Fern>(records);
+            return await PlantService.CreateAsync<Fern>(request.Records, request.Image);
         }
 
         /// <summary>
         /// Edits an existing <see cref="Fern"/>
         /// </summary>
         /// <param name="id">Id of the <see cref="Fern"/> to edit.</param>
-        /// <param name="records">A collection of <see cref="PlantRecord"/> to update the <see cref="Fern"/> with.</param>
+        /// <param name="records">Contains a collection of <see cref="PlantRecord"/>, <see cref="IFormFile"/> information to update the <see cref="Fern"/> with.</param>
         [HttpPut("{id}")]
-        [Consumes("application/json")]
-        public async Task EditAsync(int id, IEnumerable<PlantRecord> records)
+        [Consumes("multipart/form-data")]
+        public async Task EditAsync([FromRoute] int id, [FromForm] PlantRequest request)
         {
             Fern fern = DbContext.Ferns
                 .Include(c => c.PlantBase)
                 .AsNoTracking()
                 .Single(c => c.Id == id);
 
-            await PlantService.EditAsync(fern, fern.PlantBase, records);
+            await PlantService.EditAsync(fern, fern.PlantBase, request.Records, request.Image, request.RemoveImage);
         }
 
         /// <summary>

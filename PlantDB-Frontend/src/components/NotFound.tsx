@@ -4,6 +4,7 @@ import { type TitleText } from "../types";
 import { MoodSad } from "tabler-icons-react";
 import { Helmet } from "react-helmet";
 import { vstack } from "../../styled-system/patterns";
+import Container from "./Container";
 
 function NotFound() {
   const { t } = useTranslation();
@@ -13,14 +14,14 @@ function NotFound() {
     <Helmet>
       <title>{t("title", { ns: "app", page: notFound.title})}</title>
     </Helmet>
-    <div className={vstack()}>
+    <Container className={vstack()}>
       <MoodSad size={100} />
       <h1 className={css({
         fontSize: "4xl",
         fontWeight: "bold"
       })}>{notFound.title}</h1>
       <p>{notFound.text}</p>
-    </div>
+    </Container>
   </>);
 }
 

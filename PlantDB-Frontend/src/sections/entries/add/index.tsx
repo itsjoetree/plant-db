@@ -11,6 +11,8 @@ import HeaderBar from "../../../components/HeaderBar";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import Container from "../../../components/Container";
 import FormSkeleton from "../FormSkeleton";
+import getRequestFormData from "../../../helpers/getRequestFormData";
+import Logo from "../../../components/Logo";
 
 function Add() {
   const queryClient = useQueryClient();
@@ -29,10 +31,7 @@ function Add() {
   const submitMutation = useMutation(async (plantRecords: PlantRecord[]) => {
     const resp = await fetch(`/api/${species}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(plantRecords)
+      body: getRequestFormData(plantRecords, data?.schema!)
     });
 
     return resp.json();
@@ -61,6 +60,7 @@ function Add() {
 
   return (<>
     <HeaderBar>
+      <Logo />
       <Breadcrumbs links={[
         {
           title: t(species?.toLocaleLowerCase() + ".plural"),
@@ -102,6 +102,7 @@ export function Skeleton() {
 
   return (<>
     <HeaderBar>
+      <Logo />
       <Breadcrumbs links={[
         {
           title: t(species?.toLocaleLowerCase() + ".plural"),

@@ -1,13 +1,14 @@
-import { type SubmitHandler, type RegisterOptions, type UseFormReturn } from "react-hook-form";
+import { type SubmitHandler, type RegisterOptions, type UseFormReturn, Controller } from "react-hook-form";
 import { PlantDataType } from "../constants";
 import { type PlantInfo } from "../types";
-import type { ReactNode } from "react";
+import { type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 import { css } from "../../styled-system/css";
 import InputGroup from "./InputGroup";
 import Input from "./Input";
 import Select from "./Select";
 import Button from "./Button";
+import FileSelection from "./FileSelection";
 
 type SpeciesFormProps = {
   /**
@@ -34,6 +35,7 @@ type SpeciesFormProps = {
 function SpeciesForm({
   formMethods: {
     register,
+    control,
     handleSubmit,
     formState: { errors, isDirty }
   },
@@ -44,6 +46,31 @@ function SpeciesForm({
 
   return (<form onSubmit={handleSubmit(onSubmit)}>
     <div className={css({ display: "flex", flexDir: "column", gap: "2", pb: "2" })}>
+      <Controller
+        name="Image"
+        rules={{
+          validate: {
+            fileType: (f: File | string) => f instanceof File && f && !f.type.match(/^image\/(png|jpg|jpeg)$/) ? t("clientErrors.InvalidFileType") : undefined,
+            fileSize: (f: File | string) => f instanceof File && f && f.size / (1024 * 1024) > 2 ? t("clientErrors.InvalidFileSize") : undefined
+          }
+        }}
+        control={control}
+        render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+          <FileSelection
+            title={t("photoSelect.title")}
+            message={t("photoSelect.message")}
+            onFileSelect={(f) => {
+              onChange(f);
+              onBlur(); // Used to update error state since our form mode is "onBlur"
+            }}
+            onDelete={() => onChange(null)}
+            imagePreview={value instanceof File ? URL.createObjectURL(value) : value}
+            error={error?.message}
+            showDelete={!!value}
+          />
+        )}
+      />
+
       {
         schema.filter(s => !s.isHidden).map(s => {
           const pdt = PlantDataType[s.type];

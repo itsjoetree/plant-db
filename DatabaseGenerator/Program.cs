@@ -31,8 +31,8 @@ using (SqliteConnection connection = new SqliteConnection(connectionStringBuilde
             [Watering Interval] TINYINT NOT NULL,
             [Average Height Inches] DECIMAL NOT NULL,
             [Origin] VARCHAR(100),
-            [Image] BLOB,
-            [Image Type] VARCHAR(100),
+            [Image] TEXT,
+            [Image Type] TEXT,
             CONSTRAINT [PK Plant Base] PRIMARY KEY ([Id]),
             CONSTRAINT [CK Plant Base Lighting Condition <= 2] CHECK ([Lighting Condition] <= 2),
             CONSTRAINT [CK Plant Base Watering Interval <= 2] CHECK ([Watering Interval] <= 2)

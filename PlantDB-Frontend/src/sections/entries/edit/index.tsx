@@ -12,6 +12,9 @@ import HeaderBar from "../../../components/HeaderBar";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import getIdentifier from "../../../helpers/getIdentifier";
 import FormSkeleton from "../FormSkeleton";
+import getRequestFormData from "../../../helpers/getRequestFormData";
+import getImage from "../../../helpers/getImage";
+import Logo from "../../../components/Logo";
 
 function Edit() {
   const queryClient = useQueryClient();
@@ -29,7 +32,9 @@ function Edit() {
   const identifier = data?.records && getIdentifier(data);
 
   const formMethods = useForm({
-    mode: "onBlur", defaultValues: Object.assign({}, ...data?.schema?.filter(s => !s.isHidden)?.map(s => {
+    mode: "onBlur", defaultValues: Object.assign({
+      Image: getImage(data!)
+    }, ...data?.schema?.filter(s => !s.isHidden)?.map(s => {
       const record = data?.records[0]?.find(r => r.propertyName === s.propertyName);
 
       const obj: { [key: string]: unknown } = {};
@@ -41,10 +46,7 @@ function Edit() {
   const submitMutation = useMutation(async (plantRecords: PlantRecord[]) => {
     const resp = await fetch(`/api/${species}/${id}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(plantRecords)
+      body: getRequestFormData(plantRecords, data?.schema!, !formMethods.getValues("Image"))
     });
 
     if (!resp.ok) throw new Error();
@@ -61,7 +63,7 @@ function Edit() {
     const plantRecords: PlantRecord[] = Object.entries(data).map(([key, value]) => {
       return {
         propertyName: key,
-        value: value
+        value
       };
     });
 
@@ -74,6 +76,7 @@ function Edit() {
 
   return (<>
     <HeaderBar>
+      <Logo />
       <Breadcrumbs links={[
         {
           title: t(species?.toLocaleLowerCase() + ".plural"),
@@ -119,6 +122,7 @@ export function Skeleton() {
 
   return (<>
     <HeaderBar>
+      <Logo />
       <Breadcrumbs links={[
         {
           title: t(species?.toLocaleLowerCase() + ".plural"),

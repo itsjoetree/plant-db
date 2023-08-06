@@ -17,6 +17,8 @@ import HeaderBar from "../../../components/HeaderBar";
 import Breadcrumbs from "../../../components/Breadcrumbs";
 import LoadingSkeleton from "../../../components/LoadingSkeleton";
 import ActionModal from "../../../components/ActionModal";
+import getImage from "../../../helpers/getImage";
+import Logo from "../../../components/Logo";
 
 function Dashboard() {
   const queryClient = useQueryClient();
@@ -66,6 +68,7 @@ function Dashboard() {
     />
 
     <HeaderBar>
+      <Logo />
       <Breadcrumbs links={[
         {
           title: t(species?.toLocaleLowerCase() + ".plural"),
@@ -83,7 +86,7 @@ function Dashboard() {
           display: "flex",
           gap: "4"
         })}>
-          <Avatar size="lg" />
+          <Avatar src={data && getImage(data)} size="lg" />
 
           <div className={css({ alignSelf: "center" })}>
             <h1 className={css({ fontSize: "4xl", lineHeight: 1 })}>
@@ -134,6 +137,7 @@ export function Skeleton() {
 
   return (<>
     <HeaderBar>
+      <Logo />
       <Breadcrumbs links={[
         {
           title: t(species?.toLocaleLowerCase() + ".plural"),
