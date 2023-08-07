@@ -43,8 +43,7 @@ function Entries() {
       setPrevSpecies(species);
     };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [prevSpecies, species]);
+  }, [prevSpecies, species, setPrevSpecies, setPageIndex]);
 
   const getRows = () => {
     const rows: {[key: string]: unknown}[] = [];

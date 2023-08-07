@@ -30,8 +30,9 @@ function App() {
     return data;
   });
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { if (data) setApiInfo(data); }, [data]);
+  useEffect(() => {
+    data && setApiInfo(data);
+  }, [data, setApiInfo]);
 
   const routes = [
     {

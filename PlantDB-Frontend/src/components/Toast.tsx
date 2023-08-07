@@ -52,8 +52,7 @@ function Toast({ id, message, severity }: ToastProps) {
   useEffect(() => {
     if (id && timeoutAfterMs)
       setTimeout(() => { removeToast(id); }, timeoutAfterMs);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, timeoutAfterMs]);
+  }, [id, timeoutAfterMs, removeToast]);
 
   return (
     <div className={

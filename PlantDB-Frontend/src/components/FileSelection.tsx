@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { css, cx } from "../../styled-system/css";
-import Avatar from "./Avatar";
 import { Trash } from "tabler-icons-react";
 import { circle } from "../../styled-system/patterns";
+import Avatar from "./Avatar";
 
 type FileSelectionProps = {
   title: string;
@@ -14,11 +14,14 @@ type FileSelectionProps = {
   onDelete?: () => void;
 }
 
+/**
+ * Component for selecting an image file.
+ */
 function FileSelection({ title, message, imagePreview, error, showDelete, onFileSelect, onDelete }: FileSelectionProps) {
 
   useEffect(() => {
     return () => {
-      if (imagePreview && typeof imagePreview === "string")
+      if (imagePreview && typeof imagePreview === "string" && imagePreview.startsWith("blob:"))
         URL.revokeObjectURL(imagePreview);
     };
   }, [imagePreview]);
