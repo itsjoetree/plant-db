@@ -65,7 +65,7 @@ function EntryForm({
               onBlur(); // Used to update error state since our form mode is "onBlur"
             }}
             onDelete={() => onChange(null)}
-            imagePreview={(value instanceof File && !isSubmitting) ? URL.createObjectURL(value) : value}
+            imagePreview={value}
             error={error?.message}
             showDelete={!!value}
           />

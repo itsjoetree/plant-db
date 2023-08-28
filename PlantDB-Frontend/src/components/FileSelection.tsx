@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { css, cx } from "styled-system/css";
 import { Trash } from "tabler-icons-react";
 import { circle } from "styled-system/patterns";
@@ -7,7 +7,7 @@ import Avatar from "./Avatar";
 type FileSelectionProps = {
   title: string;
   message: string;
-  imagePreview?: string;
+  imagePreview?: string | File;
   error?: string;
   showDelete?: boolean;
   onFileSelect: (file: File) => void;
@@ -18,12 +18,18 @@ type FileSelectionProps = {
  * Component for selecting an image file.
  */
 function FileSelection({ title, message, imagePreview, error, showDelete, onFileSelect, onDelete }: FileSelectionProps) {
+  const [url, setUrl] = useState<string>();
 
   useEffect(() => {
-    return () => {
-      if (imagePreview && typeof imagePreview === "string" && imagePreview.startsWith("blob:"))
-        URL.revokeObjectURL(imagePreview);
-    };
+    if (typeof imagePreview === "string")
+      setUrl(imagePreview);
+    else if (imagePreview instanceof File)
+      setUrl(URL.createObjectURL(imagePreview));
+    else
+      setUrl(prev => {
+        prev && URL.revokeObjectURL(prev);
+        return undefined;
+      });
   }, [imagePreview]);
 
   return (<div>
@@ -35,7 +41,7 @@ function FileSelection({ title, message, imagePreview, error, showDelete, onFile
     htmlFor="fileInput">
       <div className={css({ display: "flex", gap: "4", alignItems: "center" })}>
         <div className={css({ position: "relative" })}>
-          <Avatar className={error && css({ borderColor: "error" })} src={imagePreview} size="lg" />
+          <Avatar className={error && css({ borderColor: "error" })} src={url} size="lg" />
           {showDelete && <div onClick={(e) => {
             e.preventDefault();
             onDelete?.();
