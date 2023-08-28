@@ -1,5 +1,5 @@
 import { forwardRef, type ComponentProps, type ForwardedRef } from "react";
-import { css, cx } from "../../styled-system/css";
+import { css, cx } from "styled-system/css";
 
 export type InputProps = Omit<ComponentProps<"input">, "type"> & {
   type?: "text" | "password" | "email" | "number" | "date" | "datetime-local";

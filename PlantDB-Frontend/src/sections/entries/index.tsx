@@ -3,15 +3,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import { atom, useAtom } from "jotai";
 import { useQuery } from "react-query";
 import { useTranslation } from "react-i18next";
-import Table, { type TableColumn } from "../../components/Table";
-import { css } from "../../../styled-system/css";
-import type { PlantInfo } from "../../types";
-import Card from "../../components/Card";
-import Pagination from "../../components/Pagination";
-import Button from "../../components/Button";
-import getKey from "../../helpers/getKey";
-import Container from "../../components/Container";
-import { vstack } from "../../../styled-system/patterns";
+import { css } from "styled-system/css";
+import { vstack } from "styled-system/patterns";
+import Table, { type TableColumn } from "@/components/Table";
+import type { PlantInfo } from "@/types";
+import Card from "@/components/Card";
+import Pagination from "@/components/Pagination";
+import Button from "@/components/Button";
+import getKey from "@/helpers/getKey";
+import Container from "@/components/Container";
 
 // Number of records to display per page, ideally this would be dynamic on resize.
 const pageSize = 5;

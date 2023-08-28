@@ -1,15 +1,15 @@
 import { useTranslation } from "react-i18next";
-import { css } from "../../../styled-system/css";
 import { useNavigate } from "react-router-dom";
-import Card from "../../components/Card";
-import type { NavBarItem } from "../../components/NavBar";
+import { css } from "styled-system/css";
+import type { NavBarItem } from "@/components/NavBar";
 import { useAtomValue } from "jotai";
-import { apiInfoAtom } from "../../App";
+import { apiInfoAtom } from "@/App";
 import { Helmet } from "react-helmet";
-import NavBar from "../../components/NavBar";
-import Logo from "../../components/Logo";
+import Card from "@/components/Card";
+import NavBar from "@/components/NavBar";
+import Logo from "@/components/Logo";
+import Container from "@/components/Container";
 import Hero from "./Hero";
-import Container from "../../components/Container";
 
 /**
  * Landing page of application.

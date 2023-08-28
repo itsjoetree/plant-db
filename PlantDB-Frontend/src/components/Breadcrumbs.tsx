@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { css } from "../../styled-system/css";
+import { css } from "styled-system/css";
 import { Fragment } from "react";
 
 type BreadcrumbLink = {

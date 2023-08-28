@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { css, cx } from "../../styled-system/css";
+import { css, cx } from "styled-system/css";
 import { Trash } from "tabler-icons-react";
-import { circle } from "../../styled-system/patterns";
+import { circle } from "styled-system/patterns";
 import Avatar from "./Avatar";
 
 type FileSelectionProps = {

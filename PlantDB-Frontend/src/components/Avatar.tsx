@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
-import { css, cx } from "../../styled-system/css";
-import { circle } from "../../styled-system/patterns";
+import { css, cx } from "styled-system/css";
+import { circle } from "styled-system/patterns";
 
 type AvatarProps = ComponentProps<"div"> & {
   /**

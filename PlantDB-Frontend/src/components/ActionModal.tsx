@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import { css } from "../../styled-system/css";
-import { vstack } from "../../styled-system/patterns";
+import { css } from "styled-system/css";
+import { vstack } from "styled-system/patterns";
 import Button from "./Button";
 
 type ActionModalProps = {

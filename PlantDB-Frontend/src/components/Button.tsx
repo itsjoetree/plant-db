@@ -1,6 +1,6 @@
 import { type ComponentProps } from "react";
 import { Link, type LinkProps } from "react-router-dom";
-import { css, cx } from "../../styled-system/css";
+import { css, cx } from "styled-system/css";
 
 const styles = css({
   border: "none",

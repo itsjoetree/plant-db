@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
-import { css } from "../../../styled-system/css";
+import { css } from "styled-system/css";
+import { vstack } from "styled-system/patterns";
 import { Cactus, Flower, Leaf } from "tabler-icons-react";
-import { vstack } from "../../../styled-system/patterns";
-import type { TitleText } from "../../types";
+import type { TitleText } from "@/types";
 
 function Hero() {
   const { t } = useTranslation("home");

@@ -1,5 +1,5 @@
 import { type ReactNode } from "react";
-import { css } from "../../styled-system/css";
+import { css } from "styled-system/css";
 import { Link } from "react-router-dom";
 import { styles } from "./HeaderBar";
 

@@ -1,5 +1,5 @@
 import { useState, type ComponentProps, useEffect } from "react";
-import { css, cx } from "../../styled-system/css";
+import { css, cx } from "styled-system/css";
 
 /**
  * Used to display animated loading skeleton of page to help ease transition to content.

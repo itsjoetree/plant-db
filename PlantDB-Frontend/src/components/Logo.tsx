@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { css } from "../../styled-system/css";
+import { css } from "styled-system/css";
 import { useTranslation } from "react-i18next";
 
 const logoStyles = css({

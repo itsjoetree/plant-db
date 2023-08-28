@@ -1,20 +1,19 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { css } from "../../../../styled-system/css";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { type PlantRecord, type PlantInfo } from "../../../types";
-import { useToast } from "../../../components/Toast";
+import { css } from "styled-system/css";
+import { type PlantRecord, type PlantInfo } from "@/types";
+import { useToast } from "@/components/Toast";
+import Loading from "@/components/Loading";
+import Container from "@/components/Container";
+import HeaderBar from "@/components/HeaderBar";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import getIdentifier from "@/helpers/getIdentifier";
+import getRequestFormData from "@/helpers/getRequestFormData";
+import getImage from "@/helpers/getImage";
+import Logo from "@/components/Logo";
 import EntryForm from "../EntryForm";
-import Loading from "../../../components/Loading";
-import Container from "../../../components/Container";
-import HeaderBar from "../../../components/HeaderBar";
-import Breadcrumbs from "../../../components/Breadcrumbs";
-import getIdentifier from "../../../helpers/getIdentifier";
-import FormSkeleton from "../FormSkeleton";
-import getRequestFormData from "../../../helpers/getRequestFormData";
-import getImage from "../../../helpers/getImage";
-import Logo from "../../../components/Logo";
 
 function Edit() {
   const queryClient = useQueryClient();
@@ -115,31 +114,3 @@ function Edit() {
 }
 
 export default Edit;
-
-export function Skeleton() {
-  const { species, id } = useParams();
-  const { t } = useTranslation("entries");
-
-  return (<>
-    <HeaderBar>
-      <Logo />
-      <Breadcrumbs links={[
-        {
-          title: t(species?.toLocaleLowerCase() + ".plural"),
-          to: `/${species}`
-        },
-        {
-          title: "...",
-          to: `/${species}/${id}`
-        },
-        {
-          title: t("edit.title")
-        }
-      ]} />
-    </HeaderBar>
-
-    <Container>
-      <FormSkeleton />
-    </Container>
-  </>);
-}

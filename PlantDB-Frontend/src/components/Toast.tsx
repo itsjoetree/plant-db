@@ -1,5 +1,5 @@
 import { useState, type ReactNode, useEffect } from "react";
-import { css, cx } from "../../styled-system/css";
+import { css, cx } from "styled-system/css";
 import constate from "constate";
 
 type Severity = "error" | "success";

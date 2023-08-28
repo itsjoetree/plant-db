@@ -1,9 +1,9 @@
-import { css } from "../../styled-system/css";
+import { css } from "styled-system/css";
+import { vstack } from "styled-system/patterns";
 import { useTranslation } from "react-i18next";
 import { type TitleText } from "../types";
 import { PlugOff } from "tabler-icons-react";
 import { Helmet } from "react-helmet";
-import { vstack } from "../../styled-system/patterns";
 import HeaderBar from "./HeaderBar";
 import Logo from "./Logo";
 import Container from "./Container";

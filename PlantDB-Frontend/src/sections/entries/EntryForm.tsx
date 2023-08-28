@@ -1,15 +1,15 @@
 import { type SubmitHandler, type RegisterOptions, type UseFormReturn, Controller } from "react-hook-form";
-import { PlantDataType } from "../../constants";
-import type { PlantProperty, PlantInfo } from "../../types";
 import { type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
-import { css } from "../../../styled-system/css";
-import InputGroup from "../../components/InputGroup";
-import Input from "../../components/Input";
-import Select from "../../components/Select";
-import Button from "../../components/Button";
-import FileSelection from "../../components/FileSelection";
+import { css } from "styled-system/css";
+import { PlantDataType } from "@/constants";
+import type { PlantProperty, PlantInfo } from "@/types";
 import chunk from "lodash/chunk";
+import InputGroup from "@/components/InputGroup";
+import Input from "@/components/Input";
+import Select from "@/components/Select";
+import Button from "@/components/Button";
+import FileSelection from "@/components/FileSelection";
 
 type SpeciesFormProps = {
   /**

@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react";
-import { css, cx } from "../../styled-system/css";
+import { css, cx } from "styled-system/css";
 
 export const styles = css({
   display: "flex",

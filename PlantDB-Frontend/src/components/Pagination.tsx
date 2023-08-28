@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight } from "tabler-icons-react";
-import { css } from "../../styled-system/css";
-import { hstack } from "../../styled-system/patterns";
+import { css } from "styled-system/css";
+import { hstack } from "styled-system/patterns";
 
 const arrowContainerStyles = css({ display: "flex", gap: "4", alignItems: "center" });
 const arrowStyles = css({ cursor: "pointer" });

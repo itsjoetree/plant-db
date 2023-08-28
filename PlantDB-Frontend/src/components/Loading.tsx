@@ -1,5 +1,5 @@
 import { Loader } from "tabler-icons-react";
-import { css } from "../../styled-system/css";
+import { css } from "styled-system/css";
 
 const styles = css({
   color: "secondary",

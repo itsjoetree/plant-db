@@ -1,5 +1,5 @@
 import { type ReactNode } from "react";
-import { css } from "../../styled-system/css";
+import { css } from "styled-system/css";
 
 type TableProps<T> = {
   columns: TableColumn<T>[];

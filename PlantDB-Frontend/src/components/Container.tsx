@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
-import { container } from "../../styled-system/patterns";
-import { cx } from "../../styled-system/css";
+import { container } from "styled-system/patterns";
+import { cx } from "styled-system/css";
 
 /**
  * Container for content across app, used for consistent padding and max width.

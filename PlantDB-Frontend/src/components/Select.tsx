@@ -1,5 +1,5 @@
 import { type ComponentProps, type ForwardedRef, forwardRef } from "react";
-import { css } from "../../styled-system/css";
+import { css } from "styled-system/css";
 
 const defaultStyles = css({ borderColor: "secondary", color: "secondary" });
 const errorStyles = css({ borderColor: "error", color: "error" });

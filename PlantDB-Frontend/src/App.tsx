@@ -3,19 +3,19 @@ import { Suspense, lazy, useEffect } from "react";
 import type { PlantApiInfo } from "./types";
 import { atom, useSetAtom } from "jotai";
 import { useQuery } from "react-query";
-import { Skeleton as EntriesDashSkeleton } from "./sections/entries/dashboard";
-import { Skeleton as EntryEditSkeleton } from "./sections/entries/edit";
-import { Skeleton as EntryAddSkeleton } from "./sections/entries/add";
 import { ToastProvider } from "./components/Toast";
 import { useTranslation } from "react-i18next";
+import EntriesDashSkeleton from "./sections/entries/dashboard/Skeleton";
+import EntryEditSkeleton from "./sections/entries/edit/Skeleton";
+import EntryAddSkeleton from "./sections/entries/add/Skeleton";
 import NotFound from "./components/NotFound";
 import Layout from "./layouts/Layout";
-import Edit from "./sections/entries/edit";
 import Offline from "./components/Offline";
 
 const Home      =   lazy(() => import("./sections/home"));
 const Entries   =   lazy(() => import("./sections/entries"));
 const Add       =   lazy(() => import("./sections/entries/add"));
+const Edit       =   lazy(() => import("./sections/entries/edit"));
 const Dashboard =   lazy(() => import("./sections/entries/dashboard"));
 
 export const apiInfoAtom = atom<PlantApiInfo[] | null>(null);

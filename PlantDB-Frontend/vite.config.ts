@@ -19,7 +19,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src/")
+      "@": path.resolve(__dirname, "./src/"),
+      "styled-system": path.resolve(__dirname, "./styled-system/")
     }
   },
   plugins: [

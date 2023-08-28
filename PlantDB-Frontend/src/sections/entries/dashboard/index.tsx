@@ -1,24 +1,23 @@
 import { Helmet } from "react-helmet";
 import { useNavigate, useParams } from "react-router-dom";
-import { css } from "../../../../styled-system/css";
 import { useTranslation } from "react-i18next";
-import { type PlantInfo } from "../../../types";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useState } from "react";
-import { circle, hstack, vstack } from "../../../../styled-system/patterns";
-import { useToast } from "../../../components/Toast";
-import getIdentifier from "../../../helpers/getIdentifier";
-import Loading from "../../../components/Loading";
-import Avatar from "../../../components/Avatar";
-import Card from "../../../components/Card";
-import Button from "../../../components/Button";
-import Container from "../../../components/Container";
-import HeaderBar from "../../../components/HeaderBar";
-import Breadcrumbs from "../../../components/Breadcrumbs";
-import LoadingSkeleton from "../../../components/LoadingSkeleton";
-import ActionModal from "../../../components/ActionModal";
-import getImage from "../../../helpers/getImage";
-import Logo from "../../../components/Logo";
+import { css } from "styled-system/css";
+import { hstack, vstack } from "styled-system/patterns";
+import { type PlantInfo } from "@/types";
+import { useToast } from "@/components/Toast";
+import getIdentifier from "@/helpers/getIdentifier";
+import Loading from "@/components/Loading";
+import Avatar from "@/components/Avatar";
+import Card from "@/components/Card";
+import Button from "@/components/Button";
+import Container from "@/components/Container";
+import HeaderBar from "@/components/HeaderBar";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import ActionModal from "@/components/ActionModal";
+import getImage from "@/helpers/getImage";
+import Logo from "@/components/Logo";
 
 function Dashboard() {
   const queryClient = useQueryClient();
@@ -130,49 +129,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-
-export function Skeleton() {
-  const { species } = useParams();
-  const { t } = useTranslation();
-
-  return (<>
-    <HeaderBar>
-      <Logo />
-      <Breadcrumbs links={[
-        {
-          title: t(species?.toLocaleLowerCase() + ".plural"),
-          to: `/${species}`
-        },
-        {
-          title: "...",
-        }
-      ]} />
-    </HeaderBar>
-
-    <Container>
-      <div className={vstack({ gap: "4", alignItems: "start", pb: "8" })}>
-        <div className={css({
-          display: "flex",
-          gap: "4"
-        })}>
-
-          <LoadingSkeleton className={circle({height: "8rem", width: "8rem"})} />
-
-          <div className={vstack({ gap: "2", alignItems: "start", justifyContent: "center" })}>
-            <LoadingSkeleton className={css({height: "2.5rem", width: "6rem"})} />
-            <LoadingSkeleton className={css({height: "2.25rem", width: "4rem"})} />
-          </div>
-        </div>
-      </div>
-
-      <div className={css({ display: "flex", justifyContent: "center", gap: "2", flexWrap: "wrap" })}>
-        {
-          Array(6).fill("").map((_, i) => <LoadingSkeleton key={i} className={css({ borderRadius: "xl",
-            width: "100%",
-            height: "6rem",
-            sm: { width: "20rem" } })} />)
-        }
-      </div>
-    </Container>
-  </>);
-}

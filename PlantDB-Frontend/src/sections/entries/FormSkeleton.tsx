@@ -1,5 +1,5 @@
-import { css } from "../../../styled-system/css";
-import LoadingSkeleton from "../../components/LoadingSkeleton";
+import { css } from "styled-system/css";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 function FormSkeleton() {
 
