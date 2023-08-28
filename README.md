@@ -15,6 +15,8 @@ To setup the frontend, navigate to "PlantDB-Frontend" and run the following comm
 
 ```bash
 pnpm i
+pnpm run prepare
+pnpm start
 ```
 For the backend code I recommend using [Visual Studio](https://visualstudio.microsoft.com/) and then you can easily open PlantDB_Backend.sln found in the root directory to load up the project files and debug.
 
