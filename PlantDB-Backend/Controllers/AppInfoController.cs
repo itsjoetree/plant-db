@@ -21,16 +21,10 @@ namespace PlantDB_Backend.Controllers
             {
                 new()
                 {
-                    SingularDisplayName = "Cactus",
-                    PluralDisplayName = "Cacti",
-                    ImgUri = "cacti.webp",
                     Path = "cacti"
                 },
                 new()
                 {
-                    SingularDisplayName = "Fern",
-                    PluralDisplayName = "Ferns",
-                    ImgUri = "ferns.webp",
                     Path = "ferns"
                 },
             };

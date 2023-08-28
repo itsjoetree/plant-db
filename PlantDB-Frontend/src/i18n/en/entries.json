@@ -1,0 +1,51 @@
+{
+  "add": {
+    "title": "Add new entry",
+    "success": "Successfully added a new {{species}}!",
+    "reset": "Add another entry"
+  },
+  "edit": {
+    "title": "Edit entry"
+  },
+  "fields": {
+    "Name": "Name",
+    "Nickname": "Nickname",
+    "Description": "Description",
+    "LightingCondition": "Lighting",
+    "WateringInterval": "Watering",
+    "AverageHeightInches": "Avg. Height (In.)",
+    "Origin": "Origin",
+    "Blades": "Blades",
+    "Glochids": "Glochids"
+  },
+  "photoSelect": {
+    "title": "Select a photo",
+    "message": "Max size 2MB; JPG, PNG accepted."
+  },
+  "choices": {
+    "Bright": "Bright",
+    "Partial Sun": "Partial Sun",
+    "Low": "Low",
+    "Often": "Often",
+    "Sometimes": "Sometimes",
+    "Seldom": "Seldom"
+  },
+  "deleteModal": {
+    "title": "Are you sure?",
+    "text": "You are about to delete this entry. This action cannot be undone."
+  },
+  "noEntries": "No entries were found for this species!",
+  "newEntry": "New entry",
+  "clientErrors": {
+    "DeletionFailed": "Failed to delete entry.",
+    "EditFailed": "Failed to edit entry.",
+    "AddFailed": "Failed to add entry.",
+    "InvalidFileType": "Invalid file type selected.",
+    "InvalidFileSize": "File size exceeds 2MB."
+  },
+  "successMessages": {
+    "DeletionSuccess": "Successfully deleted entry.",
+    "EditSuccess": "Successfully edited entry.",
+    "AddSuccess": "Successfully added entry."
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Plant DB",
+  "title": "Plant DB - {{page}}",
+  "entryTitle": "{{page}} - {{entry}}",
+  "ferns": {
+    "singular": "Fern",
+    "plural": "Ferns"
+  },
+  "cacti": {
+    "singular": "Cactus",
+    "plural": "Cacti"
+  },
+  "formMessages": {
+    "required": "{{field}} is required.",
+    "maxLength": "{{field}} must be {{maxLength}} characters or less."
+  },
+  "notFound": {
+    "title": "404",
+    "text": "The requested resource could not be found."
+  },
+  "offline": {
+    "title": "Offline",
+    "text": "Unable to connect to the server."
+  },
+  "close": "Close",
+  "submit": "Submit",
+  "continue": "Continue",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "reload": "Reload",
+  "pagination": "{{current}} of {{total}}"
+}

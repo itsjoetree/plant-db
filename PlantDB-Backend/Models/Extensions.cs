@@ -21,8 +21,7 @@
             String = 0,
             Int,
             Decimal,
-            Enum,
-            Image
+            Enum
         }
     }
 }

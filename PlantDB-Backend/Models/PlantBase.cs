@@ -18,7 +18,7 @@ namespace PlantDB_Backend.Models
         public WateringInterval WateringInterval { get; set; }
         public decimal AverageHeightInches { get; set; }
         public string? Origin { get; set; }
-        public byte[]? Image { get; set; }
+        public string? Image { get; set; }
         public string? ImageType { get; set; }
 
         public virtual ICollection<Cactus> Cacti { get; set; }

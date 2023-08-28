@@ -1,26 +1,45 @@
 # Plant DB
 
-A web application that processes generic data, made with React and C#.
+A web application that processes dynamic data created with React + C#.
+
+The goal of this repository is to provide a template on an application that processes dynamic data and requires minimal tweaks to add new entities.
+
+With this template the backend is responsible for structuring what properties the frontend will render. A unified data structure is used to display table and form data. Adding a new entity to the backend should require little to no updates to frontend code (aside from translations).
+
+While this may not be optimal for every application, it provides insight into implementing form heavy applications and 
+how to handle potentially complex data manipulations on the frontend.
 
 ## Setup
 
-To setup the frontend, navigate to "plant-db-frontend" and run the following command:
+To setup the frontend, navigate to "PlantDB-Frontend" and run the following command:
 
 ```bash
-npm install
+pnpm i
 ```
 For the backend code I recommend using [Visual Studio](https://visualstudio.microsoft.com/) and then you can easily open PlantDB_Backend.sln found in the root directory to load up the project files and debug.
 
 ## Frontend
 
-For the frontend I decided to use React and TypeScript, and [Mantine](https://mantine.dev/) for the main styling library.
+For the frontend I decided to use Vite + React/TypeScript, and Panda CSS for creating components.
 
-The core components that showcase my take on handling generic data from the server are **DbForm, DbItem, and DbTable**.
+```bash
+├── components # Components of app built with Panda CSS 
+├── helpers # Helper functions
+├── i18n # Translation namespaces
+├── layouts # Layouts of application
+├── sections # Main content/sections of app                      
+│   ├── add # Add a new entry
+│   ├── dashboard # Viewing an entry
+|   ├── edit # Editing an entry
+```
 
-**DbTable** only handles pagination as of now, but more complex features are to come.
+The frontend code for this template exhibits code splitting, suspense, building components with Panda CSS and translations.
+
+The core of the app is within `sections`, where each section is built to utilize dynamic data to build form, tables and dashboards.
+
+With the dynamic nature of `sections`, we can add hundreds of entities to our backend without having to add additional frontend code (aside from translations).
 
 ## Backend
-
 I chose C# to showcase the usage of generics, reflection and services in the application.
 
 The database for this application is created in SQLite, and if you startup the **DatabaseGenerator** project you can tweak the schemas and create a new database to replace the default provided.

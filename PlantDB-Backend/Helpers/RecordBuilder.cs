@@ -43,6 +43,12 @@ namespace PlantDB_Backend.Helpers
 
                         foreach (PropertyInfo plantBaseProp in plantBaseProps)
                         {
+                            // We only need this for preparing base64 string to frontend
+                            if (plantBaseProp.Name == "ImageType")
+                            {
+                                continue;
+                            }
+
                             PlantRecord record = new()
                             {
                                 PropertyName = plantBaseProp.Name,
@@ -68,7 +74,10 @@ namespace PlantDB_Backend.Helpers
                                     continue;
                                 }
 
-                                record.Value = Convert.ToBase64String((byte[])pbVal);
+                                var imageTypeProp = plantBaseProps.SingleOrDefault(pb => pb.Name == "ImageType");
+                                var imageType = imageTypeProp?.GetValue(val);
+
+                                record.Value = $"data:{imageType};base64,{pbVal}";
                             }
                             else
                             {
